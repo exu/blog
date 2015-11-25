@@ -10,11 +10,11 @@
     <atom:link href="http://wysocki.in/post/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
-      <title>Golang Channels Basics</title>
-      <link>http://wysocki.in/golang-channels-basics</link>
+      <title>Golang Channels - Basics</title>
+      <link>http://wysocki.in/golang-channels---basics</link>
       <pubDate>Wed, 25 Nov 2015 16:56:07 +0100</pubDate>
       
-      <guid>http://wysocki.in/golang-channels-basics</guid>
+      <guid>http://wysocki.in/golang-channels---basics</guid>
       <description>
 
 &lt;h2 id=&#34;channels-basic-example:b7f1cb643094ee3dbf988083964d7342&#34;&gt;Channels basic example:&lt;/h2&gt;
@@ -66,6 +66,69 @@ used on both sides - goroutine which write to channel, and goroutine which reads
 &lt;/ul&gt;
 
 &lt;h3 id=&#34;want-more:b7f1cb643094ee3dbf988083964d7342&#34;&gt;Want More?&lt;/h3&gt;
+
+&lt;p&gt;If you like My Go basics series feel free to read more at &lt;a href=&#34;http://wysocki.in/series/go-basics/&#34;&gt;Go Basics Series&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Golang Channels - Receiving data</title>
+      <link>http://wysocki.in/golang-channels---receiving-data</link>
+      <pubDate>Wed, 25 Nov 2015 16:56:07 +0100</pubDate>
+      
+      <guid>http://wysocki.in/golang-channels---receiving-data</guid>
+      <description>
+
+&lt;h2 id=&#34;channels-basic-example:efe161ef779bd2b7a6dadc547c487606&#34;&gt;Channels basic example:&lt;/h2&gt;
+
+&lt;p&gt;When we want to receive data from multiple channels (probably filled by
+multiple goroutines) we should use &lt;code&gt;select&lt;/code&gt; statement. It simply choose
+channel which receive value as first (It&amp;rsquo;s in context of time)&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #f92672&#34;&gt;package&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;main&lt;/span&gt;
+
+&lt;span style=&#34;color: #f92672&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;time&amp;quot;&lt;/span&gt;
+&lt;span style=&#34;color: #f92672&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;fmt&amp;quot;&lt;/span&gt;
+
+&lt;span style=&#34;color: #66d9ef&#34;&gt;func&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;main&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+	&lt;span style=&#34;color: #a6e22e&#34;&gt;c1&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;make(&lt;/span&gt;&lt;span style=&#34;color: #66d9ef&#34;&gt;chan&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;string&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
+	&lt;span style=&#34;color: #a6e22e&#34;&gt;c2&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;make(&lt;/span&gt;&lt;span style=&#34;color: #66d9ef&#34;&gt;chan&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;string&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
+
+	&lt;span style=&#34;color: #66d9ef&#34;&gt;go&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;func&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+		&lt;span style=&#34;color: #a6e22e&#34;&gt;time&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;Sleep&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;time&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;Second&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;3&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
+		&lt;span style=&#34;color: #a6e22e&#34;&gt;c1&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;one&amp;quot;&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;}()&lt;/span&gt;
+
+	&lt;span style=&#34;color: #66d9ef&#34;&gt;go&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;func&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+		&lt;span style=&#34;color: #a6e22e&#34;&gt;time&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;Sleep&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;time&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;Second&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;2&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
+		&lt;span style=&#34;color: #a6e22e&#34;&gt;c2&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;two&amp;quot;&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;}()&lt;/span&gt;
+
+	&lt;span style=&#34;color: #66d9ef&#34;&gt;select&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+	&lt;span style=&#34;color: #66d9ef&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;msg1&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;-&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;c1&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt;
+		&lt;span style=&#34;color: #a6e22e&#34;&gt;fmt&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;Println&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;received&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;msg1&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
+	&lt;span style=&#34;color: #66d9ef&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;msg2&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;-&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;c2&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt;
+		&lt;span style=&#34;color: #a6e22e&#34;&gt;fmt&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;Println&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;received&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;msg2&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&lt;a href=&#34;http://play.golang.org/p/wnusjAPW1g&#34; target=&#34;_new&#34;&gt;Run it on play.golang.org&lt;/a&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;code-summary:efe161ef779bd2b7a6dadc547c487606&#34;&gt;Code Summary&lt;/h3&gt;
+
+&lt;p&gt;This simple example contains several important points about receiving data from
+multiple channels:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Select blocks until value will be sent through channel (whatever channel in case statement).&lt;/li&gt;
+&lt;li&gt;In example above we read data from first channel which receive value (&lt;code&gt;msg2&lt;/code&gt;)&lt;/li&gt;
+&lt;li&gt;If we want receive from all channels, we should loop through select statement
+as many times as many values we want to read.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;want-more:efe161ef779bd2b7a6dadc547c487606&#34;&gt;Want More?&lt;/h3&gt;
 
 &lt;p&gt;If you like My Go basics series feel free to read more at &lt;a href=&#34;http://wysocki.in/series/go-basics/&#34;&gt;Go Basics Series&lt;/a&gt;&lt;/p&gt;
 </description>
@@ -3253,25 +3316,6 @@ My config on GitHub &lt;a href=&#34;https://github.com/exu/emacs.d&#34;&gt;https
 &lt;div style=&#34;text-align: center;&#34;&gt;
 &lt;span style=&#34;color: #999999;&#34;&gt;img: my emacs&lt;/span&gt;&lt;/div&gt;
 &lt;img src=&#34;http://feeds.feedburner.com/~r/JacekWysocki/~4/Zrv74f1M5CQ&#34; height=&#34;1&#34; width=&#34;1&#34;/&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>VIM - Python Koans plugin</title>
-      <link>http://wysocki.in/vim-python-koans-plugin</link>
-      <pubDate>Tue, 03 Jul 2012 00:00:00 +0000</pubDate>
-      
-      <guid>http://wysocki.in/vim-python-koans-plugin</guid>
-      <description>Yesterday I&#39;ve started (again) python koans, and switching into terminal to run again and again pissed me off. So from now i press 1 combination and shell has gone away :), koans run in background and My lovely editor put cursor on last error.&lt;br /&gt;
-&lt;br /&gt;
-Meet the VIM python koans helper: &lt;br /&gt;
-&lt;br /&gt;
-&lt;a href=&#34;https://github.com/exu/vim-python_koans&#34;&gt;https://github.com/exu/vim-python_koans&lt;/a&gt;&lt;br /&gt;
-&lt;br /&gt;
-Output format sucks a little (because my VimL skills sucks - I didn&#39;t find solution for this ^@ ^] symbols) but it is great productivity improvement.&lt;br /&gt;
-&lt;br /&gt;
-&lt;a href=&#34;http://2.bp.blogspot.com/--wc-yuEJnY4/T_KVhxt2PpI/AAAAAAAAHLA/SGX29_1h1Ps/s1600/Snap%2B2012-07-03%2Bat%2B08.41.49.png&#34; imageanchor=&#34;1&#34;&gt;&lt;img border=&#34;0&#34; height=&#34;328&#34; src=&#34;http://2.bp.blogspot.com/--wc-yuEJnY4/T_KVhxt2PpI/AAAAAAAAHLA/SGX29_1h1Ps/s640/Snap%2B2012-07-03%2Bat%2B08.41.49.png&#34; width=&#34;640&#34; /&gt;&lt;/a&gt;&lt;br /&gt;
-Picture 1: Output window with cursor on last error&lt;img src=&#34;http://feeds.feedburner.com/~r/JacekWysocki/~4/Kqj5zIbZ2gI&#34; height=&#34;1&#34; width=&#34;1&#34;/&gt;
 </description>
     </item>
     

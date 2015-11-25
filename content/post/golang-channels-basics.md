@@ -1,7 +1,7 @@
 +++
 date = "2015-11-25T16:56:07+01:00"
-title = "Golang Channels Basics"
-description = "Basic channels usage in simple examples"
+title = "Golang Channels - Basics"
+description = "Golang Channels - Basic channels usage in simple examples"
 tags = ["go", "channels", "concurrency"]
 series = ["Go basics"]
 +++
