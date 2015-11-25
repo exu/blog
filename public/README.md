@@ -1,2 +1,0 @@
-# exu hugo based blog
-

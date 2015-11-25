@@ -1,0 +1,24 @@
+{{ partial "head" . }}
+<body class="home-template">
+
+    {{ partial "header" . }}
+    {{ partial "navigation" . }}
+
+    {{ $baseurl := .Site.BaseURL}}
+    <article class="content" role="main">
+        <section class="taxonomy-tags">
+            <h1>{{ .Title }}</h1>
+            <ul>
+                {{ $data := .Data }}
+                {{ range $key, $value := .Data.Terms }}
+                <li><a href="{{ $baseurl }}/{{ $data.Plural }}/{{ $key | urlize }}">{{ $key }}</a> {{ len $value }}</li>
+                {{ end }}
+            </ul>
+        </section>
+	</article>
+
+    {{ partial "footer" . }}
+    {{ partial "js" . }}
+
+</body>
+</html>

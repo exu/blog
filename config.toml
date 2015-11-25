@@ -1,20 +1,31 @@
-baseurl = "http://wysocki.in/blog/"
+baseurl = "http://wysocki.in/"
 languageCode = "en-us"
 title = "Jacek Wysocki DevLog"
-theme = "hugo-steam-theme"
-disqusShortname = "ex00"
+theme = "steam"
+# theme = "hugo-theme-air"
+disqusShortname = "wysocki"
 paginate = 10
+canonifyurls = false
+
+[permalinks]
+  post = "/:slug"
+
+
+[taxonomies]
+  tag = "tags"
+  category = "categories"
+  series = "series"
+
 
 [params]
-
 	title = "Jacek Wysocki DevLog"
-	subtitle = "stuff about programming"
+	subtitle = "various stuff about programming"
 	copyright = "Released under the MIT license."
 
 	# You can choose between green, orange, red and blue.
 	themeColor = "green"
 	# Enable Google Analytics be inserting your tracking code
-	googleAnalytics = ""
+	googleAnalytics = "UA-1883783-4"
 
 	# To provide some metadata for search engines and the about section in the footer
 	# feel free to add a few information about you and your website.
@@ -36,3 +47,28 @@ paginate = 10
 	backtotopStr = "Back to top"
 	shareStr = "Share"
 	pageNotFoundTitle = "404 - Page not found"
+
+
+
+[[menu.main]]
+    name = "Posts"
+    weight = -200
+    identifier = "root"
+    url = "/"
+    pre = "<i class='fa fa-heart-o'></i>"
+[[menu.main]]
+    name = "Series"
+    weight = -90
+    url = "/series/"
+    pre = "<i class='fa fa-folder-o'></i>"
+[[menu.main]]
+    name = "Tags"
+    weight = -100
+    url = "/tags/"
+    pre = "<i class='fa fa-star-o'></i>"
+[[menu.main]]
+    name = "Contact"
+    weight = -20
+    identifier = "contact"
+    url = "/contact/"
+    pre = "<i class='fa fa-envelope-o'></i>"
