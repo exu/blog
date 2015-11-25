@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Pdf on Jacek Wysocki DevLog</title>
+    <link>http://wysocki.in/tags/pdf/</link>
+    <description>Recent content in Pdf on Jacek Wysocki DevLog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 21 Jun 2012 00:00:00 +0000</lastBuildDate>
+    <atom:link href="http://wysocki.in/tags/pdf/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Merge many PDF files into one in linux shell</title>
+      <link>http://wysocki.in/merge-many-pdf-files-into-one-in-linux-shell</link>
+      <pubDate>Thu, 21 Jun 2012 00:00:00 +0000</pubDate>
+      
+      <guid>http://wysocki.in/merge-many-pdf-files-into-one-in-linux-shell</guid>
+      <description>Do you want to merge many PDF files into one? There you are&lt;span style=&#34;background-color: white;&#34;&gt;:&lt;/span&gt;&lt;br /&gt;
+&lt;br /&gt;
+Shell code:&lt;br /&gt;
+&lt;pre class=&#34;brush: bash&#34;&gt;$ gs -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite -sOutputFile=out.pdf in1.pdf in2.pdf
+&lt;/pre&gt;
+&lt;br /&gt;
+- out.pdf - destination file name&lt;br /&gt;
+- in1.pdf, in2.pdf - source file names&lt;br /&gt;
+&lt;br /&gt;
+(gs - Ghost Script - on Ubuntu 12.04 and OpenSuse 11.3 is installed by default)&lt;img src=&#34;http://feeds.feedburner.com/~r/JacekWysocki/~4/X-2uL0On7jE&#34; height=&#34;1&#34; width=&#34;1&#34;/&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

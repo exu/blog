@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Linux on Jacek Wysocki DevLog</title>
+    <link>http://wysocki.in/tags/linux/</link>
+    <description>Recent content in Linux on Jacek Wysocki DevLog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 26 Jun 2012 00:00:00 +0000</lastBuildDate>
+    <atom:link href="http://wysocki.in/tags/linux/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Linux Shell Tips - watch</title>
+      <link>http://wysocki.in/linux-shell-tips-watch</link>
+      <pubDate>Tue, 26 Jun 2012 00:00:00 +0000</pubDate>
+      
+      <guid>http://wysocki.in/linux-shell-tips-watch</guid>
+      <description>If you want to monitor some command execution in time like &#34;tail -f&#34; for files, probably your linux box have nice solution for you:&lt;br /&gt;
+&lt;br /&gt;
+&lt;pre class=&#34;brush:bash&#34;&gt;watch -n 1 &#39;ls -l&#39;
+&lt;/pre&gt;&lt;br /&gt;
+Where:&lt;br /&gt;
+&#39;-n 1&#39;  - time (in seconds) to refresh command output&lt;br /&gt;
+&#39;ls -l&#39; - command to execute in interval above&lt;br /&gt;
+&lt;br /&gt;
+When we add &#39;-d&#39; option (help: highlight changes between updates), watch inform Us what was changed between command executions.&lt;br /&gt;
+&lt;br /&gt;
+Example for &#39;ls&#39; command below:&lt;br /&gt;
+&lt;br /&gt;
+&lt;br /&gt;
+&lt;pre class=&#34;brush:bash&#34;&gt;watch --color -n 10 -d &#39;ls -la&#39;&lt;/pre&gt;&lt;br /&gt;
+Output:&lt;br /&gt;
+&lt;br /&gt;
+&lt;br /&gt;
+&lt;div class=&#34;separator&#34; style=&#34;clear: both; text-align: center;&#34;&gt;&lt;a href=&#34;http://1.bp.blogspot.com/-hWdWtskK6gk/TZteizdEJfI/AAAAAAAABE0/ET9I3HB39iU/s1600/screenshot13.png&#34; imageanchor=&#34;1&#34; style=&#34;margin-bottom: 1em; margin-right: 1em;&#34;&gt;&lt;img border=&#34;0&#34; height=&#34;148&#34; src=&#34;http://1.bp.blogspot.com/-hWdWtskK6gk/TZteizdEJfI/AAAAAAAABE0/ET9I3HB39iU/s320/screenshot13.png&#34; width=&#34;320&#34; /&gt;&lt;/a&gt;&lt;/div&gt;&lt;br /&gt;
+After change in directory structure watch informs us about changes:&lt;br /&gt;
+&lt;div class=&#34;separator&#34; style=&#34;clear: both; text-align: center;&#34;&gt;&lt;a href=&#34;http://1.bp.blogspot.com/-E-DmRqYVeT8/TZtenHXr0FI/AAAAAAAABE8/9Lxnznlbf5c/s1600/screenshot14.png&#34; imageanchor=&#34;1&#34; style=&#34;margin-bottom: 1em; margin-right: 1em;&#34;&gt;&lt;img border=&#34;0&#34; height=&#34;126&#34; src=&#34;http://1.bp.blogspot.com/-E-DmRqYVeT8/TZtenHXr0FI/AAAAAAAABE8/9Lxnznlbf5c/s320/screenshot14.png&#34; width=&#34;320&#34; /&gt;&lt;/a&gt;&lt;/div&gt;&lt;br /&gt;&lt;img src=&#34;http://feeds.feedburner.com/~r/JacekWysocki/~4/ElkzEVxUDLs&#34; height=&#34;1&#34; width=&#34;1&#34;/&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Linux Shell Tips - rm exclude emulation</title>
+      <link>http://wysocki.in/linux-shell-tips-rm-exclude-emulation</link>
+      <pubDate>Thu, 21 Jun 2012 00:00:00 +0000</pubDate>
+      
+      <guid>http://wysocki.in/linux-shell-tips-rm-exclude-emulation</guid>
+      <description>If you want to remove all files and&amp;nbsp;sub-directories&amp;nbsp;from directory exept some files you can use &amp;nbsp;rm and find combination as described below:&amp;nbsp;&lt;span style=&#34;background-color: white;&#34;&gt;:&lt;/span&gt;&lt;br /&gt;
+&lt;br /&gt;
+&lt;pre class=&#34;brush: bash&#34;&gt;rm -rf $(find . ! -wholename &#39;./web/index.php&#39; ! -wholename &#39;./web/.htaccess&#39; ! -name &#39;.&#39; ! -name &#39;web&#39;)
+&lt;/pre&gt;
+&lt;br /&gt;
+You can see more find power examples on &amp;nbsp;&lt;a href=&#34;http://www.infoanda.com/resources/find.htm&#34;&gt;http://www.infoanda.com/resources/find.htm&lt;/a&gt;&lt;img src=&#34;http://feeds.feedburner.com/~r/JacekWysocki/~4/NcDsPXFMvYc&#34; height=&#34;1&#34; width=&#34;1&#34;/&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>VIM &#43; gpicker = SublimeText 2 like files fuzzy searching</title>
+      <link>http://wysocki.in/vim-gpicker-sublimetext-2-like-files-fuzzy-searching</link>
+      <pubDate>Fri, 15 Jun 2012 00:00:00 +0000</pubDate>
+      
+      <guid>http://wysocki.in/vim-gpicker-sublimetext-2-like-files-fuzzy-searching</guid>
+      <description>Authors of SublimeText2 make great job with Fuzzy searching. In the past&amp;nbsp;I&#39;ve&amp;nbsp;used &lt;a href=&#34;https://wincent.com/products/command-t&#34; target=&#34;_blank&#34;&gt;Command-T&lt;/a&gt; and &lt;a href=&#34;https://github.com/kien/ctrlp.vim&#34; target=&#34;_blank&#34;&gt;CtrlP&lt;/a&gt; plugins but both of them doesn&#39;t works well for me. Then i found &lt;a href=&#34;https://github.com/alk/gpicker&#34; target=&#34;_blank&#34;&gt;Gpicker&lt;/a&gt; project it is written in C so its very fast and can be used in two most&amp;nbsp;powerful&amp;nbsp;editors: VIM (gpicker.vim) or Emacs (gpicker.el). I&#39;m using now gpicker for both of them. It&#39;s not so&amp;nbsp;powerful&amp;nbsp;like SublimeText but it get the job done very well.&lt;br /&gt;
+&lt;br /&gt;
+You can install gpicker in ubuntu&lt;br /&gt;
+&lt;br /&gt;
+&lt;pre class=&#34;brush:bash&#34;&gt;$ sudo apt-get install gpicker
+&lt;/pre&gt;
+&lt;br /&gt;
+Next step is to configure your favourite editor. In VIM you must put&amp;nbsp;&lt;b&gt;gpicker.vim&lt;/b&gt; to &lt;b&gt;~/.vim/plugins&lt;/b&gt; directory (or use any other technique pathogen, vundle or whatever). In emacs you must load gpicker.el in your init.el file (I&#39;m using prelude for that ~/.emacs.d/vendor/).&amp;nbsp;It is working out of the box for me (Ubuntu 12.04, Vim 7.3.429, Emacs-snapshot - 24.1.50.1).&lt;br /&gt;
+&lt;br /&gt;
+My&amp;nbsp;key bindings&amp;nbsp;in VIM:&lt;br /&gt;
+&lt;br /&gt;
+&lt;pre class=&#34;brush:bash&#34;&gt;map &amp;lt;Leader&amp;gt;p :GPickFile&amp;lt;CR&amp;gt;
+noremap &amp;lt;C-p&amp;gt; :GPickFile&amp;lt;CR&amp;gt;
+map &amp;lt;Leader&amp;gt;. :GPickBuffer&amp;lt;CR&amp;gt;
+
+&lt;/pre&gt;
+&lt;br /&gt;
+Final result:&lt;br /&gt;
+&lt;br /&gt;
+&lt;div class=&#34;separator&#34; style=&#34;clear: both; text-align: center;&#34;&gt;
+&lt;a href=&#34;http://4.bp.blogspot.com/-TaUFafNGFJ8/T9rtpO2psJI/AAAAAAAAFtA/tSlfo5UlJMA/s1600/Snap+2012-06-15+at+10.08.41.png&#34; imageanchor=&#34;1&#34; style=&#34;margin-left: 1em; margin-right: 1em;&#34;&gt;&lt;img border=&#34;0&#34; height=&#34;408&#34; src=&#34;http://4.bp.blogspot.com/-TaUFafNGFJ8/T9rtpO2psJI/AAAAAAAAFtA/tSlfo5UlJMA/s640/Snap+2012-06-15+at+10.08.41.png&#34; width=&#34;640&#34; /&gt;&lt;/a&gt;&lt;/div&gt;
+&lt;div style=&#34;text-align: center;&#34;&gt;
+Gpicker in VIM&lt;/div&gt;
+&lt;div style=&#34;text-align: center;&#34;&gt;
+&lt;br /&gt;&lt;/div&gt;
+&lt;div style=&#34;text-align: center;&#34;&gt;
+&lt;br /&gt;&lt;/div&gt;
+&lt;div class=&#34;separator&#34; style=&#34;clear: both; text-align: center;&#34;&gt;
+&lt;a href=&#34;http://3.bp.blogspot.com/-KGMdsnTypSQ/T9ruArP65vI/AAAAAAAAFtI/uL0KxaQVTdw/s1600/Snap+2012-06-15+at+10.10.23.png&#34; imageanchor=&#34;1&#34; style=&#34;margin-left: 1em; margin-right: 1em;&#34;&gt;&lt;img border=&#34;0&#34; height=&#34;574&#34; src=&#34;http://3.bp.blogspot.com/-KGMdsnTypSQ/T9ruArP65vI/AAAAAAAAFtI/uL0KxaQVTdw/s640/Snap+2012-06-15+at+10.10.23.png&#34; width=&#34;640&#34; /&gt;&lt;/a&gt;&lt;/div&gt;
+&lt;div style=&#34;text-align: center;&#34;&gt;
+Gpicker in Emacs&lt;/div&gt;
+&lt;div style=&#34;text-align: center;&#34;&gt;
+&lt;br /&gt;&lt;/div&gt;
+&lt;div style=&#34;text-align: left;&#34;&gt;
+&lt;br /&gt;&lt;/div&gt;
+&lt;div style=&#34;text-align: left;&#34;&gt;
+&lt;br /&gt;&lt;/div&gt;
+&lt;div style=&#34;text-align: left;&#34;&gt;
+You can use it in shell too:&amp;nbsp;&lt;/div&gt;
+&lt;div class=&#34;separator&#34; style=&#34;clear: both; text-align: center;&#34;&gt;
+&lt;a href=&#34;http://4.bp.blogspot.com/-pMnKhvNlwDA/T9rvAYmyMaI/AAAAAAAAFtQ/HbB38dJvebU/s1600/Snap+2012-06-15+at+10.12.07.png&#34; imageanchor=&#34;1&#34; style=&#34;margin-left: 1em; margin-right: 1em;&#34;&gt;&lt;img border=&#34;0&#34; height=&#34;410&#34; src=&#34;http://4.bp.blogspot.com/-pMnKhvNlwDA/T9rvAYmyMaI/AAAAAAAAFtQ/HbB38dJvebU/s640/Snap+2012-06-15+at+10.12.07.png&#34; width=&#34;640&#34; /&gt;&lt;/a&gt;&lt;/div&gt;
+&lt;br /&gt;
+&lt;div class=&#34;separator&#34; style=&#34;clear: both; text-align: center;&#34;&gt;
+&lt;a href=&#34;http://1.bp.blogspot.com/-z8B1eZ2o3w0/T9rvBVOAG4I/AAAAAAAAFtU/cPZgKLj9nR0/s1600/Snap+2012-06-15+at+10.14.25.png&#34; imageanchor=&#34;1&#34; style=&#34;margin-left: 1em; margin-right: 1em;&#34;&gt;&lt;img border=&#34;0&#34; height=&#34;406&#34; src=&#34;http://1.bp.blogspot.com/-z8B1eZ2o3w0/T9rvBVOAG4I/AAAAAAAAFtU/cPZgKLj9nR0/s640/Snap+2012-06-15+at+10.14.25.png&#34; width=&#34;640&#34; /&gt;&lt;/a&gt;&lt;/div&gt;
+&lt;div style=&#34;text-align: left;&#34;&gt;
+&lt;br /&gt;
+You can look in my &lt;a href=&#34;https://github.com/exu/vim-dotfiles&#34; target=&#34;_blank&#34;&gt;vim dotfiles&lt;/a&gt; for more information.&amp;nbsp;If you want try my VIM configs you can run command below in your shell&lt;br /&gt;
+&lt;br /&gt;
+&lt;pre class=&#34;brush:bash&#34;&gt;$ curl -L https://raw.github.com/exu/vim-dotfiles/master/gitinstall|bash&lt;/pre&gt;
+&lt;br /&gt;
+&lt;span style=&#34;color: red; font-size: large;&#34;&gt;&lt;b&gt;WARNING &lt;/b&gt;this command will kill your .vimrc file and .vim/ directory so &lt;b&gt;BACKUP &lt;/b&gt;your old configs! look at &lt;a href=&#34;https://raw.github.com/exu/vim-dotfiles/master/gitinstall&#34; target=&#34;_blank&#34;&gt;https://raw.github.com/exu/vim-dotfiles/master/gitinstall&lt;/a&gt; for more details&lt;/span&gt;&lt;br /&gt;
+&lt;br /&gt;&lt;/div&gt;&lt;img src=&#34;http://feeds.feedburner.com/~r/JacekWysocki/~4/wMpp9uJrixw&#34; height=&#34;1&#34; width=&#34;1&#34;/&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Nice ubuntu counters</title>
+      <link>http://wysocki.in/nice-ubuntu-counters</link>
+      <pubDate>Wed, 25 Apr 2012 00:00:00 +0000</pubDate>
+      
+      <guid>http://wysocki.in/nice-ubuntu-counters</guid>
+      <description>&lt;img border=&#34;0&#34; src=&#34;http://www.ubuntu.com/countdown/banner1.png&#34; /&gt;&lt;br /&gt;
+&lt;img border=&#34;0&#34; src=&#34;http://www.ubuntu.com/countdown/banner2.png&#34; /&gt;&lt;br /&gt;
+&lt;img border=&#34;0&#34; src=&#34;http://www.ubuntu.com/countdown/banner3.png&#34; /&gt;&lt;br /&gt;
+&lt;img border=&#34;0&#34; src=&#34;http://www.ubuntu.com/countdown/banner4.png&#34; /&gt;&lt;br /&gt;
+&lt;img border=&#34;0&#34; src=&#34;http://www.ubuntu.com/countdown/banner5.png&#34; /&gt;&lt;br /&gt;
+&lt;img border=&#34;0&#34; src=&#34;http://www.ubuntu.com/countdown/banner6.png&#34; /&gt;&lt;br /&gt;
+&lt;img border=&#34;0&#34; src=&#34;http://www.ubuntu.com/countdown/banner7.png&#34; /&gt;&lt;br /&gt;
+&lt;img border=&#34;0&#34; src=&#34;http://www.ubuntu.com/countdown/banner8.png&#34; /&gt;&lt;br /&gt;
+&lt;img border=&#34;0&#34; src=&#34;http://www.ubuntu.com/countdown/banner9.png&#34; /&gt;&lt;br /&gt;
+&lt;img border=&#34;0&#34; src=&#34;http://www.ubuntu.com/countdown/banner10.png&#34; /&gt;&lt;br /&gt;
+&lt;img border=&#34;0&#34; src=&#34;http://www.ubuntu.com/countdown/banner11.png&#34; /&gt;&lt;br /&gt;
+&lt;img border=&#34;0&#34; src=&#34;http://www.ubuntu.com/countdown/banner12.png&#34; /&gt;&lt;br /&gt;
+&lt;img border=&#34;0&#34; src=&#34;http://www.ubuntu.com/countdown/banner13.png&#34; /&gt;&lt;br /&gt;&lt;img src=&#34;http://feeds.feedburner.com/~r/JacekWysocki/~4/ztXBoNr4M7A&#34; height=&#34;1&#34; width=&#34;1&#34;/&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>PHP Ubuntu simple server monitoring script</title>
+      <link>http://wysocki.in/php-ubuntu-simple-server-monitoring-script</link>
+      <pubDate>Mon, 12 Sep 2011 00:00:00 +0000</pubDate>
+      
+      <guid>http://wysocki.in/php-ubuntu-simple-server-monitoring-script</guid>
+      <description>Simple PHP monitoring script.&lt;br /&gt;
+&lt;script src=&#34;https://gist.github.com/1203367.js?file=monitoring&#34;&gt;&lt;/script&gt;
+&lt;br /&gt;
+&lt;b&gt;Change hosts variable (array) and path to icon file (-i /usr/share/icons/Faenza/status/scalable/error.svg).&lt;/b&gt;
+
+&lt;br /&gt;
+&lt;br /&gt;
+You can use it in your crontab:
+
+Edit your cron settings:
+&lt;br /&gt;
+&lt;pre class=&#34;brush:bash&#34;&gt;
+crontab -e
+&lt;/pre&gt;
+&lt;br /&gt;
+and insert:
+
+&lt;br /&gt;
+&lt;pre class=&#34;brush:bash&#34;&gt;
+* * * * * php /home/exu/scripts/monitoring
+&lt;/pre&gt;
+&lt;br /&gt;
+(change /home/exu/scripts/monitoring to path to your file)
+
+
+Enjoy!&lt;br /&gt;
+&lt;br /&gt;
+&lt;div class=&#34;separator&#34; style=&#34;clear: both; text-align: center;&#34;&gt;
+&lt;a href=&#34;http://2.bp.blogspot.com/-BzQe9cJrnMA/TmjLmiUL-zI/AAAAAAAABWc/LI9qTZST_lI/s1600/Przechwytywanie_monitoring.JPG&#34; imageanchor=&#34;1&#34; style=&#34;margin-left: 1em; margin-right: 1em;&#34;&gt;&lt;img border=&#34;0&#34; height=&#34;132&#34; src=&#34;http://2.bp.blogspot.com/-BzQe9cJrnMA/TmjLmiUL-zI/AAAAAAAABWc/LI9qTZST_lI/s320/Przechwytywanie_monitoring.JPG&#34; width=&#34;320&#34; /&gt;&lt;/a&gt;&lt;/div&gt;
+&lt;br /&gt;&lt;img src=&#34;http://feeds.feedburner.com/~r/JacekWysocki/~4/yDk6njQP12E&#34; height=&#34;1&#34; width=&#34;1&#34;/&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>rsync with --itemize-changes flag</title>
+      <link>http://wysocki.in/rsync-with-itemize-changes-flag</link>
+      <pubDate>Thu, 07 Jul 2011 00:00:00 +0000</pubDate>
+      
+      <guid>http://wysocki.in/rsync-with-itemize-changes-flag</guid>
+      <description>My yesterday rsync battle notes:&lt;br /&gt;
+&lt;pre class=&#34;brush:bash&#34;&gt;rsync --checksum --verbose  --recursive --delete --itemize-changes --times SOURCE_HOST DESTINATION_HOST
+&lt;/pre&gt;&lt;br /&gt;
+&lt;pre&gt;+- incoming / outgoing / change
+|
+|+- type : f for a file, a d for a
+||         directory, an L for a symlink,
+||         a D for a device, and a S  for  a
+||         special file (e.g. named sockets and fifos
+||
+&amp;lt;f.st......
+  |||||||||
+  ||||||||+- x - extended attributes
+  |||||||+- a - ACL info changed
+  ||||||+- u - reserved for future
+  |||||+- g - group
+  ||||+- o - owner
+  |||+- p - permissions
+  ||+- t - modification time
+  |+- s - size
+  +- c - checksum
+
+
+Additional information:
+. - no change
+* - e.g. *deleting
+c - local change/creation e.g. creating dir symlink
+&amp;lt; - file transfer to remote
+&amp;gt; - file transfer to local host (received)
+&lt;/pre&gt;&lt;img src=&#34;http://feeds.feedburner.com/~r/JacekWysocki/~4/rLFX2vC_GYE&#34; height=&#34;1&#34; width=&#34;1&#34;/&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Cool, but obscure unix tools - KKovacs</title>
+      <link>http://wysocki.in/cool-unix-tools</link>
+      <pubDate>Mon, 30 May 2011 00:00:00 +0000</pubDate>
+      
+      <guid>http://wysocki.in/cool-unix-tools</guid>
+      <description>&lt;a href=&#34;http://kkovacs.eu/cool-but-obscure-unix-tools&#34;&gt;Cool, but obscure unix tools :: KKovacs&lt;/a&gt; - realy great linux toolbox.&lt;img src=&#34;http://feeds.feedburner.com/~r/JacekWysocki/~4/l8h_sxxpFlQ&#34; height=&#34;1&#34; width=&#34;1&#34;/&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Ubuntu 11.04 po instalacji na VirtualBox</title>
+      <link>http://wysocki.in/ubuntu-11.04-po-instalacji-na-virtualbox</link>
+      <pubDate>Fri, 06 May 2011 00:00:00 +0000</pubDate>
+      
+      <guid>http://wysocki.in/ubuntu-11.04-po-instalacji-na-virtualbox</guid>
+      <description>&lt;div class=&#34;separator&#34; style=&#34;clear: both; text-align: left;&#34;&gt;Oto moje Ubuntu 11.04 po wstępnej instalacji i konfiguracji.&amp;nbsp;&lt;/div&gt;&lt;br /&gt;
+&lt;div class=&#34;separator&#34; style=&#34;clear: both; text-align: left;&#34;&gt;&lt;a href=&#34;http://3.bp.blogspot.com/-0Ti6ccdG8rw/TbqcHwpXzNI/AAAAAAAABFc/pkphlfdeYPI/s1600/natty-01.png&#34; imageanchor=&#34;1&#34; style=&#34;margin-left: 1em; margin-right: 1em;&#34;&gt;&lt;img border=&#34;0&#34; height=&#34;180&#34; src=&#34;http://3.bp.blogspot.com/-0Ti6ccdG8rw/TbqcHwpXzNI/AAAAAAAABFc/pkphlfdeYPI/s320/natty-01.png&#34; width=&#34;320&#34; /&gt;&lt;/a&gt;&lt;/div&gt;&lt;ul&gt;&lt;li&gt;na Virtualbox&#39;ie &amp;nbsp;&lt;strike&gt;czasami się zacina&lt;/strike&gt;&amp;nbsp;przestał się zacinać po pierwszej aktualizacji.&lt;/li&gt;
+&lt;li&gt;Jak dla mnie unity wprowadziło delikatny powiew nowości (lubię nowe rzeczy).&lt;/li&gt;
+&lt;li&gt;Co mnie najbardziej zdziwiło to na moim starym desktopie z Pentium 4 2.8 i 2GB działa płynnie a co najważniejsze działa po aktualizacji z wersji 10.10.&lt;/li&gt;
+&lt;/ul&gt;&lt;img src=&#34;http://feeds.feedburner.com/~r/JacekWysocki/~4/spsP_KvbTkU&#34; height=&#34;1&#34; width=&#34;1&#34;/&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Ubuntu 11.04 już jest</title>
+      <link>http://wysocki.in/ubuntu-11.04-juz-jest</link>
+      <pubDate>Thu, 28 Apr 2011 00:00:00 +0000</pubDate>
+      
+      <guid>http://wysocki.in/ubuntu-11.04-juz-jest</guid>
+      <description>&lt;a href=&#34;http://www.ubuntu.com/&#34;&gt;&lt;img src=&#34;http://www.ubuntu.com/countdown/banner2.png&#34; border=&#34;0&#34; width=&#34;180&#34; height=&#34;150&#34; alt=&#34;The next version of Ubuntu is coming soon&#34;&gt;&lt;/a&gt;&lt;br /&gt;
+&lt;br /&gt;
+Postawione na VirtualBox , w wolnej chwili postaram się opisać wrażenia. Wrażenia po godzinie używania - spodziewałem się że będzie gorzej ;)&lt;img src=&#34;http://feeds.feedburner.com/~r/JacekWysocki/~4/f76mKSz1t8Q&#34; height=&#34;1&#34; width=&#34;1&#34;/&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

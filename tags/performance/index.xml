@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Performance on Jacek Wysocki DevLog</title>
+    <link>http://wysocki.in/tags/performance/</link>
+    <description>Recent content in Performance on Jacek Wysocki DevLog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 09 Jun 2011 00:00:00 +0000</lastBuildDate>
+    <atom:link href="http://wysocki.in/tags/performance/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Faster PHP? Kick off getters and setters.</title>
+      <link>http://wysocki.in/faster-php-kick-off-getters-and-setters</link>
+      <pubDate>Thu, 09 Jun 2011 00:00:00 +0000</pubDate>
+      
+      <guid>http://wysocki.in/faster-php-kick-off-getters-and-setters</guid>
+      <description>In PHP getters and setters sucks on performance.&lt;br /&gt;
+&lt;br /&gt;
+&lt;script src=&#34;https://gist.github.com/1016679.js?file=getterssetter_vs_pubproperties.php&#34;&gt;&lt;/script&gt;&lt;br /&gt;
+&lt;br /&gt;
+Output on my Ubuntu VM (PHP 5.3.5):&lt;br /&gt;
+&lt;pre class=&#34;brush:bash&#34;&gt;
+test_getters_setters: 0.64945447444916
+test_public_properties: 0.27986690998077
+test_magic_methods: 1.0444820642471
+test_array_access: 0.9640593290329
+
+&lt;/pre&gt;&lt;br /&gt;
+WTF? How many getters/setters You use in your project per request?&lt;br /&gt;
+&lt;br /&gt;
+Source: &lt;a href=&#34;http://code.google.com/intl/pl/speed/articles/optimizing-php.html&#34;&gt;Let&#39;s make the web faster by Google&lt;/a&gt;&lt;img src=&#34;http://feeds.feedburner.com/~r/JacekWysocki/~4/_mGAmLFOboU&#34; height=&#34;1&#34; width=&#34;1&#34;/&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

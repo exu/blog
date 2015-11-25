@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Contacts on Jacek Wysocki DevLog</title>
+    <link>http://wysocki.in/contact/</link>
+    <description>Recent content in Contacts on Jacek Wysocki DevLog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 22 Jan 2015 00:00:00 +0000</lastBuildDate>
+    <atom:link href="http://wysocki.in/contact/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Contact</title>
+      <link>http://wysocki.in/contact/</link>
+      <pubDate>Thu, 22 Jan 2015 00:00:00 +0000</pubDate>
+      
+      <guid>http://wysocki.in/contact/</guid>
+      <description>
+
+&lt;h2 id=&#34;by-email:d680e8a854a7cbad6d490c445cba2eba&#34;&gt;by Email&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;mailto:&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;script&gt;
+var a = (&#39;jacek.wysocki&#39; + &#39;+blog@&#39; + &#39;gmail.com&#39;)
+document.write(&#39;&lt;a href=&#34;mailto:&#39; + a + &#39;&#34;&gt;&#39; + a + &#39;&lt;/a&gt;&#39;)
+&lt;/script&gt;
+
+&lt;p&gt;&lt;NOSCRIPT&gt;
+    &lt;em&gt;Email address protected by JavaScript.&lt;BR&gt;
+    Please enable JavaScript to contact me.&lt;/em&gt;
+&lt;/NOSCRIPT&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;social-media:d680e8a854a7cbad6d490c445cba2eba&#34;&gt;Social media&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;http://twitter.com/ex00&#34;&gt;ex00@twitter&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://github.com/exu&#34;&gt;exu@github&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

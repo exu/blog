@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Vim on Jacek Wysocki DevLog</title>
+    <link>http://wysocki.in/tags/vim/</link>
+    <description>Recent content in Vim on Jacek Wysocki DevLog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 03 Jul 2012 00:00:00 +0000</lastBuildDate>
+    <atom:link href="http://wysocki.in/tags/vim/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>VIM - Python Koans plugin</title>
+      <link>http://wysocki.in/vim-python-koans-plugin</link>
+      <pubDate>Tue, 03 Jul 2012 00:00:00 +0000</pubDate>
+      
+      <guid>http://wysocki.in/vim-python-koans-plugin</guid>
+      <description>Yesterday I&#39;ve started (again) python koans, and switching into terminal to run again and again pissed me off. So from now i press 1 combination and shell has gone away :), koans run in background and My lovely editor put cursor on last error.&lt;br /&gt;
+&lt;br /&gt;
+Meet the VIM python koans helper: &lt;br /&gt;
+&lt;br /&gt;
+&lt;a href=&#34;https://github.com/exu/vim-python_koans&#34;&gt;https://github.com/exu/vim-python_koans&lt;/a&gt;&lt;br /&gt;
+&lt;br /&gt;
+Output format sucks a little (because my VimL skills sucks - I didn&#39;t find solution for this ^@ ^] symbols) but it is great productivity improvement.&lt;br /&gt;
+&lt;br /&gt;
+&lt;a href=&#34;http://2.bp.blogspot.com/--wc-yuEJnY4/T_KVhxt2PpI/AAAAAAAAHLA/SGX29_1h1Ps/s1600/Snap%2B2012-07-03%2Bat%2B08.41.49.png&#34; imageanchor=&#34;1&#34;&gt;&lt;img border=&#34;0&#34; height=&#34;328&#34; src=&#34;http://2.bp.blogspot.com/--wc-yuEJnY4/T_KVhxt2PpI/AAAAAAAAHLA/SGX29_1h1Ps/s640/Snap%2B2012-07-03%2Bat%2B08.41.49.png&#34; width=&#34;640&#34; /&gt;&lt;/a&gt;&lt;br /&gt;
+Picture 1: Output window with cursor on last error&lt;img src=&#34;http://feeds.feedburner.com/~r/JacekWysocki/~4/Kqj5zIbZ2gI&#34; height=&#34;1&#34; width=&#34;1&#34;/&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>VIM faster Text-blocks with onoremap</title>
+      <link>http://wysocki.in/vim-faster-text-blocks-with-onoremap</link>
+      <pubDate>Mon, 18 Jun 2012 00:00:00 +0000</pubDate>
+      
+      <guid>http://wysocki.in/vim-faster-text-blocks-with-onoremap</guid>
+      <description>I&#39;ve found nice VIM feature to add mapping to operators &lt;br /&gt;
+&lt;br /&gt;
+&lt;pre class=&#34;brush:bash&#34;&gt;onoremap p i(
+onoremap m i{
+onoremap &#34; i&#34;
+onoremap &#39; i&#39;
+&lt;/pre&gt;
+&lt;br /&gt;
+Now i can press &lt;br /&gt;
+&lt;pre&gt;c&#39; d&#39;&lt;/pre&gt;
+to use defined text-blocks &lt;br /&gt;
+&lt;br /&gt;
+This technique didn&#39;t work with visual mode (you must press &lt;span style=&#34;font-family: &#39;Courier New&#39;, Courier, monospace;&#34;&gt;vi&#39;&lt;/span&gt;&lt;span style=&#34;font-family: inherit;&#34;&gt;)&lt;/span&gt;&lt;img src=&#34;http://feeds.feedburner.com/~r/JacekWysocki/~4/OrR24mzbwUI&#34; height=&#34;1&#34; width=&#34;1&#34;/&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>My vimrc file on github.</title>
+      <link>http://wysocki.in/my-vimrc-file-on-github</link>
+      <pubDate>Fri, 15 Jun 2012 00:00:00 +0000</pubDate>
+      
+      <guid>http://wysocki.in/my-vimrc-file-on-github</guid>
+      <description>Enjoy!&lt;br /&gt;
+&lt;br /&gt;
+&lt;a href=&#34;https://github.com/exu/vim-dotfiles/blob/master/vimrc&#34;&gt;https://github.com/exu/vim-dotfiles/blob/master/vimrc&lt;/a&gt;&lt;img src=&#34;http://feeds.feedburner.com/~r/JacekWysocki/~4/YbQJ9OdYJLE&#34; height=&#34;1&#34; width=&#34;1&#34;/&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>VIM &#43; gpicker = SublimeText 2 like files fuzzy searching</title>
+      <link>http://wysocki.in/vim-gpicker-sublimetext-2-like-files-fuzzy-searching</link>
+      <pubDate>Fri, 15 Jun 2012 00:00:00 +0000</pubDate>
+      
+      <guid>http://wysocki.in/vim-gpicker-sublimetext-2-like-files-fuzzy-searching</guid>
+      <description>Authors of SublimeText2 make great job with Fuzzy searching. In the past&amp;nbsp;I&#39;ve&amp;nbsp;used &lt;a href=&#34;https://wincent.com/products/command-t&#34; target=&#34;_blank&#34;&gt;Command-T&lt;/a&gt; and &lt;a href=&#34;https://github.com/kien/ctrlp.vim&#34; target=&#34;_blank&#34;&gt;CtrlP&lt;/a&gt; plugins but both of them doesn&#39;t works well for me. Then i found &lt;a href=&#34;https://github.com/alk/gpicker&#34; target=&#34;_blank&#34;&gt;Gpicker&lt;/a&gt; project it is written in C so its very fast and can be used in two most&amp;nbsp;powerful&amp;nbsp;editors: VIM (gpicker.vim) or Emacs (gpicker.el). I&#39;m using now gpicker for both of them. It&#39;s not so&amp;nbsp;powerful&amp;nbsp;like SublimeText but it get the job done very well.&lt;br /&gt;
+&lt;br /&gt;
+You can install gpicker in ubuntu&lt;br /&gt;
+&lt;br /&gt;
+&lt;pre class=&#34;brush:bash&#34;&gt;$ sudo apt-get install gpicker
+&lt;/pre&gt;
+&lt;br /&gt;
+Next step is to configure your favourite editor. In VIM you must put&amp;nbsp;&lt;b&gt;gpicker.vim&lt;/b&gt; to &lt;b&gt;~/.vim/plugins&lt;/b&gt; directory (or use any other technique pathogen, vundle or whatever). In emacs you must load gpicker.el in your init.el file (I&#39;m using prelude for that ~/.emacs.d/vendor/).&amp;nbsp;It is working out of the box for me (Ubuntu 12.04, Vim 7.3.429, Emacs-snapshot - 24.1.50.1).&lt;br /&gt;
+&lt;br /&gt;
+My&amp;nbsp;key bindings&amp;nbsp;in VIM:&lt;br /&gt;
+&lt;br /&gt;
+&lt;pre class=&#34;brush:bash&#34;&gt;map &amp;lt;Leader&amp;gt;p :GPickFile&amp;lt;CR&amp;gt;
+noremap &amp;lt;C-p&amp;gt; :GPickFile&amp;lt;CR&amp;gt;
+map &amp;lt;Leader&amp;gt;. :GPickBuffer&amp;lt;CR&amp;gt;
+
+&lt;/pre&gt;
+&lt;br /&gt;
+Final result:&lt;br /&gt;
+&lt;br /&gt;
+&lt;div class=&#34;separator&#34; style=&#34;clear: both; text-align: center;&#34;&gt;
+&lt;a href=&#34;http://4.bp.blogspot.com/-TaUFafNGFJ8/T9rtpO2psJI/AAAAAAAAFtA/tSlfo5UlJMA/s1600/Snap+2012-06-15+at+10.08.41.png&#34; imageanchor=&#34;1&#34; style=&#34;margin-left: 1em; margin-right: 1em;&#34;&gt;&lt;img border=&#34;0&#34; height=&#34;408&#34; src=&#34;http://4.bp.blogspot.com/-TaUFafNGFJ8/T9rtpO2psJI/AAAAAAAAFtA/tSlfo5UlJMA/s640/Snap+2012-06-15+at+10.08.41.png&#34; width=&#34;640&#34; /&gt;&lt;/a&gt;&lt;/div&gt;
+&lt;div style=&#34;text-align: center;&#34;&gt;
+Gpicker in VIM&lt;/div&gt;
+&lt;div style=&#34;text-align: center;&#34;&gt;
+&lt;br /&gt;&lt;/div&gt;
+&lt;div style=&#34;text-align: center;&#34;&gt;
+&lt;br /&gt;&lt;/div&gt;
+&lt;div class=&#34;separator&#34; style=&#34;clear: both; text-align: center;&#34;&gt;
+&lt;a href=&#34;http://3.bp.blogspot.com/-KGMdsnTypSQ/T9ruArP65vI/AAAAAAAAFtI/uL0KxaQVTdw/s1600/Snap+2012-06-15+at+10.10.23.png&#34; imageanchor=&#34;1&#34; style=&#34;margin-left: 1em; margin-right: 1em;&#34;&gt;&lt;img border=&#34;0&#34; height=&#34;574&#34; src=&#34;http://3.bp.blogspot.com/-KGMdsnTypSQ/T9ruArP65vI/AAAAAAAAFtI/uL0KxaQVTdw/s640/Snap+2012-06-15+at+10.10.23.png&#34; width=&#34;640&#34; /&gt;&lt;/a&gt;&lt;/div&gt;
+&lt;div style=&#34;text-align: center;&#34;&gt;
+Gpicker in Emacs&lt;/div&gt;
+&lt;div style=&#34;text-align: center;&#34;&gt;
+&lt;br /&gt;&lt;/div&gt;
+&lt;div style=&#34;text-align: left;&#34;&gt;
+&lt;br /&gt;&lt;/div&gt;
+&lt;div style=&#34;text-align: left;&#34;&gt;
+&lt;br /&gt;&lt;/div&gt;
+&lt;div style=&#34;text-align: left;&#34;&gt;
+You can use it in shell too:&amp;nbsp;&lt;/div&gt;
+&lt;div class=&#34;separator&#34; style=&#34;clear: both; text-align: center;&#34;&gt;
+&lt;a href=&#34;http://4.bp.blogspot.com/-pMnKhvNlwDA/T9rvAYmyMaI/AAAAAAAAFtQ/HbB38dJvebU/s1600/Snap+2012-06-15+at+10.12.07.png&#34; imageanchor=&#34;1&#34; style=&#34;margin-left: 1em; margin-right: 1em;&#34;&gt;&lt;img border=&#34;0&#34; height=&#34;410&#34; src=&#34;http://4.bp.blogspot.com/-pMnKhvNlwDA/T9rvAYmyMaI/AAAAAAAAFtQ/HbB38dJvebU/s640/Snap+2012-06-15+at+10.12.07.png&#34; width=&#34;640&#34; /&gt;&lt;/a&gt;&lt;/div&gt;
+&lt;br /&gt;
+&lt;div class=&#34;separator&#34; style=&#34;clear: both; text-align: center;&#34;&gt;
+&lt;a href=&#34;http://1.bp.blogspot.com/-z8B1eZ2o3w0/T9rvBVOAG4I/AAAAAAAAFtU/cPZgKLj9nR0/s1600/Snap+2012-06-15+at+10.14.25.png&#34; imageanchor=&#34;1&#34; style=&#34;margin-left: 1em; margin-right: 1em;&#34;&gt;&lt;img border=&#34;0&#34; height=&#34;406&#34; src=&#34;http://1.bp.blogspot.com/-z8B1eZ2o3w0/T9rvBVOAG4I/AAAAAAAAFtU/cPZgKLj9nR0/s640/Snap+2012-06-15+at+10.14.25.png&#34; width=&#34;640&#34; /&gt;&lt;/a&gt;&lt;/div&gt;
+&lt;div style=&#34;text-align: left;&#34;&gt;
+&lt;br /&gt;
+You can look in my &lt;a href=&#34;https://github.com/exu/vim-dotfiles&#34; target=&#34;_blank&#34;&gt;vim dotfiles&lt;/a&gt; for more information.&amp;nbsp;If you want try my VIM configs you can run command below in your shell&lt;br /&gt;
+&lt;br /&gt;
+&lt;pre class=&#34;brush:bash&#34;&gt;$ curl -L https://raw.github.com/exu/vim-dotfiles/master/gitinstall|bash&lt;/pre&gt;
+&lt;br /&gt;
+&lt;span style=&#34;color: red; font-size: large;&#34;&gt;&lt;b&gt;WARNING &lt;/b&gt;this command will kill your .vimrc file and .vim/ directory so &lt;b&gt;BACKUP &lt;/b&gt;your old configs! look at &lt;a href=&#34;https://raw.github.com/exu/vim-dotfiles/master/gitinstall&#34; target=&#34;_blank&#34;&gt;https://raw.github.com/exu/vim-dotfiles/master/gitinstall&lt;/a&gt; for more details&lt;/span&gt;&lt;br /&gt;
+&lt;br /&gt;&lt;/div&gt;&lt;img src=&#34;http://feeds.feedburner.com/~r/JacekWysocki/~4/wMpp9uJrixw&#34; height=&#34;1&#34; width=&#34;1&#34;/&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>VIM &#43; PHP - key mapping to find parent class</title>
+      <link>http://wysocki.in/vim-php-key-mapping-to-find-parent-class</link>
+      <pubDate>Tue, 14 Jun 2011 00:00:00 +0000</pubDate>
+      
+      <guid>http://wysocki.in/vim-php-key-mapping-to-find-parent-class</guid>
+      <description>I love VIM power&lt;br /&gt;
+&lt;br /&gt;
+&lt;pre class=&#34;brush:bash&#34;&gt;map &amp;nbsp; &amp;lt;Leader&amp;gt;] &amp;nbsp; &amp;nbsp;/extends /e&amp;lt;CR&amp;gt;:normal l&amp;lt;CR&amp;gt;&amp;lt;C-]&amp;gt;
+&lt;/pre&gt;&lt;br /&gt;
+Use with generated ctags!&lt;br /&gt;
+&lt;br /&gt;
+&lt;br /&gt;
+BONUS! your VIM cowsay powered:&lt;br /&gt;
+&lt;pre class=&#34;brush:bash&#34;&gt;vmap &amp;lt;C-S-F1&amp;gt; yo&amp;lt;esc&amp;gt;:r !cowsay &amp;lt;C-r&amp;gt;&#34;&amp;lt;cr&amp;gt;&lt;/pre&gt;0. select block of text and press Control-Shift-F1 key. &lt;br /&gt;
+1. cowsay needed! &lt;br /&gt;
+2. Ubuntu installation:&lt;br /&gt;
+&lt;pre class=&#34;brush:bash&#34;&gt;sudo apt-get install cowsay&lt;/pre&gt;&lt;img src=&#34;http://feeds.feedburner.com/~r/JacekWysocki/~4/8WFVtFWswYc&#34; height=&#34;1&#34; width=&#34;1&#34;/&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Embedded data image VIM script</title>
+      <link>http://wysocki.in/embedded-image-data-src</link>
+      <pubDate>Thu, 31 Mar 2011 00:00:00 +0000</pubDate>
+      
+      <guid>http://wysocki.in/embedded-image-data-src</guid>
+      <description>(w nawiązaniu do posta &lt;a href=&#34;http://wysocki.in/2011/03/image-src-data-szybki-skrypt-w-php.html&#34;&gt;o konwersji obrazka na embedded data za pomocą PHP&lt;/a&gt;)&lt;br /&gt;
+&lt;br /&gt;
+Stwierdziłem że skoro używam VIM&#39;a fajnie byłoby mieć plugina który to zrobi. A ponieważ ostatnio przerabiam &lt;a href=&#34;https://github.com/gregmalcolm/python_koans&#34;&gt;python koans&lt;/a&gt;&amp;nbsp;a VIM ma możliwość pisania pluginów w pythonie więc wziąłem się dziś do dzieła.&lt;br /&gt;
+&lt;br /&gt;
+Wynik moich wypocin to kilka linijek kodu w postaci &lt;a href=&#34;https://github.com/exu/img2data.vim&#34;&gt;plugin&#39;u do VIM&#39;a Image2Data&lt;/a&gt;&lt;br /&gt;
+&lt;br /&gt;
+&lt;script src=&#34;https://gist.github.com/897411.js?file=img2data.vim&#34;&gt;
+&lt;/script&gt;&lt;br /&gt;
+&lt;br /&gt;
+&lt;br /&gt;
+Jest to wersja po tuningu, wykrywa automatycznie mime type. Wystarczy dodać plugin do VIM&#39;a, zmapować sobie go pod klawisz a następnie skopiować do schowka link do obrazka a w miejscu, w którym chcemy aby nasz obrazek objawił się w formie data:image...... wykorzystać swój skrót w normal mode.&lt;br /&gt;
+&lt;br /&gt;
+PS: proszę o wrozumiałość to mój pierwszy plugin w VIMie :p&lt;img src=&#34;http://feeds.feedburner.com/~r/JacekWysocki/~4/DpT94t-vN38&#34; height=&#34;1&#34; width=&#34;1&#34;/&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Image src data - szybki skrypt w PHP</title>
+      <link>http://wysocki.in/image-src-data-szybki-skrypt-w-php</link>
+      <pubDate>Thu, 31 Mar 2011 00:00:00 +0000</pubDate>
+      
+      <guid>http://wysocki.in/image-src-data-szybki-skrypt-w-php</guid>
+      <description>Ja mam poniższy skrypt zapisany jako plik image_to_data (w katalogu ~/scripts, który jest dodany do $PATH).&lt;br /&gt;
+&lt;br /&gt;
+&lt;pre class=&#34;brush:bash&#34;&gt;image_to_data http://www.blogger.com/img/logo40.png image/png
+&lt;/pre&gt;- 1 parametr: URL&lt;br /&gt;
+- 2 parametr: mime (domyślnie ustawiłem image/png)&lt;br /&gt;
+&lt;br /&gt;
+&lt;br /&gt;
+A Oto wynik&lt;br /&gt;
+&lt;pre class=&#34;brush:bash&#34;&gt;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAJYAAAAoCAMAAAArH/PVAAAAYFBMVEUNQIDCz988ZZhKcKAcTIhoiLArWJDw8/f///93lLiGn7+zw9f/jEFZfKiVq8ekt8/R2+fh5+//17y4Wyb/5tXrYwt3UUj/eSD/ZgD/cBApRHH/xp9DSGP/9e//tYT/gzDYtauvAAAAAXRSTlMAQObYZgAAAtNJREFUeF7t2OluozAUBeDrfWPP3mXm/d9yMMcuoU0JQinpjzlVa12CpU92bxJMRC/H3eE8k8Pu+EKb5213vpvd29aqF6juubZer+N5UY4bs3bLWLuNWYdlrMPGrPPCPJN1KlJ+E6vobM77n8tvYb1ClGF/n87KqjlXBpQWaWqRa6N/jlXYz+lusvwI97kWP8fq7JcUsyxwfph1sl/z+h3LE/GmH8ODWZxzIk7xd7qH+2IIim6GRTrCH8wCiRP/zCpQdTDOsegGSzjFKUcrpYm4kEMlS8eJtNAAlN6XSSI4kfBef7CGnynr9TIU76j+3FmtZsJyJkrbZKxiUSvsNCkTb+fWmoHSjnfG6cHmF0CbsG5mf7nN0k0/qsyCF0FVoeg1bHxXibaoMqnkYA1lWMpCiu87saIrlo6Iqo6rkCrLKmPBauNl31qwmji3ShSb4miS9aygr1kVxugqiRw8AgOPZEkyKlHVmCCJQFJePoplzfUmsr4mCDyQ8VVsYgkIhX7EjBIXBVgT0HqWJ5JxNHpkYV3yyEYsy3MwAtcw1uAi5j2Khe2q1rCYRRaz8AaBnLo7LAHAOlbDhvCFLCAAvcNyU1aDFuRYw/SfT83AUsNFtAX+loQsZO2Lj+znWbJFh4MFiAZWAVsT6dyQMMcpQNYLWSf7TS43WC1jzKCzU62GxmpKZaw1EotmfdmARfHmIAK6TsaqLoUL1RwL6W6rurkvNq1En6fmi4EVFcKmk7D9iJlhzbdiMcNqOTYTn46Sje/9+QOGJZZshvuxiaPS8MRa/qV5/LCesjhLqRWcumKsFgPFh9ppQqQLtRrXQtXBDXDMcRULvpSxDRhTCx8xpiqEVgWsHLDWP5AhXXFezZJKY7fQdIpTbsj1j6/Iaf0DGUCIAyglPPdhn2WHkROkeO7RSLjuVnLZqJ59kKSF7yMIkcL1VSk3O3Z7/iHl/yPdX3oA/g/ZTJgDwAULKQAAAABJRU5ErkJggg==
+&lt;/pre&gt;&lt;br /&gt;
+Skrypt:&lt;br /&gt;
+&lt;script src=&#34;https://gist.github.com/894315.js?file=image_to_data&#34;&gt;
+&lt;/script&gt;&lt;br /&gt;
+&lt;br /&gt;
+(&lt;a href=&#34;http://wysocki.in/2011/04/embedded-data-image-vim-script.html&#34;&gt;zobacz też jak zrobić coś takiego jako plugin do VIM&#39;a w pythonie&lt;/a&gt;)&lt;img src=&#34;http://feeds.feedburner.com/~r/JacekWysocki/~4/ssBGWp3DkBs&#34; height=&#34;1&#34; width=&#34;1&#34;/&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

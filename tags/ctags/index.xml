@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Ctags on Jacek Wysocki DevLog</title>
+    <link>http://wysocki.in/tags/ctags/</link>
+    <description>Recent content in Ctags on Jacek Wysocki DevLog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 14 Jun 2011 00:00:00 +0000</lastBuildDate>
+    <atom:link href="http://wysocki.in/tags/ctags/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>VIM &#43; PHP - key mapping to find parent class</title>
+      <link>http://wysocki.in/vim-php-key-mapping-to-find-parent-class</link>
+      <pubDate>Tue, 14 Jun 2011 00:00:00 +0000</pubDate>
+      
+      <guid>http://wysocki.in/vim-php-key-mapping-to-find-parent-class</guid>
+      <description>I love VIM power&lt;br /&gt;
+&lt;br /&gt;
+&lt;pre class=&#34;brush:bash&#34;&gt;map &amp;nbsp; &amp;lt;Leader&amp;gt;] &amp;nbsp; &amp;nbsp;/extends /e&amp;lt;CR&amp;gt;:normal l&amp;lt;CR&amp;gt;&amp;lt;C-]&amp;gt;
+&lt;/pre&gt;&lt;br /&gt;
+Use with generated ctags!&lt;br /&gt;
+&lt;br /&gt;
+&lt;br /&gt;
+BONUS! your VIM cowsay powered:&lt;br /&gt;
+&lt;pre class=&#34;brush:bash&#34;&gt;vmap &amp;lt;C-S-F1&amp;gt; yo&amp;lt;esc&amp;gt;:r !cowsay &amp;lt;C-r&amp;gt;&#34;&amp;lt;cr&amp;gt;&lt;/pre&gt;0. select block of text and press Control-Shift-F1 key. &lt;br /&gt;
+1. cowsay needed! &lt;br /&gt;
+2. Ubuntu installation:&lt;br /&gt;
+&lt;pre class=&#34;brush:bash&#34;&gt;sudo apt-get install cowsay&lt;/pre&gt;&lt;img src=&#34;http://feeds.feedburner.com/~r/JacekWysocki/~4/8WFVtFWswYc&#34; height=&#34;1&#34; width=&#34;1&#34;/&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

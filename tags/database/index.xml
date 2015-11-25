@@ -1,0 +1,318 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Database on Jacek Wysocki DevLog</title>
+    <link>http://wysocki.in/tags/database/</link>
+    <description>Recent content in Database on Jacek Wysocki DevLog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 22 Jan 2015 00:00:00 +0000</lastBuildDate>
+    <atom:link href="http://wysocki.in/tags/database/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Golang SQL handling with sqlx package</title>
+      <link>http://wysocki.in/golang-sqlx</link>
+      <pubDate>Thu, 22 Jan 2015 00:00:00 +0000</pubDate>
+      
+      <guid>http://wysocki.in/golang-sqlx</guid>
+      <description>&lt;div id=&#34;outline-container-sec-1&#34; class=&#34;outline-2&#34;&gt;
+&lt;h2 id=&#34;sec-1&#34;&gt;&lt;code&gt;Sqlx&lt;/code&gt; little helper for your database problems&lt;/h2&gt;
+&lt;div class=&#34;outline-text-2&#34; id=&#34;text-1&#34;&gt;
+&lt;p&gt;
+SQLX package will help you in several everyday jobs with
+your SQL database. All examples below are &#34;copy-pastable&#34;
+so you can write them to file and run by &lt;code&gt;go run filename.go&lt;/code&gt;
+&lt;/p&gt;
+&lt;/div&gt;
+
+
+&lt;div id=&#34;outline-container-sec-1-1&#34; class=&#34;outline-3&#34;&gt;
+&lt;h3 id=&#34;sec-1-1&#34;&gt;Get dependencies&lt;/h3&gt;
+&lt;div class=&#34;outline-text-3&#34; id=&#34;text-1-1&#34;&gt;
+&lt;div class=&#34;org-src-container&#34;&gt;
+
+&lt;pre class=&#34;src src-sh&#34;&gt;go get github.com/jmoiron/sqlx
+go get github.com/go-sql-driver/mysql
+&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+
+&lt;div id=&#34;outline-container-sec-1-2&#34; class=&#34;outline-3&#34;&gt;
+&lt;h3 id=&#34;sec-1-2&#34;&gt;Init database&lt;/h3&gt;
+&lt;div class=&#34;outline-text-3&#34; id=&#34;text-1-2&#34;&gt;
+&lt;p&gt;
+I&#39;m using MySQL/MariaDB in this example:
+&lt;/p&gt;
+
+&lt;div class=&#34;org-src-container&#34;&gt;
+
+&lt;pre class=&#34;src src-sql&#34;&gt;&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;CREATE&lt;/span&gt; DATABASE `sqlx_test`;
+USE `sqlx_test`;
+&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;CREATE&lt;/span&gt; &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;TABLE&lt;/span&gt; `items` (
+  `id` &lt;span style=&#34;color: #9dd7ff;&#34;&gt;int&lt;/span&gt;(11) &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;NOT&lt;/span&gt; &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;NULL&lt;/span&gt; AUTO_INCREMENT,
+  `&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;name&lt;/span&gt;` &lt;span style=&#34;color: #9dd7ff;&#34;&gt;varchar&lt;/span&gt;(255) &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;NOT&lt;/span&gt; &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;NULL&lt;/span&gt;,
+  `description` longtext &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;NOT&lt;/span&gt; &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;NULL&lt;/span&gt;,
+  &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;PRIMARY&lt;/span&gt; &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;KEY&lt;/span&gt; (`id`)
+);
+&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;INSERT&lt;/span&gt; &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;INTO&lt;/span&gt; `items` (&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;name&lt;/span&gt;, description) &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;VALUES&lt;/span&gt; (&lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#39;mechanical keyboard&#39;&lt;/span&gt;, &lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#39;good for writing code&#39;&lt;/span&gt;);
+&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;INSERT&lt;/span&gt; &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;INTO&lt;/span&gt; `items` (&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;name&lt;/span&gt;, description) &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;VALUES&lt;/span&gt; (&lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#39;coffe&#39;&lt;/span&gt;, &lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#39;oh yummy!&#39;&lt;/span&gt;);
+&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;INSERT&lt;/span&gt; &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;INTO&lt;/span&gt; `items` (&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;name&lt;/span&gt;, description) &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;VALUES&lt;/span&gt; (&lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#39;emacs&#39;&lt;/span&gt;, &lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#39;your favourite text editor&#39;&lt;/span&gt;);
+&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+
+
+&lt;div id=&#34;outline-container-sec-1-3&#34; class=&#34;outline-3&#34;&gt;
+&lt;h3 id=&#34;sec-1-3&#34;&gt;SQLX provides several helpers&lt;/h3&gt;
+&lt;div class=&#34;outline-text-3&#34; id=&#34;text-1-3&#34;&gt;
+&lt;/div&gt;&lt;div id=&#34;outline-container-sec-1-3-1&#34; class=&#34;outline-4&#34;&gt;
+&lt;h4 id=&#34;sec-1-3-1&#34;&gt;Mapping single result to struct with &lt;code&gt;Get&lt;/code&gt;&lt;/h4&gt;
+&lt;div class=&#34;outline-text-4&#34; id=&#34;text-1-3-1&#34;&gt;
+&lt;div class=&#34;org-src-container&#34;&gt;
+
+&lt;pre class=&#34;src src-go&#34;&gt;&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;package&lt;/span&gt; main
+
+&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#34;fmt&#34;&lt;/span&gt;
+&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#34;database/sql&#34;&lt;/span&gt;
+&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#34;github.com/jmoiron/sqlx&#34;&lt;/span&gt;
+&lt;span style=&#34;color: #5f7f5f;&#34;&gt;// &lt;/span&gt;&lt;span style=&#34;color: #5f7f5f;&#34;&gt;I&#39;m using MySQL&lt;/span&gt;
+&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;import&lt;/span&gt; _ &lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#34;github.com/go-sql-driver/mysql&#34;&lt;/span&gt;
+
+&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;type&lt;/span&gt; &lt;span style=&#34;color: #9dd7ff;&#34;&gt;Item&lt;/span&gt; &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;struct&lt;/span&gt; {
+    Id            int            &lt;span style=&#34;color: #a5a5a5;&#34;&gt;`db:&#34;id&#34;`&lt;/span&gt;
+    Name          sql.NullString &lt;span style=&#34;color: #a5a5a5;&#34;&gt;`db:&#34;name&#34;`&lt;/span&gt;
+    Description   sql.NullString &lt;span style=&#34;color: #a5a5a5;&#34;&gt;`db:&#34;description&#34;`&lt;/span&gt;
+}
+
+&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;func&lt;/span&gt; &lt;span style=&#34;color: #a2d7fb;&#34;&gt;main&lt;/span&gt;() {
+    &lt;span style=&#34;color: #5f7f5f;&#34;&gt;// &lt;/span&gt;&lt;span style=&#34;color: #5f7f5f;&#34;&gt;Must.... functions will panic on fail&lt;/span&gt;
+    db := sqlx.&lt;span style=&#34;color: #a2d7fb;&#34;&gt;MustConnect&lt;/span&gt;(&lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#34;mysql&#34;&lt;/span&gt;, &lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#34;root:PASSWORD@tcp(l:3306)/sqlx_test&#34;&lt;/span&gt;)
+    &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;var&lt;/span&gt; item Item
+    &lt;span style=&#34;color: #5f7f5f;&#34;&gt;// &lt;/span&gt;&lt;span style=&#34;color: #5f7f5f;&#34;&gt;We&#39;ll get most recent item and map it into our struct&lt;/span&gt;
+    err := db.&lt;span style=&#34;color: #a2d7fb;&#34;&gt;Get&lt;/span&gt;(&amp;amp;item, &lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#34;SELECT * FROM items ORDER BY id DESC LIMIT 1&#34;&lt;/span&gt;)
+    &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;if&lt;/span&gt; err != &lt;span style=&#34;color: #b0deff;&#34;&gt;nil&lt;/span&gt; {
+        &lt;span style=&#34;color: #93e0e3;&#34;&gt;panic&lt;/span&gt;(err)
+    }
+
+    fmt.&lt;span style=&#34;color: #a2d7fb;&#34;&gt;Printf&lt;/span&gt;(&lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#34;id: %d, %s, %s&#34;&lt;/span&gt;, item.Id, item.Name.String, item.Description.String)
+}
+&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;
+write above content into file (&lt;code&gt;get.go&lt;/code&gt;) and run &lt;code&gt;go run get.go&lt;/code&gt;
+&lt;/p&gt;
+
+
+&lt;div class=&#34;org-src-container&#34;&gt;
+
+&lt;pre class=&#34;src src-sh&#34;&gt;&amp;#10095; go run get.go
+
+id: 3, emacs, your favourite text editor
+&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+
+
+
+
+&lt;div id=&#34;outline-container-sec-1-3-2&#34; class=&#34;outline-4&#34;&gt;
+&lt;h4 id=&#34;sec-1-3-2&#34;&gt;Preparing statements with &lt;code&gt;Preparex&lt;/code&gt;&lt;/h4&gt;
+&lt;div class=&#34;outline-text-4&#34; id=&#34;text-1-3-2&#34;&gt;
+&lt;div class=&#34;org-src-container&#34;&gt;
+
+&lt;pre class=&#34;src src-go&#34;&gt;&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;package&lt;/span&gt; main
+
+&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#34;fmt&#34;&lt;/span&gt;
+&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#34;github.com/jmoiron/sqlx&#34;&lt;/span&gt;
+&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#34;database/sql&#34;&lt;/span&gt;
+&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;import&lt;/span&gt; _ &lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#34;github.com/go-sql-driver/mysql&#34;&lt;/span&gt;
+
+&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;type&lt;/span&gt; &lt;span style=&#34;color: #9dd7ff;&#34;&gt;Item&lt;/span&gt; &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;struct&lt;/span&gt; {
+    Id          int            &lt;span style=&#34;color: #a5a5a5;&#34;&gt;`db:&#34;id&#34;`&lt;/span&gt;
+    Name        sql.NullString &lt;span style=&#34;color: #a5a5a5;&#34;&gt;`db:&#34;name&#34;`&lt;/span&gt;
+    Description sql.NullString &lt;span style=&#34;color: #a5a5a5;&#34;&gt;`db:&#34;description&#34;`&lt;/span&gt;
+}
+
+&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;func&lt;/span&gt; &lt;span style=&#34;color: #a2d7fb;&#34;&gt;main&lt;/span&gt;() {
+    &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;var&lt;/span&gt; item Item
+
+    db := sqlx.&lt;span style=&#34;color: #a2d7fb;&#34;&gt;MustConnect&lt;/span&gt;(&lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#34;mysql&#34;&lt;/span&gt;, &lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#34;root:root@tcp(127.0.0.1:3306)/sqlx_test&#34;&lt;/span&gt;)
+    stmt, err := db.&lt;span style=&#34;color: #a2d7fb;&#34;&gt;Preparex&lt;/span&gt;(&lt;span style=&#34;color: #a5a5a5;&#34;&gt;`SELECT * FROM items WHERE id=?`&lt;/span&gt;)
+
+    &lt;span style=&#34;color: #5f7f5f;&#34;&gt;// &lt;/span&gt;&lt;span style=&#34;color: #5f7f5f;&#34;&gt;existing one&lt;/span&gt;
+    err = stmt.&lt;span style=&#34;color: #a2d7fb;&#34;&gt;Get&lt;/span&gt;(&amp;amp;item, 1)
+    fmt.&lt;span style=&#34;color: #a2d7fb;&#34;&gt;Println&lt;/span&gt;(item)
+
+    &lt;span style=&#34;color: #5f7f5f;&#34;&gt;// &lt;/span&gt;&lt;span style=&#34;color: #5f7f5f;&#34;&gt;not existing one&lt;/span&gt;
+    err = stmt.&lt;span style=&#34;color: #a2d7fb;&#34;&gt;Get&lt;/span&gt;(&amp;amp;item, 3)
+    fmt.&lt;span style=&#34;color: #a2d7fb;&#34;&gt;Println&lt;/span&gt;(item)
+
+    &lt;span style=&#34;color: #5f7f5f;&#34;&gt;// &lt;/span&gt;&lt;span style=&#34;color: #5f7f5f;&#34;&gt;handling non existing item&lt;/span&gt;
+    &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;if&lt;/span&gt; err == sql.ErrNoRows {
+        fmt.&lt;span style=&#34;color: #a2d7fb;&#34;&gt;Println&lt;/span&gt;(&lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#34;There is no row with id&#34;&lt;/span&gt;, 900)
+    } &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;else&lt;/span&gt; &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;if&lt;/span&gt; err != &lt;span style=&#34;color: #b0deff;&#34;&gt;nil&lt;/span&gt; {
+        &lt;span style=&#34;color: #93e0e3;&#34;&gt;panic&lt;/span&gt;(err)
+    }
+}
+&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;
+Save above content into &lt;code&gt;prepare_x.go&lt;/code&gt; and run &lt;code&gt;go run prepare_x.go&lt;/code&gt;
+&lt;/p&gt;
+
+&lt;div class=&#34;org-src-container&#34;&gt;
+
+&lt;pre class=&#34;src src-sh&#34;&gt;&amp;#10095; go run prepare_x.go
+
+{1 {mechanical keyboard true} {good for writing code true}}
+{3 {emacs true} {your favourite text editor true}}
+&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div id=&#34;outline-container-sec-1-3-3&#34; class=&#34;outline-4&#34;&gt;
+&lt;h4 id=&#34;sec-1-3-3&#34;&gt;Querying row with &lt;code&gt;QueryRowx&lt;/code&gt; and &lt;code&gt;StructScan&lt;/code&gt;&lt;/h4&gt;
+&lt;div class=&#34;outline-text-4&#34; id=&#34;text-1-3-3&#34;&gt;
+&lt;div class=&#34;org-src-container&#34;&gt;
+
+&lt;pre class=&#34;src src-go&#34;&gt;&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;package&lt;/span&gt; main
+
+&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#34;fmt&#34;&lt;/span&gt;
+&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#34;database/sql&#34;&lt;/span&gt;
+&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#34;github.com/jmoiron/sqlx&#34;&lt;/span&gt;
+&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;import&lt;/span&gt; _ &lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#34;github.com/go-sql-driver/mysql&#34;&lt;/span&gt;
+
+&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;type&lt;/span&gt; &lt;span style=&#34;color: #9dd7ff;&#34;&gt;Item&lt;/span&gt; &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;struct&lt;/span&gt; {
+    Id          int            &lt;span style=&#34;color: #a5a5a5;&#34;&gt;`db:&#34;id&#34;`&lt;/span&gt;
+    Name        sql.NullString &lt;span style=&#34;color: #a5a5a5;&#34;&gt;`db:&#34;name&#34;`&lt;/span&gt;
+    Description sql.NullString &lt;span style=&#34;color: #a5a5a5;&#34;&gt;`db:&#34;description&#34;`&lt;/span&gt;
+}
+
+&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;func&lt;/span&gt; &lt;span style=&#34;color: #a2d7fb;&#34;&gt;main&lt;/span&gt;() {
+    &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;var&lt;/span&gt; item Item
+
+    db := sqlx.&lt;span style=&#34;color: #a2d7fb;&#34;&gt;MustConnect&lt;/span&gt;(&lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#34;mysql&#34;&lt;/span&gt;, &lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#34;root:root@tcp(127.0.0.1:3306)/sqlx_test&#34;&lt;/span&gt;)
+
+    row := db.&lt;span style=&#34;color: #a2d7fb;&#34;&gt;QueryRowx&lt;/span&gt;(&lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#34;SELECT * FROM items WHERE id=?&#34;&lt;/span&gt;, 3)
+    err := row.&lt;span style=&#34;color: #a2d7fb;&#34;&gt;StructScan&lt;/span&gt;(&amp;amp;item)
+
+    &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;if&lt;/span&gt; err != &lt;span style=&#34;color: #b0deff;&#34;&gt;nil&lt;/span&gt; {
+        &lt;span style=&#34;color: #93e0e3;&#34;&gt;panic&lt;/span&gt;(err)
+    }
+
+    fmt.&lt;span style=&#34;color: #a2d7fb;&#34;&gt;Println&lt;/span&gt;(item)
+}
+&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;
+and output after run:
+&lt;/p&gt;
+
+&lt;div class=&#34;org-src-container&#34;&gt;
+
+&lt;pre class=&#34;src src-sh&#34;&gt;&amp;#10095; go run query_row_x.go
+
+{3 {emacs true} {your favourite text editor true}}
+&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+
+&lt;div id=&#34;outline-container-sec-1-3-4&#34; class=&#34;outline-4&#34;&gt;
+&lt;h4 id=&#34;sec-1-3-4&#34;&gt;Querying multiple rows with &lt;code&gt;Queryx&lt;/code&gt; and &lt;code&gt;StructScan&lt;/code&gt;&lt;/h4&gt;
+&lt;div class=&#34;outline-text-4&#34; id=&#34;text-1-3-4&#34;&gt;
+&lt;div class=&#34;org-src-container&#34;&gt;
+
+&lt;pre class=&#34;src src-go&#34;&gt;&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;package&lt;/span&gt; main
+
+&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#34;fmt&#34;&lt;/span&gt;
+&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#34;database/sql&#34;&lt;/span&gt;
+&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#34;github.com/jmoiron/sqlx&#34;&lt;/span&gt;
+
+&lt;span style=&#34;color: #5f7f5f;&#34;&gt;// &lt;/span&gt;&lt;span style=&#34;color: #5f7f5f;&#34;&gt;We&#39;re using MySQL&lt;/span&gt;
+&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;import&lt;/span&gt; _ &lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#34;github.com/go-sql-driver/mysql&#34;&lt;/span&gt;
+
+&lt;span style=&#34;color: #5f7f5f;&#34;&gt;// &lt;/span&gt;&lt;span style=&#34;color: #5f7f5f;&#34;&gt;We can map columns to fields&lt;/span&gt;
+&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;type&lt;/span&gt; &lt;span style=&#34;color: #9dd7ff;&#34;&gt;Item&lt;/span&gt; &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;struct&lt;/span&gt; {
+    Id  int            &lt;span style=&#34;color: #a5a5a5;&#34;&gt;`db:&#34;id&#34;`&lt;/span&gt;
+    Nme sql.NullString &lt;span style=&#34;color: #a5a5a5;&#34;&gt;`db:&#34;name&#34;`&lt;/span&gt;
+    Dsc sql.NullString &lt;span style=&#34;color: #a5a5a5;&#34;&gt;`db:&#34;description&#34;`&lt;/span&gt;
+}
+
+&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;func&lt;/span&gt; &lt;span style=&#34;color: #a2d7fb;&#34;&gt;main&lt;/span&gt;() {
+
+    db := sqlx.&lt;span style=&#34;color: #a2d7fb;&#34;&gt;MustConnect&lt;/span&gt;(&lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#34;mysql&#34;&lt;/span&gt;, &lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#34;root:root@tcp(127.0.0.1:3306)/sqlx_test&#34;&lt;/span&gt;)
+    rows, err := db.&lt;span style=&#34;color: #a2d7fb;&#34;&gt;Queryx&lt;/span&gt;(&lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#34;SELECT id, name, description FROM items&#34;&lt;/span&gt;)
+
+    &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;if&lt;/span&gt; err != &lt;span style=&#34;color: #b0deff;&#34;&gt;nil&lt;/span&gt; {
+        &lt;span style=&#34;color: #93e0e3;&#34;&gt;panic&lt;/span&gt;(err)
+    }
+
+    &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;for&lt;/span&gt; rows.&lt;span style=&#34;color: #a2d7fb;&#34;&gt;Next&lt;/span&gt;() {
+        &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;var&lt;/span&gt; item Item
+        err = rows.&lt;span style=&#34;color: #a2d7fb;&#34;&gt;StructScan&lt;/span&gt;(&amp;amp;item)
+
+        &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;if&lt;/span&gt; err != &lt;span style=&#34;color: #b0deff;&#34;&gt;nil&lt;/span&gt; {
+            &lt;span style=&#34;color: #93e0e3;&#34;&gt;panic&lt;/span&gt;(err)
+        }
+
+        fmt.&lt;span style=&#34;color: #a2d7fb;&#34;&gt;Printf&lt;/span&gt;(
+            &lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#34;%d - %s:  %s\n===================\n&#34;&lt;/span&gt;,
+            item.Id,
+            item.Nme.String,
+            item.Dsc.String,
+        )
+    }
+}
+&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;
+output:
+&lt;/p&gt;
+
+&lt;div class=&#34;org-src-container&#34;&gt;
+
+&lt;pre class=&#34;src src-sh&#34;&gt;&amp;#10095; go run query_x.go
+
+1 - mechanical keyboard:  good for writing code
+===================
+2 - coffe:  oh yummy!
+===================
+3 - emacs:  your favourite text editor
+===================
+&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+
+
+&lt;div id=&#34;outline-container-sec-1-4&#34; class=&#34;outline-3&#34;&gt;
+&lt;h3 id=&#34;sec-1-4&#34;&gt;If you want to check other things feel free to&lt;/h3&gt;
+&lt;div class=&#34;outline-text-3&#34; id=&#34;text-1-4&#34;&gt;
+&lt;p&gt;
+&lt;code&gt;godoc -goroot=$GO github.com/jmoiron/sqlx&lt;/code&gt;
+&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

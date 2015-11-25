@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Unity on Jacek Wysocki DevLog</title>
+    <link>http://wysocki.in/tags/unity/</link>
+    <description>Recent content in Unity on Jacek Wysocki DevLog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 06 May 2011 00:00:00 +0000</lastBuildDate>
+    <atom:link href="http://wysocki.in/tags/unity/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Ubuntu 11.04 po instalacji na VirtualBox</title>
+      <link>http://wysocki.in/ubuntu-11.04-po-instalacji-na-virtualbox</link>
+      <pubDate>Fri, 06 May 2011 00:00:00 +0000</pubDate>
+      
+      <guid>http://wysocki.in/ubuntu-11.04-po-instalacji-na-virtualbox</guid>
+      <description>&lt;div class=&#34;separator&#34; style=&#34;clear: both; text-align: left;&#34;&gt;Oto moje Ubuntu 11.04 po wstępnej instalacji i konfiguracji.&amp;nbsp;&lt;/div&gt;&lt;br /&gt;
+&lt;div class=&#34;separator&#34; style=&#34;clear: both; text-align: left;&#34;&gt;&lt;a href=&#34;http://3.bp.blogspot.com/-0Ti6ccdG8rw/TbqcHwpXzNI/AAAAAAAABFc/pkphlfdeYPI/s1600/natty-01.png&#34; imageanchor=&#34;1&#34; style=&#34;margin-left: 1em; margin-right: 1em;&#34;&gt;&lt;img border=&#34;0&#34; height=&#34;180&#34; src=&#34;http://3.bp.blogspot.com/-0Ti6ccdG8rw/TbqcHwpXzNI/AAAAAAAABFc/pkphlfdeYPI/s320/natty-01.png&#34; width=&#34;320&#34; /&gt;&lt;/a&gt;&lt;/div&gt;&lt;ul&gt;&lt;li&gt;na Virtualbox&#39;ie &amp;nbsp;&lt;strike&gt;czasami się zacina&lt;/strike&gt;&amp;nbsp;przestał się zacinać po pierwszej aktualizacji.&lt;/li&gt;
+&lt;li&gt;Jak dla mnie unity wprowadziło delikatny powiew nowości (lubię nowe rzeczy).&lt;/li&gt;
+&lt;li&gt;Co mnie najbardziej zdziwiło to na moim starym desktopie z Pentium 4 2.8 i 2GB działa płynnie a co najważniejsze działa po aktualizacji z wersji 10.10.&lt;/li&gt;
+&lt;/ul&gt;&lt;img src=&#34;http://feeds.feedburner.com/~r/JacekWysocki/~4/spsP_KvbTkU&#34; height=&#34;1&#34; width=&#34;1&#34;/&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Synchronization on Jacek Wysocki DevLog</title>
+    <link>http://wysocki.in/tags/synchronization/</link>
+    <description>Recent content in Synchronization on Jacek Wysocki DevLog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 07 Jul 2011 00:00:00 +0000</lastBuildDate>
+    <atom:link href="http://wysocki.in/tags/synchronization/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>rsync with --itemize-changes flag</title>
+      <link>http://wysocki.in/rsync-with-itemize-changes-flag</link>
+      <pubDate>Thu, 07 Jul 2011 00:00:00 +0000</pubDate>
+      
+      <guid>http://wysocki.in/rsync-with-itemize-changes-flag</guid>
+      <description>My yesterday rsync battle notes:&lt;br /&gt;
+&lt;pre class=&#34;brush:bash&#34;&gt;rsync --checksum --verbose  --recursive --delete --itemize-changes --times SOURCE_HOST DESTINATION_HOST
+&lt;/pre&gt;&lt;br /&gt;
+&lt;pre&gt;+- incoming / outgoing / change
+|
+|+- type : f for a file, a d for a
+||         directory, an L for a symlink,
+||         a D for a device, and a S  for  a
+||         special file (e.g. named sockets and fifos
+||
+&amp;lt;f.st......
+  |||||||||
+  ||||||||+- x - extended attributes
+  |||||||+- a - ACL info changed
+  ||||||+- u - reserved for future
+  |||||+- g - group
+  ||||+- o - owner
+  |||+- p - permissions
+  ||+- t - modification time
+  |+- s - size
+  +- c - checksum
+
+
+Additional information:
+. - no change
+* - e.g. *deleting
+c - local change/creation e.g. creating dir symlink
+&amp;lt; - file transfer to remote
+&amp;gt; - file transfer to local host (received)
+&lt;/pre&gt;&lt;img src=&#34;http://feeds.feedburner.com/~r/JacekWysocki/~4/rLFX2vC_GYE&#34; height=&#34;1&#34; width=&#34;1&#34;/&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

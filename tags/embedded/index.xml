@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Embedded on Jacek Wysocki DevLog</title>
+    <link>http://wysocki.in/tags/embedded/</link>
+    <description>Recent content in Embedded on Jacek Wysocki DevLog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 31 Mar 2011 00:00:00 +0000</lastBuildDate>
+    <atom:link href="http://wysocki.in/tags/embedded/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Image src data - szybki skrypt w PHP</title>
+      <link>http://wysocki.in/image-src-data-szybki-skrypt-w-php</link>
+      <pubDate>Thu, 31 Mar 2011 00:00:00 +0000</pubDate>
+      
+      <guid>http://wysocki.in/image-src-data-szybki-skrypt-w-php</guid>
+      <description>Ja mam poniższy skrypt zapisany jako plik image_to_data (w katalogu ~/scripts, który jest dodany do $PATH).&lt;br /&gt;
+&lt;br /&gt;
+&lt;pre class=&#34;brush:bash&#34;&gt;image_to_data http://www.blogger.com/img/logo40.png image/png
+&lt;/pre&gt;- 1 parametr: URL&lt;br /&gt;
+- 2 parametr: mime (domyślnie ustawiłem image/png)&lt;br /&gt;
+&lt;br /&gt;
+&lt;br /&gt;
+A Oto wynik&lt;br /&gt;
+&lt;pre class=&#34;brush:bash&#34;&gt;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAJYAAAAoCAMAAAArH/PVAAAAYFBMVEUNQIDCz988ZZhKcKAcTIhoiLArWJDw8/f///93lLiGn7+zw9f/jEFZfKiVq8ekt8/R2+fh5+//17y4Wyb/5tXrYwt3UUj/eSD/ZgD/cBApRHH/xp9DSGP/9e//tYT/gzDYtauvAAAAAXRSTlMAQObYZgAAAtNJREFUeF7t2OluozAUBeDrfWPP3mXm/d9yMMcuoU0JQinpjzlVa12CpU92bxJMRC/H3eE8k8Pu+EKb5213vpvd29aqF6juubZer+N5UY4bs3bLWLuNWYdlrMPGrPPCPJN1KlJ+E6vobM77n8tvYb1ClGF/n87KqjlXBpQWaWqRa6N/jlXYz+lusvwI97kWP8fq7JcUsyxwfph1sl/z+h3LE/GmH8ODWZxzIk7xd7qH+2IIim6GRTrCH8wCiRP/zCpQdTDOsegGSzjFKUcrpYm4kEMlS8eJtNAAlN6XSSI4kfBef7CGnynr9TIU76j+3FmtZsJyJkrbZKxiUSvsNCkTb+fWmoHSjnfG6cHmF0CbsG5mf7nN0k0/qsyCF0FVoeg1bHxXibaoMqnkYA1lWMpCiu87saIrlo6Iqo6rkCrLKmPBauNl31qwmji3ShSb4miS9aygr1kVxugqiRw8AgOPZEkyKlHVmCCJQFJePoplzfUmsr4mCDyQ8VVsYgkIhX7EjBIXBVgT0HqWJ5JxNHpkYV3yyEYsy3MwAtcw1uAi5j2Khe2q1rCYRRaz8AaBnLo7LAHAOlbDhvCFLCAAvcNyU1aDFuRYw/SfT83AUsNFtAX+loQsZO2Lj+znWbJFh4MFiAZWAVsT6dyQMMcpQNYLWSf7TS43WC1jzKCzU62GxmpKZaw1EotmfdmARfHmIAK6TsaqLoUL1RwL6W6rurkvNq1En6fmi4EVFcKmk7D9iJlhzbdiMcNqOTYTn46Sje/9+QOGJZZshvuxiaPS8MRa/qV5/LCesjhLqRWcumKsFgPFh9ppQqQLtRrXQtXBDXDMcRULvpSxDRhTCx8xpiqEVgWsHLDWP5AhXXFezZJKY7fQdIpTbsj1j6/Iaf0DGUCIAyglPPdhn2WHkROkeO7RSLjuVnLZqJ59kKSF7yMIkcL1VSk3O3Z7/iHl/yPdX3oA/g/ZTJgDwAULKQAAAABJRU5ErkJggg==
+&lt;/pre&gt;&lt;br /&gt;
+Skrypt:&lt;br /&gt;
+&lt;script src=&#34;https://gist.github.com/894315.js?file=image_to_data&#34;&gt;
+&lt;/script&gt;&lt;br /&gt;
+&lt;br /&gt;
+(&lt;a href=&#34;http://wysocki.in/2011/04/embedded-data-image-vim-script.html&#34;&gt;zobacz też jak zrobić coś takiego jako plugin do VIM&#39;a w pythonie&lt;/a&gt;)&lt;img src=&#34;http://feeds.feedburner.com/~r/JacekWysocki/~4/ssBGWp3DkBs&#34; height=&#34;1&#34; width=&#34;1&#34;/&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

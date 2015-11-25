@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Color on Jacek Wysocki DevLog</title>
+    <link>http://wysocki.in/tags/color/</link>
+    <description>Recent content in Color on Jacek Wysocki DevLog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <atom:link href="http://wysocki.in/tags/color/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>My new color theme (Zenburn based) for Emacs exu-theme.el</title>
+      <link>http://wysocki.in/my-new-color-theme-zenburn-based-for-emacs</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://wysocki.in/my-new-color-theme-zenburn-based-for-emacs</guid>
+      <description>&lt;div id=&#34;outline-container-sec-1&#34; class=&#34;outline-2&#34;&gt;
+&lt;h2 id=&#34;sec-1&#34;&gt;Why one more colortheme?&lt;/h2&gt;
+&lt;div class=&#34;outline-text-2&#34; id=&#34;text-1&#34;&gt;
+&lt;p&gt;
+In my office i have very big windows and after 1PM brightness is killing my
+ability to see letters in my previous emacs setup with Zenburn colortheme.
+&lt;/p&gt;
+
+&lt;p&gt;
+It&#39;s good to see shiny day but my low contrast &lt;a href=&#34;https://github.com/bbatsov/zenburn-emacs&#34;&gt;Zenburn Theme&lt;/a&gt; is too bright and I
+often don&#39;t see elements with lower contrast.
+&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id=&#34;outline-container-sec-2&#34; class=&#34;outline-2&#34;&gt;
+&lt;h2 id=&#34;sec-2&#34;&gt;How to install exu-theme.el&lt;/h2&gt;
+&lt;div class=&#34;outline-text-2&#34; id=&#34;text-2&#34;&gt;
+&lt;/div&gt;&lt;div id=&#34;outline-container-sec-2-1&#34; class=&#34;outline-3&#34;&gt;
+&lt;h3 id=&#34;sec-2-1&#34;&gt;Installation&lt;/h3&gt;
+&lt;div class=&#34;outline-text-3&#34; id=&#34;text-2-1&#34;&gt;
+&lt;p&gt;
+You can grab it from my &lt;a href=&#34;https://github.com/exu/emacs.d/blob/master/themes/exu-theme.el&#34;&gt;emacs github repository&lt;/a&gt; (if You are using Emacs 24
+simply put it into `~/.emacs.d/themes` directory and add lines below into
+your `~/.emacs.d/init.el` file to load this theme
+&lt;/p&gt;
+
+&lt;div class=&#34;org-src-container&#34;&gt;
+
+&lt;pre class=&#34;src src-elisp&#34;&gt;(add-to-list &#39;custom-theme-load-path &lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#34;~/.emacs.d/themes&#34;&lt;/span&gt;)
+(load-theme &#39;exu t)
+&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div id=&#34;outline-container-sec-2-2&#34; class=&#34;outline-3&#34;&gt;
+&lt;h3 id=&#34;sec-2-2&#34;&gt;Below are some screenshots of my new theme:&lt;/h3&gt;
+&lt;div class=&#34;outline-text-3&#34; id=&#34;text-2-2&#34;&gt;
+
+&lt;div class=&#34;figure&#34;&gt;
+&lt;p&gt;&lt;img src=&#34;http://wysocki.in/img/exu-emacs-theme-01.png&#34; alt=&#34;exu-emacs-theme-01.png&#34; /&gt;
+&lt;/p&gt;
+&lt;/div&gt;
+
+
+&lt;div class=&#34;figure&#34;&gt;
+&lt;p&gt;&lt;img src=&#34;http://wysocki.in/img/exu-emacs-theme-02.png&#34; alt=&#34;exu-emacs-theme-02.png&#34; /&gt;
+&lt;/p&gt;
+&lt;/div&gt;
+
+
+&lt;div class=&#34;figure&#34;&gt;
+&lt;p&gt;&lt;img src=&#34;http://wysocki.in/img/exu-emacs-theme-03.png&#34; alt=&#34;exu-emacs-theme-03.png&#34; /&gt;
+&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

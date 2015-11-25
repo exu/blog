@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Rpc on Jacek Wysocki DevLog</title>
+    <link>http://wysocki.in/tags/rpc/</link>
+    <description>Recent content in Rpc on Jacek Wysocki DevLog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 21 Jan 2015 00:00:00 +0000</lastBuildDate>
+    <atom:link href="http://wysocki.in/tags/rpc/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Golang JSON RPC Services using net/rpc/jsonrpc</title>
+      <link>http://wysocki.in/golang-net-rpc-jsonrpc</link>
+      <pubDate>Wed, 21 Jan 2015 00:00:00 +0000</pubDate>
+      
+      <guid>http://wysocki.in/golang-net-rpc-jsonrpc</guid>
+      <description>&lt;div id=&#34;outline-container-sec-1&#34; class=&#34;outline-2&#34;&gt;
+&lt;h2 id=&#34;sec-1&#34;&gt;RPC or not to RPC&lt;/h2&gt;
+&lt;div class=&#34;outline-text-2&#34; id=&#34;text-1&#34;&gt;
+&lt;p&gt;
+Yesterday I&#39;ve played with JSON RPC Server and decided that I&#39;ll write something
+about it because didn&#39;t found much resources about writing this kind of services in Golang.
+&lt;/p&gt;
+
+&lt;p&gt;
+As reference I&#39;ve used post from Michael Crosby  &lt;a href=&#34;http://crosbymichael.com/golang-json-rpc.html&#34;&gt;http://crosbymichael.com/golang-json-rpc.html&lt;/a&gt;
+and I&#39;ve tuned it a little to work out of the box on recent Go (1.4).
+&lt;/p&gt;
+
+
+&lt;p&gt;
+It&#39;s one file example so server is runned in go-routine (will close after
+ execution of last line).
+&lt;/p&gt;
+
+&lt;p&gt;
+&lt;code&gt;Arith&lt;/code&gt; code was borrowed from &lt;code&gt;all_test.go&lt;/code&gt; (in net/rpc/jsonrpc lib directory)
+file for better post readability
+&lt;/p&gt;
+&lt;/div&gt;
+
+&lt;div id=&#34;outline-container-sec-1-1&#34; class=&#34;outline-3&#34;&gt;
+&lt;h3 id=&#34;sec-1-1&#34;&gt;Working example (&lt;a href=&#34;https://github.com/exu/go-playground&#34;&gt;and many others&lt;/a&gt;)  can be found on my github account:&lt;/h3&gt;
+&lt;div class=&#34;outline-text-3&#34; id=&#34;text-1-1&#34;&gt;
+&lt;p&gt;
+&lt;a href=&#34;https://github.com/exu/go-playground/blob/master/47-json-rpc/rpc.go&#34;&gt;https://github.com/exu/go-playground/blob/master/47-json-rpc/rpc.go&lt;/a&gt;.
+&lt;/p&gt;
+
+
+
+&lt;div class=&#34;org-src-container&#34;&gt;
+
+&lt;pre class=&#34;src src-go&#34;&gt;&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;package&lt;/span&gt; main
+
+&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;import&lt;/span&gt; (
+    &lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#34;errors&#34;&lt;/span&gt;
+    &lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#34;fmt&#34;&lt;/span&gt;
+    &lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#34;log&#34;&lt;/span&gt;
+    &lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#34;net&#34;&lt;/span&gt;
+    &lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#34;net/rpc&#34;&lt;/span&gt;
+    &lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#34;net/rpc/jsonrpc&#34;&lt;/span&gt;
+)
+
+&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;type&lt;/span&gt; &lt;span style=&#34;color: #9dd7ff;&#34;&gt;Args&lt;/span&gt; &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;struct&lt;/span&gt; {
+    A, B int
+}
+
+&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;type&lt;/span&gt; &lt;span style=&#34;color: #9dd7ff;&#34;&gt;Reply&lt;/span&gt; &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;struct&lt;/span&gt; {
+    C int
+}
+
+&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;type&lt;/span&gt; &lt;span style=&#34;color: #9dd7ff;&#34;&gt;Arith&lt;/span&gt; &lt;span style=&#34;color: #9dd7ff;&#34;&gt;int&lt;/span&gt;
+
+&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;type&lt;/span&gt; &lt;span style=&#34;color: #9dd7ff;&#34;&gt;ArithAddResp&lt;/span&gt; &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;struct&lt;/span&gt; {
+    Id     &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;interface&lt;/span&gt;{} &lt;span style=&#34;color: #a5a5a5;&#34;&gt;`json:&#34;id&#34;`&lt;/span&gt;
+    Result Reply       &lt;span style=&#34;color: #a5a5a5;&#34;&gt;`json:&#34;result&#34;`&lt;/span&gt;
+    Error  &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;interface&lt;/span&gt;{} &lt;span style=&#34;color: #a5a5a5;&#34;&gt;`json:&#34;error&#34;`&lt;/span&gt;
+}
+
+&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;func&lt;/span&gt; (t *&lt;span style=&#34;color: #9dd7ff;&#34;&gt;Arith&lt;/span&gt;) &lt;span style=&#34;color: #a2d7fb;&#34;&gt;Add&lt;/span&gt;(args *Args, reply *Reply) error {
+    reply.C = args.A + args.B
+    &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color: #b0deff;&#34;&gt;nil&lt;/span&gt;
+}
+
+&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;func&lt;/span&gt; (t *&lt;span style=&#34;color: #9dd7ff;&#34;&gt;Arith&lt;/span&gt;) &lt;span style=&#34;color: #a2d7fb;&#34;&gt;Mul&lt;/span&gt;(args *Args, reply *Reply) error {
+    reply.C = args.A * args.B
+    &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color: #b0deff;&#34;&gt;nil&lt;/span&gt;
+}
+
+&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;func&lt;/span&gt; (t *&lt;span style=&#34;color: #9dd7ff;&#34;&gt;Arith&lt;/span&gt;) &lt;span style=&#34;color: #a2d7fb;&#34;&gt;Div&lt;/span&gt;(args *Args, reply *Reply) error {
+    &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;if&lt;/span&gt; args.B == 0 {
+        &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;return&lt;/span&gt; errors.&lt;span style=&#34;color: #a2d7fb;&#34;&gt;New&lt;/span&gt;(&lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#34;divide by zero&#34;&lt;/span&gt;)
+    }
+    reply.C = args.A / args.B
+    &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color: #b0deff;&#34;&gt;nil&lt;/span&gt;
+}
+
+&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;func&lt;/span&gt; (t *&lt;span style=&#34;color: #9dd7ff;&#34;&gt;Arith&lt;/span&gt;) &lt;span style=&#34;color: #a2d7fb;&#34;&gt;Error&lt;/span&gt;(args *Args, reply *Reply) error {
+    &lt;span style=&#34;color: #93e0e3;&#34;&gt;panic&lt;/span&gt;(&lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#34;ERROR&#34;&lt;/span&gt;)
+}
+
+&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;func&lt;/span&gt; &lt;span style=&#34;color: #a2d7fb;&#34;&gt;startServer&lt;/span&gt;() {
+    arith := &lt;span style=&#34;color: #93e0e3;&#34;&gt;new&lt;/span&gt;(&lt;span style=&#34;color: #9dd7ff;&#34;&gt;Arith&lt;/span&gt;)
+
+    server := rpc.&lt;span style=&#34;color: #a2d7fb;&#34;&gt;NewServer&lt;/span&gt;()
+    server.&lt;span style=&#34;color: #a2d7fb;&#34;&gt;Register&lt;/span&gt;(arith)
+
+    l, e := net.&lt;span style=&#34;color: #a2d7fb;&#34;&gt;Listen&lt;/span&gt;(&lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#34;tcp&#34;&lt;/span&gt;, &lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#34;:8222&#34;&lt;/span&gt;)
+    &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;if&lt;/span&gt; e != &lt;span style=&#34;color: #b0deff;&#34;&gt;nil&lt;/span&gt; {
+        log.&lt;span style=&#34;color: #a2d7fb;&#34;&gt;Fatal&lt;/span&gt;(&lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#34;listen error:&#34;&lt;/span&gt;, e)
+    }
+
+    &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;for&lt;/span&gt; {
+        conn, err := l.&lt;span style=&#34;color: #a2d7fb;&#34;&gt;Accept&lt;/span&gt;()
+        &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;if&lt;/span&gt; err != &lt;span style=&#34;color: #b0deff;&#34;&gt;nil&lt;/span&gt; {
+            log.&lt;span style=&#34;color: #a2d7fb;&#34;&gt;Fatal&lt;/span&gt;(err)
+        }
+
+        &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;go&lt;/span&gt; server.&lt;span style=&#34;color: #a2d7fb;&#34;&gt;ServeCodec&lt;/span&gt;(jsonrpc.&lt;span style=&#34;color: #a2d7fb;&#34;&gt;NewServerCodec&lt;/span&gt;(conn))
+    }
+}
+
+&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;func&lt;/span&gt; &lt;span style=&#34;color: #a2d7fb;&#34;&gt;main&lt;/span&gt;() {
+
+    &lt;span style=&#34;color: #5f7f5f;&#34;&gt;// &lt;/span&gt;&lt;span style=&#34;color: #5f7f5f;&#34;&gt;starting server in go routine (it ends on end&lt;/span&gt;
+    &lt;span style=&#34;color: #5f7f5f;&#34;&gt;// &lt;/span&gt;&lt;span style=&#34;color: #5f7f5f;&#34;&gt;of main function&lt;/span&gt;
+    &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;go&lt;/span&gt; &lt;span style=&#34;color: #a2d7fb;&#34;&gt;startServer&lt;/span&gt;()
+
+    &lt;span style=&#34;color: #5f7f5f;&#34;&gt;// &lt;/span&gt;&lt;span style=&#34;color: #5f7f5f;&#34;&gt;now client part connecting to RPC service&lt;/span&gt;
+    &lt;span style=&#34;color: #5f7f5f;&#34;&gt;// &lt;/span&gt;&lt;span style=&#34;color: #5f7f5f;&#34;&gt;and calling methods&lt;/span&gt;
+
+    conn, err := net.&lt;span style=&#34;color: #a2d7fb;&#34;&gt;Dial&lt;/span&gt;(&lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#34;tcp&#34;&lt;/span&gt;, &lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#34;localhost:8222&#34;&lt;/span&gt;)
+
+    &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;if&lt;/span&gt; err != &lt;span style=&#34;color: #b0deff;&#34;&gt;nil&lt;/span&gt; {
+        &lt;span style=&#34;color: #93e0e3;&#34;&gt;panic&lt;/span&gt;(err)
+    }
+    &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;defer&lt;/span&gt; conn.&lt;span style=&#34;color: #a2d7fb;&#34;&gt;Close&lt;/span&gt;()
+
+    c := jsonrpc.&lt;span style=&#34;color: #a2d7fb;&#34;&gt;NewClient&lt;/span&gt;(conn)
+
+    &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;var&lt;/span&gt; reply Reply
+    &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;var&lt;/span&gt; args *Args
+    &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;for&lt;/span&gt; i := 0; i &amp;lt; 11; i++ {
+        &lt;span style=&#34;color: #5f7f5f;&#34;&gt;// &lt;/span&gt;&lt;span style=&#34;color: #5f7f5f;&#34;&gt;passing Args to RPC call&lt;/span&gt;
+        args = &amp;amp;&lt;span style=&#34;color: #9dd7ff;&#34;&gt;Args&lt;/span&gt;{7, i}
+
+        &lt;span style=&#34;color: #5f7f5f;&#34;&gt;// &lt;/span&gt;&lt;span style=&#34;color: #5f7f5f;&#34;&gt;calling &#34;Arith.Mul&#34; on RPC server&lt;/span&gt;
+        err = c.&lt;span style=&#34;color: #a2d7fb;&#34;&gt;Call&lt;/span&gt;(&lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#34;Arith.Mul&#34;&lt;/span&gt;, args, &amp;amp;reply)
+        &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;if&lt;/span&gt; err != &lt;span style=&#34;color: #b0deff;&#34;&gt;nil&lt;/span&gt; {
+            log.&lt;span style=&#34;color: #a2d7fb;&#34;&gt;Fatal&lt;/span&gt;(&lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#34;arith error:&#34;&lt;/span&gt;, err)
+        }
+        fmt.&lt;span style=&#34;color: #a2d7fb;&#34;&gt;Printf&lt;/span&gt;(&lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#34;Arith: %d * %d = %v\n&#34;&lt;/span&gt;, args.A, args.B, reply.C)
+
+        &lt;span style=&#34;color: #5f7f5f;&#34;&gt;// &lt;/span&gt;&lt;span style=&#34;color: #5f7f5f;&#34;&gt;calling &#34;Arith.Add&#34; on RPC server&lt;/span&gt;
+        err = c.&lt;span style=&#34;color: #a2d7fb;&#34;&gt;Call&lt;/span&gt;(&lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#34;Arith.Add&#34;&lt;/span&gt;, args, &amp;amp;reply)
+        &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;if&lt;/span&gt; err != &lt;span style=&#34;color: #b0deff;&#34;&gt;nil&lt;/span&gt; {
+            log.&lt;span style=&#34;color: #a2d7fb;&#34;&gt;Fatal&lt;/span&gt;(&lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#34;arith error:&#34;&lt;/span&gt;, err)
+        }
+        fmt.&lt;span style=&#34;color: #a2d7fb;&#34;&gt;Printf&lt;/span&gt;(&lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#34;Arith: %d + %d = %v\n&#34;&lt;/span&gt;, args.A, args.B, reply.C)
+
+        &lt;span style=&#34;color: #5f7f5f;&#34;&gt;// &lt;/span&gt;&lt;span style=&#34;color: #5f7f5f;&#34;&gt;NL&lt;/span&gt;
+        fmt.&lt;span style=&#34;color: #a2d7fb;&#34;&gt;Printf&lt;/span&gt;(&lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#34;\033[33m%s\033[m\n&#34;&lt;/span&gt;, &lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#34;---------------&#34;&lt;/span&gt;)
+
+    }
+}
+&lt;/pre&gt;
+&lt;/div&gt;
+
+
+
+&lt;p&gt;
+When we run above program, we should receive:
+&lt;/p&gt;
+
+
+&lt;div class=&#34;org-src-container&#34;&gt;
+
+&lt;pre class=&#34;src src-sh&#34;&gt;&amp;#10095; go run rpc.go
+
+
+Arith: 7 * &lt;span style=&#34;color: #e2b1f4;&#34;&gt;0&lt;/span&gt; = 0
+Arith: 7 + &lt;span style=&#34;color: #e2b1f4;&#34;&gt;0&lt;/span&gt; = 7
+---------------
+Arith: 7 * &lt;span style=&#34;color: #e2b1f4;&#34;&gt;1&lt;/span&gt; = 7
+Arith: 7 + &lt;span style=&#34;color: #e2b1f4;&#34;&gt;1&lt;/span&gt; = 8
+---------------
+Arith: 7 * &lt;span style=&#34;color: #e2b1f4;&#34;&gt;2&lt;/span&gt; = 14
+Arith: 7 + &lt;span style=&#34;color: #e2b1f4;&#34;&gt;2&lt;/span&gt; = 9
+---------------
+Arith: 7 * &lt;span style=&#34;color: #e2b1f4;&#34;&gt;3&lt;/span&gt; = 21
+Arith: 7 + &lt;span style=&#34;color: #e2b1f4;&#34;&gt;3&lt;/span&gt; = 10
+---------------
+Arith: 7 * &lt;span style=&#34;color: #e2b1f4;&#34;&gt;4&lt;/span&gt; = 28
+Arith: 7 + &lt;span style=&#34;color: #e2b1f4;&#34;&gt;4&lt;/span&gt; = 11
+---------------
+Arith: 7 * &lt;span style=&#34;color: #e2b1f4;&#34;&gt;5&lt;/span&gt; = 35
+Arith: 7 + &lt;span style=&#34;color: #e2b1f4;&#34;&gt;5&lt;/span&gt; = 12
+---------------
+Arith: 7 * &lt;span style=&#34;color: #e2b1f4;&#34;&gt;6&lt;/span&gt; = 42
+Arith: 7 + &lt;span style=&#34;color: #e2b1f4;&#34;&gt;6&lt;/span&gt; = 13
+---------------
+Arith: 7 * &lt;span style=&#34;color: #e2b1f4;&#34;&gt;7&lt;/span&gt; = 49
+Arith: 7 + &lt;span style=&#34;color: #e2b1f4;&#34;&gt;7&lt;/span&gt; = 14
+---------------
+Arith: 7 * &lt;span style=&#34;color: #e2b1f4;&#34;&gt;8&lt;/span&gt; = 56
+Arith: 7 + &lt;span style=&#34;color: #e2b1f4;&#34;&gt;8&lt;/span&gt; = 15
+---------------
+Arith: 7 * &lt;span style=&#34;color: #e2b1f4;&#34;&gt;9&lt;/span&gt; = 63
+Arith: 7 + &lt;span style=&#34;color: #e2b1f4;&#34;&gt;9&lt;/span&gt; = 16
+---------------
+Arith: 7 * &lt;span style=&#34;color: #e2b1f4;&#34;&gt;10&lt;/span&gt; = 70
+Arith: 7 + &lt;span style=&#34;color: #e2b1f4;&#34;&gt;10&lt;/span&gt; = 17
+---------------
+&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

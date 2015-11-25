@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Tool on Jacek Wysocki DevLog</title>
+    <link>http://wysocki.in/tags/tool/</link>
+    <description>Recent content in Tool on Jacek Wysocki DevLog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 03 Dec 2013 00:00:00 +0000</lastBuildDate>
+    <atom:link href="http://wysocki.in/tags/tool/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Symfony2 Acme\DemoBundle removal tool</title>
+      <link>http://wysocki.in/symfony2-acme-removal-tool</link>
+      <pubDate>Tue, 03 Dec 2013 00:00:00 +0000</pubDate>
+      
+      <guid>http://wysocki.in/symfony2-acme-removal-tool</guid>
+      <description>&lt;div id=&#34;outline-container-sec-1&#34; class=&#34;outline-2&#34;&gt;
+&lt;h2 id=&#34;sec-1&#34;&gt;If removing AcmeDemoBundle is annoying You i have some little snippet which can help.&lt;/h2&gt;
+&lt;div class=&#34;outline-text-2&#34; id=&#34;text-1&#34;&gt;
+&lt;script src=&#34;https://gist.github.com/exu/7770302.js&#34;&gt;&lt;/script&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

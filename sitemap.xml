@@ -1,0 +1,386 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  
+  <url>
+    <loc>http://wysocki.in/</loc>
+    <lastmod>2015-01-22T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://wysocki.in/contact/</loc>
+    <lastmod>2015-01-22T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://wysocki.in/database/2015/01/golang-sqlx/</loc>
+    <lastmod>2015-01-22T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://wysocki.in/golang-sqlx</loc>
+    <lastmod>2015-01-22T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://wysocki.in/golang/2015/01/golang-net-rpc-jsonrpc/</loc>
+    <lastmod>2015-01-21T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://wysocki.in/golang-net-rpc-jsonrpc</loc>
+    <lastmod>2015-01-21T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://wysocki.in/editor/2014/04/03-real-programmers-xkcd-explanation/</loc>
+    <lastmod>2014-04-03T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://wysocki.in/emacs-real-programmers-xkcd-explanation</loc>
+    <lastmod>2014-04-03T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://wysocki.in/bdd-excercise-1-calc-bdd-in-golang-and-ginkgo</loc>
+    <lastmod>2014-03-16T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://wysocki.in/programming/2014/03/21-excercise-1-calc-bdd-in-golang-and-ginkgo/</loc>
+    <lastmod>2014-03-16T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://wysocki.in/bdd-excercise-1-calc-bdd-in-javascript-with-mocha</loc>
+    <lastmod>2014-03-16T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://wysocki.in/programming/2014/03/21-excercise-1-calc-bdd-in-javascript-with-mocha/</loc>
+    <lastmod>2014-03-16T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://wysocki.in/bdd-excercise-1-calc-bdd-in-javascript-with-mocha</loc>
+    <lastmod>2014-03-16T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://wysocki.in/programming/2014/03/21-excercise-1-calc-bdd-in-php-with-phpspec/</loc>
+    <lastmod>2014-03-16T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://wysocki.in/bdd-in-php-golang-javascript-comparizon</loc>
+    <lastmod>2014-03-15T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://wysocki.in/programming/2014/03/20-bdd-in-php-golang-javascript-comparizon/</loc>
+    <lastmod>2014-03-15T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://wysocki.in/behat-and-phpspec-example</loc>
+    <lastmod>2013-12-10T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://wysocki.in/programming/2013/12/10-behat-and-phpspec-example/</loc>
+    <lastmod>2013-12-10T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://wysocki.in/symfony2-console-as-standalone-component</loc>
+    <lastmod>2013-12-04T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://wysocki.in/programming/2013/12/04-symfony2-console-as-standalone-component/</loc>
+    <lastmod>2013-12-04T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://wysocki.in/symfony2-acme-removal-tool</loc>
+    <lastmod>2013-12-03T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://wysocki.in/programming/2013/12/02-symfony2-Acme-removal-tool/</loc>
+    <lastmod>2013-12-03T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://wysocki.in/symfony2-behat-check-checkbox-if-not-checked-yet-with-onclick-event</loc>
+    <lastmod>2013-06-07T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://wysocki.in/programming/2013/06/07-symfony2-behat-check-checkbox-if-not-checked-yet-with-onclick-event/</loc>
+    <lastmod>2013-06-07T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://wysocki.in/vagrant-puppet-install-php-nginx-based-symfony2-environment</loc>
+    <lastmod>2013-04-26T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://wysocki.in/setup/2013/04/26-vagrant-puppet-install-php-nginx-based-symfony2-environment/</loc>
+    <lastmod>2013-04-26T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://wysocki.in/editor/2012/10/15-Finding-perfect-text-editor-part-129021:-Emacs/</loc>
+    <lastmod>2012-10-15T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://wysocki.in/finding-perfect-text-editor-part-129021</loc>
+    <lastmod>2012-10-15T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://wysocki.in/files/2012/09/09-Handling-archives-in-linux-%28ranger-file-manager%29/</loc>
+    <lastmod>2012-09-09T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://wysocki.in/editor/2012/07/03-VIM---Python-Koans-plugin/</loc>
+    <lastmod>2012-07-03T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://wysocki.in/vim-python-koans-plugin</loc>
+    <lastmod>2012-07-03T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://wysocki.in/editor/2012/07/03-VIM---share-current-file-in-your-LAN-%28for-one-person%29/</loc>
+    <lastmod>2012-07-03T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://wysocki.in/linux/2012/06/26-Linux-Shell-Tips---watch/</loc>
+    <lastmod>2012-06-26T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://wysocki.in/linux-shell-tips-watch</loc>
+    <lastmod>2012-06-26T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://wysocki.in/linux/2012/06/21-Linux-Shell-Tips---rm-exclude-emulation/</loc>
+    <lastmod>2012-06-21T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://wysocki.in/linux-shell-tips-rm-exclude-emulation</loc>
+    <lastmod>2012-06-21T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://wysocki.in/linux/2012/06/21-Merge-many-PDF-files-into-one-in-linux-shell/</loc>
+    <lastmod>2012-06-21T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://wysocki.in/merge-many-pdf-files-into-one-in-linux-shell</loc>
+    <lastmod>2012-06-21T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://wysocki.in/editor/2012/06/21-VIM---inserting-UTF-8-symbols-%28digraphs%29/</loc>
+    <lastmod>2012-06-21T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://wysocki.in/editor/2012/06/18-VIM-faster-Text-blocks-with-onoremap/</loc>
+    <lastmod>2012-06-18T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://wysocki.in/vim-faster-text-blocks-with-onoremap</loc>
+    <lastmod>2012-06-18T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://wysocki.in/editor/2012/06/15-My-vimrc-file-on-github./</loc>
+    <lastmod>2012-06-15T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://wysocki.in/my-vimrc-file-on-github</loc>
+    <lastmod>2012-06-15T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://wysocki.in/editor/2012/06/15-VIM-&#43;-gpicker-=-SublimeText-2-like-files-fuzzy-searching/</loc>
+    <lastmod>2012-06-15T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://wysocki.in/vim-gpicker-sublimetext-2-like-files-fuzzy-searching</loc>
+    <lastmod>2012-06-15T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://wysocki.in/linux/2012/04/25-Nice-ubuntu-counters/</loc>
+    <lastmod>2012-04-25T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://wysocki.in/nice-ubuntu-counters</loc>
+    <lastmod>2012-04-25T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://wysocki.in/www-rogozinskie-przedszkolaki</loc>
+    <lastmod>2011-10-25T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://wysocki.in/projects/2011/10/25-Rogozinskie-Przedszkolaki/</loc>
+    <lastmod>2011-10-25T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://wysocki.in/ruby-development-is-fun</loc>
+    <lastmod>2011-09-23T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://wysocki.in/ruby/2011/09/23-Ruby-development-is-fun/</loc>
+    <lastmod>2011-09-23T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://wysocki.in/linux/2011/09/12-PHP-Ubuntu-simple-server-monitoring-script/</loc>
+    <lastmod>2011-09-12T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://wysocki.in/php-ubuntu-simple-server-monitoring-script</loc>
+    <lastmod>2011-09-12T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://wysocki.in/php/2011/07/29-Symfony-2-juz-dostepne/</loc>
+    <lastmod>2011-07-29T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://wysocki.in/symfony-2-juz-dostepne</loc>
+    <lastmod>2011-07-29T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://wysocki.in/linux/2011/07/07-rsync-with---itemize-changes-flag/</loc>
+    <lastmod>2011-07-07T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://wysocki.in/rsync-with-itemize-changes-flag</loc>
+    <lastmod>2011-07-07T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://wysocki.in/editor/2011/06/14-VIM-&#43;-PHP:-key-mapping-to-find-parent-class/</loc>
+    <lastmod>2011-06-14T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://wysocki.in/vim-php-key-mapping-to-find-parent-class</loc>
+    <lastmod>2011-06-14T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://wysocki.in/php/2011/06/09-Faster-PHP-Kick-off-getters-and-setters/</loc>
+    <lastmod>2011-06-09T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://wysocki.in/faster-php-kick-off-getters-and-setters</loc>
+    <lastmod>2011-06-09T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://wysocki.in/linux/2011/05/30-Cool,-but-obscure-unix-tools-::-KKovacs/</loc>
+    <lastmod>2011-05-30T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://wysocki.in/cool-unix-tools</loc>
+    <lastmod>2011-05-30T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://wysocki.in/php/2011/05/PHP---numeric-string-comparizon/</loc>
+    <lastmod>2011-05-06T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://wysocki.in/php-numeric-string-comparizon</loc>
+    <lastmod>2011-05-06T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://wysocki.in/linux/2011/05/Ubuntu-11.04-po-instalacji-na-VirtualBox/</loc>
+    <lastmod>2011-05-06T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://wysocki.in/ubuntu-11.04-po-instalacji-na-virtualbox</loc>
+    <lastmod>2011-05-06T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://wysocki.in/linux/2011/04/Ubuntu-11.04-juz-jest/</loc>
+    <lastmod>2011-04-28T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://wysocki.in/ubuntu-11.04-juz-jest</loc>
+    <lastmod>2011-04-28T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://wysocki.in/editor/2011/03/Embedded-data-image-VIM-script/</loc>
+    <lastmod>2011-03-31T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://wysocki.in/embedded-image-data-src</loc>
+    <lastmod>2011-03-31T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://wysocki.in/html/2011/03/Image-src-=-data:-szybki-skrypt-w-PHP/</loc>
+    <lastmod>2011-03-31T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://wysocki.in/image-src-data-szybki-skrypt-w-php</loc>
+    <lastmod>2011-03-31T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://wysocki.in/blog/2013/04/23-migration-to-jekyll/</loc>
+  </url>
+  
+  <url>
+    <loc>http://wysocki.in/migration-to-jekyll</loc>
+  </url>
+  
+  <url>
+    <loc>http://wysocki.in/editor/2013/04/24-my-new-color-theme-zenburn-based-for-emacs-exu-themeel/</loc>
+  </url>
+  
+  <url>
+    <loc>http://wysocki.in/my-new-color-theme-zenburn-based-for-emacs</loc>
+  </url>
+  
+</urlset>
