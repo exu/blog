@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+    <title>Image src data - szybki skrypt w PHP &middot; Jacek Wysocki DevLog</title>
+    <meta name="author" content="Jacek Wysocki">
+    <meta name="description" content="LOL">
+    <meta name="generator" content="Hugo 0.15-DEV" />
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+
+    <link rel="shortcut icon" href="http://wysocki.in/img/favicon.ico">
+    <link rel="stylesheet" href="http://wysocki.in/css/normalize.min.css">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="http://wysocki.in/css/screen.css">
+    <link rel="stylesheet" href="http://wysocki.in/css/github.css">
+    <link rel="stylesheet" href="http://wysocki.in/css/default.min.css">
+    <link rel="stylesheet" href="http://wysocki.in/css/site.css">
+
+    <!-- Stylesheet for theme color -->
+    <style type="text/css">
+    a, a:visited {color: #33cc99;}
+    .pagination a {color: #33cc99;}
+    .gist .gist-file .gist-meta a:visited {color: #33cc99 !important;}
+    a:focus, a:hover {color: #178b6b;}
+    h1.post-title a:focus, h1.post-title a:hover, h1.blog-title a:focus, h1.blog-title a:hover {color: #178b6b;}
+    .older-posts:hover, .newer-posts:hover {color: #178b6b;}
+</style>
+</head>
+
+<body class="post-template">
+
+    <header id="site-head">
+	
+	<h1 class="blog-title">
+        <img src="/img/ja128.png" class="main-image">
+        <i class='fa fa-code'></i>
+        <a href="http://wysocki.in/">Jacek Wysocki DevLog</a>
+    </h1>
+	
+	
+	<h1 class="blog-subtitle">various stuff about programming</h1>
+	
+</header>
+
+    
+<nav class="menu" role="nav">
+    <ul>
+        
+        <li class="nav nav-current"><a href="/">
+            <i class='fa fa-heart-o'></i>&nbsp;Posts
+        </a></li>
+      	
+        <li class="nav nav-current"><a href="/tags/">
+            <i class='fa fa-star-o'></i>&nbsp;Tags
+        </a></li>
+      	
+        <li class="nav nav-current"><a href="/series/">
+            <i class='fa fa-folder-o'></i>&nbsp;Series
+        </a></li>
+      	
+        <li class="nav nav-current"><a href="/contact/">
+            <i class='fa fa-envelope-o'></i>&nbsp;Contact
+        </a></li>
+      	
+    </ul>
+</nav>
+
+
+
+    <div class="pull-right social-media">
+        <div>
+            <a href="https://twitter.com/share" class="twitter-share-button" data-via="wysocki.in">Tweet</a>
+            <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+        </div>
+        <div>
+            <div class="g-plusone" data-size="small"></div>
+            <script type="text/javascript">
+             (function() {
+                 var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+                 po.src = 'https://apis.google.com/js/platform.js';
+                 var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+             })();
+            </script>
+        </div>
+    </div>
+
+    <main class="content" role="main">
+	    <article class="post">
+	        <header>
+	        <h1 class="post-title">Image src data - szybki skrypt w PHP</h1>
+            </header>
+	        <section class="post-content">
+	            Ja mam poniższy skrypt zapisany jako plik image_to_data (w katalogu ~/scripts, który jest dodany do $PATH).<br />
+<br />
+<pre class="brush:bash">image_to_data http://www.blogger.com/img/logo40.png image/png
+</pre>- 1 parametr: URL<br />
+- 2 parametr: mime (domyślnie ustawiłem image/png)<br />
+<br />
+<br />
+A Oto wynik<br />
+<pre class="brush:bash">data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAJYAAAAoCAMAAAArH/PVAAAAYFBMVEUNQIDCz988ZZhKcKAcTIhoiLArWJDw8/f///93lLiGn7+zw9f/jEFZfKiVq8ekt8/R2+fh5+//17y4Wyb/5tXrYwt3UUj/eSD/ZgD/cBApRHH/xp9DSGP/9e//tYT/gzDYtauvAAAAAXRSTlMAQObYZgAAAtNJREFUeF7t2OluozAUBeDrfWPP3mXm/d9yMMcuoU0JQinpjzlVa12CpU92bxJMRC/H3eE8k8Pu+EKb5213vpvd29aqF6juubZer+N5UY4bs3bLWLuNWYdlrMPGrPPCPJN1KlJ+E6vobM77n8tvYb1ClGF/n87KqjlXBpQWaWqRa6N/jlXYz+lusvwI97kWP8fq7JcUsyxwfph1sl/z+h3LE/GmH8ODWZxzIk7xd7qH+2IIim6GRTrCH8wCiRP/zCpQdTDOsegGSzjFKUcrpYm4kEMlS8eJtNAAlN6XSSI4kfBef7CGnynr9TIU76j+3FmtZsJyJkrbZKxiUSvsNCkTb+fWmoHSjnfG6cHmF0CbsG5mf7nN0k0/qsyCF0FVoeg1bHxXibaoMqnkYA1lWMpCiu87saIrlo6Iqo6rkCrLKmPBauNl31qwmji3ShSb4miS9aygr1kVxugqiRw8AgOPZEkyKlHVmCCJQFJePoplzfUmsr4mCDyQ8VVsYgkIhX7EjBIXBVgT0HqWJ5JxNHpkYV3yyEYsy3MwAtcw1uAi5j2Khe2q1rCYRRaz8AaBnLo7LAHAOlbDhvCFLCAAvcNyU1aDFuRYw/SfT83AUsNFtAX+loQsZO2Lj+znWbJFh4MFiAZWAVsT6dyQMMcpQNYLWSf7TS43WC1jzKCzU62GxmpKZaw1EotmfdmARfHmIAK6TsaqLoUL1RwL6W6rurkvNq1En6fmi4EVFcKmk7D9iJlhzbdiMcNqOTYTn46Sje/9+QOGJZZshvuxiaPS8MRa/qV5/LCesjhLqRWcumKsFgPFh9ppQqQLtRrXQtXBDXDMcRULvpSxDRhTCx8xpiqEVgWsHLDWP5AhXXFezZJKY7fQdIpTbsj1j6/Iaf0DGUCIAyglPPdhn2WHkROkeO7RSLjuVnLZqJ59kKSF7yMIkcL1VSk3O3Z7/iHl/yPdX3oA/g/ZTJgDwAULKQAAAABJRU5ErkJggg==
+</pre><br />
+Skrypt:<br />
+<script src="https://gist.github.com/894315.js?file=image_to_data">
+</script><br />
+<br />
+(<a href="http://wysocki.in/2011/04/embedded-data-image-vim-script.html">zobacz też jak zrobić coś takiego jako plugin do VIM'a w pythonie</a>)<img src="http://feeds.feedburner.com/~r/JacekWysocki/~4/ssBGWp3DkBs" height="1" width="1"/>
+
+	        </section>
+	    </article>
+	</main>
+
+    <footer class="site-footer">
+	<div class="inner">
+		<section class="footer-social">
+			
+		    <a href="//twitter.com/ex00" target="_blank" title="Twitter"><i class="fa fa-2x fa-fw fa-twitter"></i> <span class="hidden">Twitter</span></a>&nbsp;
+		    
+		    
+		    <a href="//github.com/exu" target="_blank" title="GitHub"><i class="fa fa-2x fa-fw fa-github"></i> <span class="hidden">GitHub</span></a>&nbsp;
+		    
+		    <a href="" target="_blank" title="RSS"><i class="fa fa-2x fa-fw fa-rss"></i> <span class="hidden">RSS</span></a>
+		</section>
+
+		<section class="copyright">&copy; 2015 <a href="http://wysocki.in/">Jacek Wysocki</a>. Released under the MIT license.</section>
+	</div>
+</footer>
+    <script src="http://wysocki.in/js/jquery.min.js"></script>
+<script src="http://wysocki.in/js/index.js"></script>
+<script src="http://wysocki.in/js/smooth-scroll.min.js"></script>
+<script src="http://wysocki.in/js/highlight.min.js"></script>
+
+<script>
+    smoothScroll.init({
+        speed: 800,
+        easing: 'easeInOutCubic',
+        updateURL: false,
+        offset: 125,
+    });
+</script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+<!-- Google Analytics -->
+<script>
+  var _gaq=[['_setAccount','UA-1883783-4'],['_trackPageview']];
+  (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+  g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+  s.parentNode.insertBefore(g,s)}(document,'script'));
+</script>
+
+
+
+</body>
+</html>

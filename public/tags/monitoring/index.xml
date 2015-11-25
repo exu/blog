@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Monitoring on Jacek Wysocki DevLog</title>
+    <link>http://wysocki.in/tags/monitoring/</link>
+    <description>Recent content in Monitoring on Jacek Wysocki DevLog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Mon, 12 Sep 2011 00:00:00 +0000</lastBuildDate>
+    <atom:link href="http://wysocki.in/tags/monitoring/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>PHP Ubuntu simple server monitoring script</title>
+      <link>http://wysocki.in/php-ubuntu-simple-server-monitoring-script</link>
+      <pubDate>Mon, 12 Sep 2011 00:00:00 +0000</pubDate>
+      
+      <guid>http://wysocki.in/php-ubuntu-simple-server-monitoring-script</guid>
+      <description>Simple PHP monitoring script.&lt;br /&gt;
+&lt;script src=&#34;https://gist.github.com/1203367.js?file=monitoring&#34;&gt;&lt;/script&gt;
+&lt;br /&gt;
+&lt;b&gt;Change hosts variable (array) and path to icon file (-i /usr/share/icons/Faenza/status/scalable/error.svg).&lt;/b&gt;
+
+&lt;br /&gt;
+&lt;br /&gt;
+You can use it in your crontab:
+
+Edit your cron settings:
+&lt;br /&gt;
+&lt;pre class=&#34;brush:bash&#34;&gt;
+crontab -e
+&lt;/pre&gt;
+&lt;br /&gt;
+and insert:
+
+&lt;br /&gt;
+&lt;pre class=&#34;brush:bash&#34;&gt;
+* * * * * php /home/exu/scripts/monitoring
+&lt;/pre&gt;
+&lt;br /&gt;
+(change /home/exu/scripts/monitoring to path to your file)
+
+
+Enjoy!&lt;br /&gt;
+&lt;br /&gt;
+&lt;div class=&#34;separator&#34; style=&#34;clear: both; text-align: center;&#34;&gt;
+&lt;a href=&#34;http://2.bp.blogspot.com/-BzQe9cJrnMA/TmjLmiUL-zI/AAAAAAAABWc/LI9qTZST_lI/s1600/Przechwytywanie_monitoring.JPG&#34; imageanchor=&#34;1&#34; style=&#34;margin-left: 1em; margin-right: 1em;&#34;&gt;&lt;img border=&#34;0&#34; height=&#34;132&#34; src=&#34;http://2.bp.blogspot.com/-BzQe9cJrnMA/TmjLmiUL-zI/AAAAAAAABWc/LI9qTZST_lI/s320/Przechwytywanie_monitoring.JPG&#34; width=&#34;320&#34; /&gt;&lt;/a&gt;&lt;/div&gt;
+&lt;br /&gt;&lt;img src=&#34;http://feeds.feedburner.com/~r/JacekWysocki/~4/yDk6njQP12E&#34; height=&#34;1&#34; width=&#34;1&#34;/&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

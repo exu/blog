@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Python on Jacek Wysocki DevLog</title>
+    <link>http://wysocki.in/tags/python/</link>
+    <description>Recent content in Python on Jacek Wysocki DevLog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 03 Jul 2012 00:00:00 +0000</lastBuildDate>
+    <atom:link href="http://wysocki.in/tags/python/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>VIM - Python Koans plugin</title>
+      <link>http://wysocki.in/vim-python-koans-plugin</link>
+      <pubDate>Tue, 03 Jul 2012 00:00:00 +0000</pubDate>
+      
+      <guid>http://wysocki.in/vim-python-koans-plugin</guid>
+      <description>Yesterday I&#39;ve started (again) python koans, and switching into terminal to run again and again pissed me off. So from now i press 1 combination and shell has gone away :), koans run in background and My lovely editor put cursor on last error.&lt;br /&gt;
+&lt;br /&gt;
+Meet the VIM python koans helper: &lt;br /&gt;
+&lt;br /&gt;
+&lt;a href=&#34;https://github.com/exu/vim-python_koans&#34;&gt;https://github.com/exu/vim-python_koans&lt;/a&gt;&lt;br /&gt;
+&lt;br /&gt;
+Output format sucks a little (because my VimL skills sucks - I didn&#39;t find solution for this ^@ ^] symbols) but it is great productivity improvement.&lt;br /&gt;
+&lt;br /&gt;
+&lt;a href=&#34;http://2.bp.blogspot.com/--wc-yuEJnY4/T_KVhxt2PpI/AAAAAAAAHLA/SGX29_1h1Ps/s1600/Snap%2B2012-07-03%2Bat%2B08.41.49.png&#34; imageanchor=&#34;1&#34;&gt;&lt;img border=&#34;0&#34; height=&#34;328&#34; src=&#34;http://2.bp.blogspot.com/--wc-yuEJnY4/T_KVhxt2PpI/AAAAAAAAHLA/SGX29_1h1Ps/s640/Snap%2B2012-07-03%2Bat%2B08.41.49.png&#34; width=&#34;640&#34; /&gt;&lt;/a&gt;&lt;br /&gt;
+Picture 1: Output window with cursor on last error&lt;img src=&#34;http://feeds.feedburner.com/~r/JacekWysocki/~4/Kqj5zIbZ2gI&#34; height=&#34;1&#34; width=&#34;1&#34;/&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Embedded data image VIM script</title>
+      <link>http://wysocki.in/embedded-image-data-src</link>
+      <pubDate>Thu, 31 Mar 2011 00:00:00 +0000</pubDate>
+      
+      <guid>http://wysocki.in/embedded-image-data-src</guid>
+      <description>(w nawiązaniu do posta &lt;a href=&#34;http://wysocki.in/2011/03/image-src-data-szybki-skrypt-w-php.html&#34;&gt;o konwersji obrazka na embedded data za pomocą PHP&lt;/a&gt;)&lt;br /&gt;
+&lt;br /&gt;
+Stwierdziłem że skoro używam VIM&#39;a fajnie byłoby mieć plugina który to zrobi. A ponieważ ostatnio przerabiam &lt;a href=&#34;https://github.com/gregmalcolm/python_koans&#34;&gt;python koans&lt;/a&gt;&amp;nbsp;a VIM ma możliwość pisania pluginów w pythonie więc wziąłem się dziś do dzieła.&lt;br /&gt;
+&lt;br /&gt;
+Wynik moich wypocin to kilka linijek kodu w postaci &lt;a href=&#34;https://github.com/exu/img2data.vim&#34;&gt;plugin&#39;u do VIM&#39;a Image2Data&lt;/a&gt;&lt;br /&gt;
+&lt;br /&gt;
+&lt;script src=&#34;https://gist.github.com/897411.js?file=img2data.vim&#34;&gt;
+&lt;/script&gt;&lt;br /&gt;
+&lt;br /&gt;
+&lt;br /&gt;
+Jest to wersja po tuningu, wykrywa automatycznie mime type. Wystarczy dodać plugin do VIM&#39;a, zmapować sobie go pod klawisz a następnie skopiować do schowka link do obrazka a w miejscu, w którym chcemy aby nasz obrazek objawił się w formie data:image...... wykorzystać swój skrót w normal mode.&lt;br /&gt;
+&lt;br /&gt;
+PS: proszę o wrozumiałość to mój pierwszy plugin w VIMie :p&lt;img src=&#34;http://feeds.feedburner.com/~r/JacekWysocki/~4/DpT94t-vN38&#34; height=&#34;1&#34; width=&#34;1&#34;/&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

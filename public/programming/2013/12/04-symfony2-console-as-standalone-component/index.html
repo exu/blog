@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+    <title>Using Symfony2 Console as standalone component &middot; Jacek Wysocki DevLog</title>
+    <meta name="author" content="Jacek Wysocki">
+    <meta name="description" content="LOL">
+    <meta name="generator" content="Hugo 0.15-DEV" />
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+
+    <link rel="shortcut icon" href="http://wysocki.in/img/favicon.ico">
+    <link rel="stylesheet" href="http://wysocki.in/css/normalize.min.css">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="http://wysocki.in/css/screen.css">
+    <link rel="stylesheet" href="http://wysocki.in/css/github.css">
+    <link rel="stylesheet" href="http://wysocki.in/css/default.min.css">
+    <link rel="stylesheet" href="http://wysocki.in/css/site.css">
+
+    <!-- Stylesheet for theme color -->
+    <style type="text/css">
+    a, a:visited {color: #33cc99;}
+    .pagination a {color: #33cc99;}
+    .gist .gist-file .gist-meta a:visited {color: #33cc99 !important;}
+    a:focus, a:hover {color: #178b6b;}
+    h1.post-title a:focus, h1.post-title a:hover, h1.blog-title a:focus, h1.blog-title a:hover {color: #178b6b;}
+    .older-posts:hover, .newer-posts:hover {color: #178b6b;}
+</style>
+</head>
+
+<body class="post-template">
+
+    <header id="site-head">
+	
+	<h1 class="blog-title">
+        <img src="/img/ja128.png" class="main-image">
+        <i class='fa fa-code'></i>
+        <a href="http://wysocki.in/">Jacek Wysocki DevLog</a>
+    </h1>
+	
+	
+	<h1 class="blog-subtitle">various stuff about programming</h1>
+	
+</header>
+
+    
+<nav class="menu" role="nav">
+    <ul>
+        
+        <li class="nav nav-current"><a href="/">
+            <i class='fa fa-heart-o'></i>&nbsp;Posts
+        </a></li>
+      	
+        <li class="nav nav-current"><a href="/tags/">
+            <i class='fa fa-star-o'></i>&nbsp;Tags
+        </a></li>
+      	
+        <li class="nav nav-current"><a href="/series/">
+            <i class='fa fa-folder-o'></i>&nbsp;Series
+        </a></li>
+      	
+        <li class="nav nav-current"><a href="/contact/">
+            <i class='fa fa-envelope-o'></i>&nbsp;Contact
+        </a></li>
+      	
+    </ul>
+</nav>
+
+
+
+    <div class="pull-right social-media">
+        <div>
+            <a href="https://twitter.com/share" class="twitter-share-button" data-via="wysocki.in">Tweet</a>
+            <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+        </div>
+        <div>
+            <div class="g-plusone" data-size="small"></div>
+            <script type="text/javascript">
+             (function() {
+                 var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+                 po.src = 'https://apis.google.com/js/platform.js';
+                 var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+             })();
+            </script>
+        </div>
+    </div>
+
+    <main class="content" role="main">
+	    <article class="post">
+	        <header>
+	        <h1 class="post-title">Using Symfony2 Console as standalone component</h1>
+            </header>
+	        <section class="post-content">
+	            <div class="figure">
+<p><img src="http://wysocki.in/img/sf2-console-component.png" alt="sf2-console-component.png" />
+</p>
+</div>
+
+<p>
+All files are located on My GitHub project: <a href="https://github.com/exu/symfony2-console-standalone">Symfony2 Console as standalone component</a>
+</p>
+
+<p>
+To use symfony console you should create <code>composer.json</code> file and add <code>symfony/console</code> component
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-json">{
+    <span style="color: #f0dfaf; font-weight: bold;">"autoload"</span>: {
+        <span style="color: #f0dfaf; font-weight: bold;">"psr-0"</span>: {<span style="color: #f0dfaf; font-weight: bold;">""</span>: <span style="color: #a5a5a5;">"src/"</span>}
+    },
+
+    <span style="color: #f0dfaf; font-weight: bold;">"require"</span>: {
+        <span style="color: #f0dfaf; font-weight: bold;">"symfony/console"</span>: <span style="color: #a5a5a5;">"dev-master"</span>
+    }
+}
+</pre>
+</div>
+
+<p>
+You should replace "<code>dev-master</code>" to current stable version (I'm trying whats new in development branch).
+</p>
+
+<p>
+I'm using composer autoloader, so in this example all classes will be loaded from <code>src</code> directory,
+you can change it to other dir (in <code>composer.json</code>)
+</p>
+
+
+
+
+<p>
+Next run
+</p>
+<div class="org-src-container">
+
+<pre class="src src-sh">$ composer update
+</pre>
+</div>
+
+<p>
+to install dependencies in your new project.
+</p>
+
+
+
+<p>
+Next thing to do is Your new shiny command loader.
+Put it in <code>bin/console</code> file - or whatever you want - but if you change
+directory position remember that you should adjust your paths
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-php"><span style="color: #5f7f5f;">#!/usr/bin/env php</span>
+<span style="color: #b0deff;">&lt;?php</span>
+
+<span style="color: #cfcfcf; ">date_default_timezone_set</span>(<span style="color: #a5a5a5;">'UTC'</span>);
+
+<span style="color: #cfcfcf; ">set_time_limit</span>(<span style="color: #ff5555;">0</span>);
+
+(@<span style="color: #f0dfaf; font-weight: bold;">include_once</span> <span style="color: #b0deff;">__DIR__</span> . <span style="color: #a5a5a5;">'/../vendor/autoload.php'</span>) || @<span style="color: #f0dfaf; font-weight: bold;">include_once</span> <span style="color: #b0deff;">__DIR__</span> . <span style="color: #a5a5a5;">'/../../../autoload.php'</span>;
+
+<span style="color: #f0dfaf; font-weight: bold;">use</span> <span style="color: #9dd7ff;">Symfony\Component\Console\Application</span>;
+
+<span style="color: #ffffff;">$</span><span style="color: #e2b1f4;">app</span> = <span style="color: #f0dfaf; font-weight: bold;">new</span> <span style="color: #9dd7ff;">Application</span>(<span style="color: #a5a5a5;">'Sample Console Component Based Application'</span>, <span style="color: #a5a5a5;">'6.6.6'</span>);
+
+<span style="color: #f0dfaf; font-weight: bold;">foreach</span>(<span style="color: #cfcfcf; ">glob</span>(<span style="color: #b0deff;">__DIR__</span> . <span style="color: #a5a5a5;">'/../src/Command/*Command.php'</span>) <span style="color: #f0dfaf; font-weight: bold;">as</span> <span style="color: #ffffff;">$</span><span style="color: #e2b1f4;">FileName</span>) {
+    <span style="color: #ffffff;">$</span><span style="color: #e2b1f4;">className</span> = <span style="color: #a5a5a5;">"Command\\"</span> . <span style="color: #cfcfcf; ">rtrim</span>(<span style="color: #cfcfcf; background-color: #1f1f1f;">basename</span>(<span style="color: #ffffff;">$</span><span style="color: #e2b1f4;">FileName</span>), <span style="color: #a5a5a5;">".php"</span>);
+    <span style="color: #ffffff;">$</span><span style="color: #e2b1f4;">app</span>-<span style="color: #b0deff;">&gt;</span><span style="color: #cfcfcf; ">addCommands</span>(<span style="color: #f0dfaf; font-weight: bold;">array</span>(
+        <span style="color: #f0dfaf; font-weight: bold;">new</span> <span style="color: #ffffff;">$</span><span style="color: #9dd7ff;">className</span>,
+    ));
+}
+
+<span style="color: #ffffff;">$</span><span style="color: #e2b1f4;">app</span>-&gt;<span style="color: #cfcfcf; ">run</span>();
+</pre>
+</div>
+
+
+<p>
+Finally create your new command file (src) for example:
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-php"><span style="color: #b0deff;">&lt;?php</span>
+<span style="color: #5f7f5f;">/**</span>
+<span style="color: #5f7f5f;"> * </span><span style="color: #b0deff; background-color: #0b0b0b;">@author</span><span style="color: #5f7f5f;">    Jacek Wysocki <a href="mailto:jacek.wysocki%40gmail.com">&lt;jacek.wysocki@gmail.com&gt;</a></span>
+<span style="color: #5f7f5f;"> </span><span style="color: #5f7f5f;">*/</span>
+<span style="color: #f0dfaf; font-weight: bold;">namespace</span> <span style="color: #9dd7ff;">Command</span>;
+
+<span style="color: #f0dfaf; font-weight: bold;">use</span> <span style="color: #9dd7ff;">Symfony\Component\Console\Command\Command</span>;
+<span style="color: #f0dfaf; font-weight: bold;">use</span> <span style="color: #9dd7ff;">Symfony\Component\Console\Input\InputInterface</span>;
+<span style="color: #f0dfaf; font-weight: bold;">use</span> <span style="color: #9dd7ff;">Symfony\Component\Console\Output\OutputInterface</span>;
+
+<span style="color: #f0dfaf; font-weight: bold;">class</span> <span style="color: #9dd7ff;">Test2Command</span> <span style="color: #f0dfaf; font-weight: bold;">extends</span> <span style="color: #9dd7ff;">Command</span>
+{
+    <span style="color: #f0dfaf; font-weight: bold;">protected</span> <span style="color: #f0dfaf; font-weight: bold;">function</span> <span style="color: #a2d7fb;">configure</span>()
+    {
+        <span style="color: #ffffff;">$</span><span style="color: #b0deff;">this</span>
+            -&gt;<span style="color: #cfcfcf; ">setName</span>(<span style="color: #a5a5a5;">'say:nothing'</span>)
+            -&gt;<span style="color: #cfcfcf; ">setDescription</span>(<span style="color: #a5a5a5;">'Says nothing'</span>);
+        ;
+    }
+
+    <span style="color: #f0dfaf; font-weight: bold;">protected</span> <span style="color: #f0dfaf; font-weight: bold;">function</span> <span style="color: #a2d7fb;">execute</span>(<span style="color: #9dd7ff;">InputInterface</span> <span style="color: #ffffff;">$</span><span style="color: #e2b1f4;">input</span>, <span style="color: #9dd7ff;">OutputInterface</span> <span style="color: #ffffff;">$</span><span style="color: #e2b1f4;">output</span>)
+    {
+        <span style="color: #ffffff;">$</span><span style="color: #e2b1f4;">output</span>-&gt;<span style="color: #cfcfcf; ">writeln</span>(<span style="color: #a5a5a5;">"nothing &lt;info&gt;nothing&lt;/info&gt; &lt;error&gt;nothing&lt;/error&gt;"</span>);
+    }
+}
+</pre>
+</div>
+
+<p>
+Thats all, command loader should detect this file and load it. You can use your command by running
+<code>php bin/console say:nothing</code>.
+</p>
+
+
+
+<p>
+You can put other commands in <code>src/Command</code>
+directory try save content below as <code>src/Command/TestCommand.php</code>
+</p>
+
+
+
+<div class="org-src-container">
+
+<pre class="src src-php"><span style="color: #b0deff;">&lt;?php</span>
+<span style="color: #5f7f5f;">/**</span>
+<span style="color: #5f7f5f;"> * </span><span style="color: #b0deff; background-color: #0b0b0b;">@author</span><span style="color: #5f7f5f;">    Jacek Wysocki <a href="mailto:jacek.wysocki%40gmail.com">&lt;jacek.wysocki@gmail.com&gt;</a></span>
+<span style="color: #5f7f5f;"> </span><span style="color: #5f7f5f;">*/</span>
+
+<span style="color: #f0dfaf; font-weight: bold;">namespace</span> <span style="color: #9dd7ff;">Command</span>;
+
+<span style="color: #f0dfaf; font-weight: bold;">use</span> <span style="color: #9dd7ff;">Symfony\Component\Console\Command\Command</span>;
+<span style="color: #f0dfaf; font-weight: bold;">use</span> <span style="color: #9dd7ff;">Symfony\Component\Console\Input\InputArgument</span>;
+<span style="color: #f0dfaf; font-weight: bold;">use</span> <span style="color: #9dd7ff;">Symfony\Component\Console\Input\InputInterface</span>;
+<span style="color: #f0dfaf; font-weight: bold;">use</span> <span style="color: #9dd7ff;">Symfony\Component\Console\Input\InputOption</span>;
+<span style="color: #f0dfaf; font-weight: bold;">use</span> <span style="color: #9dd7ff;">Symfony\Component\Console\Output\OutputInterface</span>;
+
+<span style="color: #f0dfaf; font-weight: bold;">class</span> <span style="color: #9dd7ff;">TestCommand</span> <span style="color: #f0dfaf; font-weight: bold;">extends</span> <span style="color: #9dd7ff;">Command</span>
+{
+    <span style="color: #f0dfaf; font-weight: bold;">protected</span> <span style="color: #f0dfaf; font-weight: bold;">function</span> <span style="color: #a2d7fb;">configure</span>()
+    {
+        <span style="color: #ffffff;">$</span><span style="color: #b0deff;">this</span>
+            -&gt;<span style="color: #cfcfcf; ">setName</span>(<span style="color: #a5a5a5;">'say:mynamebitch'</span>)
+            -&gt;<span style="color: #cfcfcf; ">setDescription</span>(<span style="color: #a5a5a5;">'Greet someone with colors'</span>)
+            -&gt;<span style="color: #cfcfcf; ">addArgument</span>(<span style="color: #a5a5a5;">'name'</span>, <span style="color: #9dd7ff;">InputArgument</span>::<span style="color: #b0deff;">OPTIONAL</span>, <span style="color: #a5a5a5;">'Who do you want to greet?'</span>)
+            -&gt;<span style="color: #cfcfcf; ">addOption</span>(<span style="color: #a5a5a5;">'yell'</span>, <span style="color: #b0deff;">null</span>, <span style="color: #9dd7ff;">InputOption</span>::<span style="color: #b0deff;">VALUE_NONE</span>, <span style="color: #a5a5a5;">'If set, the task will yell in uppercase letters'</span>)
+        ;
+    }
+
+    <span style="color: #f0dfaf; font-weight: bold;">protected</span> <span style="color: #f0dfaf; font-weight: bold;">function</span> <span style="color: #a2d7fb;">execute</span>(<span style="color: #9dd7ff;">InputInterface</span> <span style="color: #ffffff;">$</span><span style="color: #e2b1f4;">input</span>, <span style="color: #9dd7ff;">OutputInterface</span> <span style="color: #ffffff;">$</span><span style="color: #e2b1f4;">output</span>)
+    {
+        <span style="color: #ffffff;">$</span><span style="color: #e2b1f4;">name</span> = <span style="color: #ffffff;">$</span><span style="color: #e2b1f4;">input</span>-&gt;<span style="color: #cfcfcf; ">getArgument</span>(<span style="color: #a5a5a5;">'name'</span>);
+        <span style="color: #f0dfaf; font-weight: bold;">if</span> (<span style="color: #ffffff;">$</span><span style="color: #e2b1f4;">name</span>) {
+            <span style="color: #ffffff;">$</span><span style="color: #e2b1f4;">text</span> = <span style="color: #a5a5a5;">'Hello '</span>.<span style="color: #ffffff;">$</span><span style="color: #e2b1f4;">name</span>;
+        } <span style="color: #f0dfaf; font-weight: bold;">else</span> {
+            <span style="color: #ffffff;">$</span><span style="color: #e2b1f4;">text</span> = <span style="color: #a5a5a5;">'Hello'</span>;
+        }
+
+        <span style="color: #f0dfaf; font-weight: bold;">if</span> (<span style="color: #ffffff;">$</span><span style="color: #e2b1f4;">input</span>-&gt;<span style="color: #cfcfcf; ">getOption</span>(<span style="color: #a5a5a5;">'yell'</span>)) {
+            <span style="color: #ffffff;">$</span><span style="color: #e2b1f4;">text</span> = <span style="color: #cfcfcf; ">strtoupper</span>(<span style="color: #ffffff;">$</span><span style="color: #e2b1f4;">text</span>);
+        }
+
+        <span style="color: #ffffff;">$</span><span style="color: #e2b1f4;">output</span>-&gt;<span style="color: #cfcfcf; ">writeln</span>(<span style="color: #a5a5a5;">"</span><span style="color: #ffffff;">$</span><span style="color: #a5a5a5;">text in green '&lt;info&gt;</span><span style="color: #ffffff;">$</span><span style="color: #a5a5a5;">text&lt;/info&gt;' and in red: &lt;error&gt;</span><span style="color: #ffffff;">$</span><span style="color: #a5a5a5;">text&lt;/error&gt;"</span>);
+    }
+}
+</pre>
+</div>
+
+<p>
+and then run:
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-sh">bin/console say:mynamebitch Jacek
+</pre>
+</div>
+
+<p>
+You will get some nice colorized output.
+</p>
+
+<p>
+Enjoy!
+</p>
+
+	        </section>
+	    </article>
+	</main>
+
+    <footer class="site-footer">
+	<div class="inner">
+		<section class="footer-social">
+			
+		    <a href="//twitter.com/ex00" target="_blank" title="Twitter"><i class="fa fa-2x fa-fw fa-twitter"></i> <span class="hidden">Twitter</span></a>&nbsp;
+		    
+		    
+		    <a href="//github.com/exu" target="_blank" title="GitHub"><i class="fa fa-2x fa-fw fa-github"></i> <span class="hidden">GitHub</span></a>&nbsp;
+		    
+		    <a href="" target="_blank" title="RSS"><i class="fa fa-2x fa-fw fa-rss"></i> <span class="hidden">RSS</span></a>
+		</section>
+
+		<section class="copyright">&copy; 2015 <a href="http://wysocki.in/">Jacek Wysocki</a>. Released under the MIT license.</section>
+	</div>
+</footer>
+    <script src="http://wysocki.in/js/jquery.min.js"></script>
+<script src="http://wysocki.in/js/index.js"></script>
+<script src="http://wysocki.in/js/smooth-scroll.min.js"></script>
+<script src="http://wysocki.in/js/highlight.min.js"></script>
+
+<script>
+    smoothScroll.init({
+        speed: 800,
+        easing: 'easeInOutCubic',
+        updateURL: false,
+        offset: 125,
+    });
+</script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+<!-- Google Analytics -->
+<script>
+  var _gaq=[['_setAccount','UA-1883783-4'],['_trackPageview']];
+  (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+  g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+  s.parentNode.insertBefore(g,s)}(document,'script'));
+</script>
+
+
+
+</body>
+</html>

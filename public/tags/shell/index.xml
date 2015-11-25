@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Shell on Jacek Wysocki DevLog</title>
+    <link>http://wysocki.in/tags/shell/</link>
+    <description>Recent content in Shell on Jacek Wysocki DevLog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 04 Dec 2013 00:00:00 +0000</lastBuildDate>
+    <atom:link href="http://wysocki.in/tags/shell/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Using Symfony2 Console as standalone component</title>
+      <link>http://wysocki.in/symfony2-console-as-standalone-component</link>
+      <pubDate>Wed, 04 Dec 2013 00:00:00 +0000</pubDate>
+      
+      <guid>http://wysocki.in/symfony2-console-as-standalone-component</guid>
+      <description>&lt;div class=&#34;figure&#34;&gt;
+&lt;p&gt;&lt;img src=&#34;http://wysocki.in/img/sf2-console-component.png&#34; alt=&#34;sf2-console-component.png&#34; /&gt;
+&lt;/p&gt;
+&lt;/div&gt;
+
+&lt;p&gt;
+All files are located on My GitHub project: &lt;a href=&#34;https://github.com/exu/symfony2-console-standalone&#34;&gt;Symfony2 Console as standalone component&lt;/a&gt;
+&lt;/p&gt;
+
+&lt;p&gt;
+To use symfony console you should create &lt;code&gt;composer.json&lt;/code&gt; file and add &lt;code&gt;symfony/console&lt;/code&gt; component
+&lt;/p&gt;
+
+&lt;div class=&#34;org-src-container&#34;&gt;
+
+&lt;pre class=&#34;src src-json&#34;&gt;{
+    &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;&#34;autoload&#34;&lt;/span&gt;: {
+        &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;&#34;psr-0&#34;&lt;/span&gt;: {&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;&#34;&#34;&lt;/span&gt;: &lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#34;src/&#34;&lt;/span&gt;}
+    },
+
+    &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;&#34;require&#34;&lt;/span&gt;: {
+        &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;&#34;symfony/console&#34;&lt;/span&gt;: &lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#34;dev-master&#34;&lt;/span&gt;
+    }
+}
+&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;
+You should replace &#34;&lt;code&gt;dev-master&lt;/code&gt;&#34; to current stable version (I&#39;m trying whats new in development branch).
+&lt;/p&gt;
+
+&lt;p&gt;
+I&#39;m using composer autoloader, so in this example all classes will be loaded from &lt;code&gt;src&lt;/code&gt; directory,
+you can change it to other dir (in &lt;code&gt;composer.json&lt;/code&gt;)
+&lt;/p&gt;
+
+
+
+
+&lt;p&gt;
+Next run
+&lt;/p&gt;
+&lt;div class=&#34;org-src-container&#34;&gt;
+
+&lt;pre class=&#34;src src-sh&#34;&gt;$ composer update
+&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;
+to install dependencies in your new project.
+&lt;/p&gt;
+
+
+
+&lt;p&gt;
+Next thing to do is Your new shiny command loader.
+Put it in &lt;code&gt;bin/console&lt;/code&gt; file - or whatever you want - but if you change
+directory position remember that you should adjust your paths
+&lt;/p&gt;
+
+&lt;div class=&#34;org-src-container&#34;&gt;
+
+&lt;pre class=&#34;src src-php&#34;&gt;&lt;span style=&#34;color: #5f7f5f;&#34;&gt;#!/usr/bin/env php&lt;/span&gt;
+&lt;span style=&#34;color: #b0deff;&#34;&gt;&amp;lt;?php&lt;/span&gt;
+
+&lt;span style=&#34;color: #cfcfcf; &#34;&gt;date_default_timezone_set&lt;/span&gt;(&lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#39;UTC&#39;&lt;/span&gt;);
+
+&lt;span style=&#34;color: #cfcfcf; &#34;&gt;set_time_limit&lt;/span&gt;(&lt;span style=&#34;color: #ff5555;&#34;&gt;0&lt;/span&gt;);
+
+(@&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;include_once&lt;/span&gt; &lt;span style=&#34;color: #b0deff;&#34;&gt;__DIR__&lt;/span&gt; . &lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#39;/../vendor/autoload.php&#39;&lt;/span&gt;) || @&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;include_once&lt;/span&gt; &lt;span style=&#34;color: #b0deff;&#34;&gt;__DIR__&lt;/span&gt; . &lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#39;/../../../autoload.php&#39;&lt;/span&gt;;
+
+&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;use&lt;/span&gt; &lt;span style=&#34;color: #9dd7ff;&#34;&gt;Symfony\Component\Console\Application&lt;/span&gt;;
+
+&lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #e2b1f4;&#34;&gt;app&lt;/span&gt; = &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;new&lt;/span&gt; &lt;span style=&#34;color: #9dd7ff;&#34;&gt;Application&lt;/span&gt;(&lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#39;Sample Console Component Based Application&#39;&lt;/span&gt;, &lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#39;6.6.6&#39;&lt;/span&gt;);
+
+&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;foreach&lt;/span&gt;(&lt;span style=&#34;color: #cfcfcf; &#34;&gt;glob&lt;/span&gt;(&lt;span style=&#34;color: #b0deff;&#34;&gt;__DIR__&lt;/span&gt; . &lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#39;/../src/Command/*Command.php&#39;&lt;/span&gt;) &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;as&lt;/span&gt; &lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #e2b1f4;&#34;&gt;FileName&lt;/span&gt;) {
+    &lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #e2b1f4;&#34;&gt;className&lt;/span&gt; = &lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#34;Command\\&#34;&lt;/span&gt; . &lt;span style=&#34;color: #cfcfcf; &#34;&gt;rtrim&lt;/span&gt;(&lt;span style=&#34;color: #cfcfcf; background-color: #1f1f1f;&#34;&gt;basename&lt;/span&gt;(&lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #e2b1f4;&#34;&gt;FileName&lt;/span&gt;), &lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#34;.php&#34;&lt;/span&gt;);
+    &lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #e2b1f4;&#34;&gt;app&lt;/span&gt;-&lt;span style=&#34;color: #b0deff;&#34;&gt;&amp;gt;&lt;/span&gt;&lt;span style=&#34;color: #cfcfcf; &#34;&gt;addCommands&lt;/span&gt;(&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;array&lt;/span&gt;(
+        &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;new&lt;/span&gt; &lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #9dd7ff;&#34;&gt;className&lt;/span&gt;,
+    ));
+}
+
+&lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #e2b1f4;&#34;&gt;app&lt;/span&gt;-&amp;gt;&lt;span style=&#34;color: #cfcfcf; &#34;&gt;run&lt;/span&gt;();
+&lt;/pre&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;
+Finally create your new command file (src) for example:
+&lt;/p&gt;
+
+&lt;div class=&#34;org-src-container&#34;&gt;
+
+&lt;pre class=&#34;src src-php&#34;&gt;&lt;span style=&#34;color: #b0deff;&#34;&gt;&amp;lt;?php&lt;/span&gt;
+&lt;span style=&#34;color: #5f7f5f;&#34;&gt;/**&lt;/span&gt;
+&lt;span style=&#34;color: #5f7f5f;&#34;&gt; * &lt;/span&gt;&lt;span style=&#34;color: #b0deff; background-color: #0b0b0b;&#34;&gt;@author&lt;/span&gt;&lt;span style=&#34;color: #5f7f5f;&#34;&gt;    Jacek Wysocki &lt;a href=&#34;mailto:jacek.wysocki%40gmail.com&#34;&gt;&amp;lt;jacek.wysocki@gmail.com&amp;gt;&lt;/a&gt;&lt;/span&gt;
+&lt;span style=&#34;color: #5f7f5f;&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color: #5f7f5f;&#34;&gt;*/&lt;/span&gt;
+&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;namespace&lt;/span&gt; &lt;span style=&#34;color: #9dd7ff;&#34;&gt;Command&lt;/span&gt;;
+
+&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;use&lt;/span&gt; &lt;span style=&#34;color: #9dd7ff;&#34;&gt;Symfony\Component\Console\Command\Command&lt;/span&gt;;
+&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;use&lt;/span&gt; &lt;span style=&#34;color: #9dd7ff;&#34;&gt;Symfony\Component\Console\Input\InputInterface&lt;/span&gt;;
+&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;use&lt;/span&gt; &lt;span style=&#34;color: #9dd7ff;&#34;&gt;Symfony\Component\Console\Output\OutputInterface&lt;/span&gt;;
+
+&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color: #9dd7ff;&#34;&gt;Test2Command&lt;/span&gt; &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;extends&lt;/span&gt; &lt;span style=&#34;color: #9dd7ff;&#34;&gt;Command&lt;/span&gt;
+{
+    &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;protected&lt;/span&gt; &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;function&lt;/span&gt; &lt;span style=&#34;color: #a2d7fb;&#34;&gt;configure&lt;/span&gt;()
+    {
+        &lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #b0deff;&#34;&gt;this&lt;/span&gt;
+            -&amp;gt;&lt;span style=&#34;color: #cfcfcf; &#34;&gt;setName&lt;/span&gt;(&lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#39;say:nothing&#39;&lt;/span&gt;)
+            -&amp;gt;&lt;span style=&#34;color: #cfcfcf; &#34;&gt;setDescription&lt;/span&gt;(&lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#39;Says nothing&#39;&lt;/span&gt;);
+        ;
+    }
+
+    &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;protected&lt;/span&gt; &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;function&lt;/span&gt; &lt;span style=&#34;color: #a2d7fb;&#34;&gt;execute&lt;/span&gt;(&lt;span style=&#34;color: #9dd7ff;&#34;&gt;InputInterface&lt;/span&gt; &lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #e2b1f4;&#34;&gt;input&lt;/span&gt;, &lt;span style=&#34;color: #9dd7ff;&#34;&gt;OutputInterface&lt;/span&gt; &lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #e2b1f4;&#34;&gt;output&lt;/span&gt;)
+    {
+        &lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #e2b1f4;&#34;&gt;output&lt;/span&gt;-&amp;gt;&lt;span style=&#34;color: #cfcfcf; &#34;&gt;writeln&lt;/span&gt;(&lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#34;nothing &amp;lt;info&amp;gt;nothing&amp;lt;/info&amp;gt; &amp;lt;error&amp;gt;nothing&amp;lt;/error&amp;gt;&#34;&lt;/span&gt;);
+    }
+}
+&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;
+Thats all, command loader should detect this file and load it. You can use your command by running
+&lt;code&gt;php bin/console say:nothing&lt;/code&gt;.
+&lt;/p&gt;
+
+
+
+&lt;p&gt;
+You can put other commands in &lt;code&gt;src/Command&lt;/code&gt;
+directory try save content below as &lt;code&gt;src/Command/TestCommand.php&lt;/code&gt;
+&lt;/p&gt;
+
+
+
+&lt;div class=&#34;org-src-container&#34;&gt;
+
+&lt;pre class=&#34;src src-php&#34;&gt;&lt;span style=&#34;color: #b0deff;&#34;&gt;&amp;lt;?php&lt;/span&gt;
+&lt;span style=&#34;color: #5f7f5f;&#34;&gt;/**&lt;/span&gt;
+&lt;span style=&#34;color: #5f7f5f;&#34;&gt; * &lt;/span&gt;&lt;span style=&#34;color: #b0deff; background-color: #0b0b0b;&#34;&gt;@author&lt;/span&gt;&lt;span style=&#34;color: #5f7f5f;&#34;&gt;    Jacek Wysocki &lt;a href=&#34;mailto:jacek.wysocki%40gmail.com&#34;&gt;&amp;lt;jacek.wysocki@gmail.com&amp;gt;&lt;/a&gt;&lt;/span&gt;
+&lt;span style=&#34;color: #5f7f5f;&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color: #5f7f5f;&#34;&gt;*/&lt;/span&gt;
+
+&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;namespace&lt;/span&gt; &lt;span style=&#34;color: #9dd7ff;&#34;&gt;Command&lt;/span&gt;;
+
+&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;use&lt;/span&gt; &lt;span style=&#34;color: #9dd7ff;&#34;&gt;Symfony\Component\Console\Command\Command&lt;/span&gt;;
+&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;use&lt;/span&gt; &lt;span style=&#34;color: #9dd7ff;&#34;&gt;Symfony\Component\Console\Input\InputArgument&lt;/span&gt;;
+&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;use&lt;/span&gt; &lt;span style=&#34;color: #9dd7ff;&#34;&gt;Symfony\Component\Console\Input\InputInterface&lt;/span&gt;;
+&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;use&lt;/span&gt; &lt;span style=&#34;color: #9dd7ff;&#34;&gt;Symfony\Component\Console\Input\InputOption&lt;/span&gt;;
+&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;use&lt;/span&gt; &lt;span style=&#34;color: #9dd7ff;&#34;&gt;Symfony\Component\Console\Output\OutputInterface&lt;/span&gt;;
+
+&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color: #9dd7ff;&#34;&gt;TestCommand&lt;/span&gt; &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;extends&lt;/span&gt; &lt;span style=&#34;color: #9dd7ff;&#34;&gt;Command&lt;/span&gt;
+{
+    &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;protected&lt;/span&gt; &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;function&lt;/span&gt; &lt;span style=&#34;color: #a2d7fb;&#34;&gt;configure&lt;/span&gt;()
+    {
+        &lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #b0deff;&#34;&gt;this&lt;/span&gt;
+            -&amp;gt;&lt;span style=&#34;color: #cfcfcf; &#34;&gt;setName&lt;/span&gt;(&lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#39;say:mynamebitch&#39;&lt;/span&gt;)
+            -&amp;gt;&lt;span style=&#34;color: #cfcfcf; &#34;&gt;setDescription&lt;/span&gt;(&lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#39;Greet someone with colors&#39;&lt;/span&gt;)
+            -&amp;gt;&lt;span style=&#34;color: #cfcfcf; &#34;&gt;addArgument&lt;/span&gt;(&lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#39;name&#39;&lt;/span&gt;, &lt;span style=&#34;color: #9dd7ff;&#34;&gt;InputArgument&lt;/span&gt;::&lt;span style=&#34;color: #b0deff;&#34;&gt;OPTIONAL&lt;/span&gt;, &lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#39;Who do you want to greet?&#39;&lt;/span&gt;)
+            -&amp;gt;&lt;span style=&#34;color: #cfcfcf; &#34;&gt;addOption&lt;/span&gt;(&lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#39;yell&#39;&lt;/span&gt;, &lt;span style=&#34;color: #b0deff;&#34;&gt;null&lt;/span&gt;, &lt;span style=&#34;color: #9dd7ff;&#34;&gt;InputOption&lt;/span&gt;::&lt;span style=&#34;color: #b0deff;&#34;&gt;VALUE_NONE&lt;/span&gt;, &lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#39;If set, the task will yell in uppercase letters&#39;&lt;/span&gt;)
+        ;
+    }
+
+    &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;protected&lt;/span&gt; &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;function&lt;/span&gt; &lt;span style=&#34;color: #a2d7fb;&#34;&gt;execute&lt;/span&gt;(&lt;span style=&#34;color: #9dd7ff;&#34;&gt;InputInterface&lt;/span&gt; &lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #e2b1f4;&#34;&gt;input&lt;/span&gt;, &lt;span style=&#34;color: #9dd7ff;&#34;&gt;OutputInterface&lt;/span&gt; &lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #e2b1f4;&#34;&gt;output&lt;/span&gt;)
+    {
+        &lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #e2b1f4;&#34;&gt;name&lt;/span&gt; = &lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #e2b1f4;&#34;&gt;input&lt;/span&gt;-&amp;gt;&lt;span style=&#34;color: #cfcfcf; &#34;&gt;getArgument&lt;/span&gt;(&lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#39;name&#39;&lt;/span&gt;);
+        &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;if&lt;/span&gt; (&lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #e2b1f4;&#34;&gt;name&lt;/span&gt;) {
+            &lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #e2b1f4;&#34;&gt;text&lt;/span&gt; = &lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#39;Hello &#39;&lt;/span&gt;.&lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #e2b1f4;&#34;&gt;name&lt;/span&gt;;
+        } &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;else&lt;/span&gt; {
+            &lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #e2b1f4;&#34;&gt;text&lt;/span&gt; = &lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#39;Hello&#39;&lt;/span&gt;;
+        }
+
+        &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;if&lt;/span&gt; (&lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #e2b1f4;&#34;&gt;input&lt;/span&gt;-&amp;gt;&lt;span style=&#34;color: #cfcfcf; &#34;&gt;getOption&lt;/span&gt;(&lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#39;yell&#39;&lt;/span&gt;)) {
+            &lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #e2b1f4;&#34;&gt;text&lt;/span&gt; = &lt;span style=&#34;color: #cfcfcf; &#34;&gt;strtoupper&lt;/span&gt;(&lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #e2b1f4;&#34;&gt;text&lt;/span&gt;);
+        }
+
+        &lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #e2b1f4;&#34;&gt;output&lt;/span&gt;-&amp;gt;&lt;span style=&#34;color: #cfcfcf; &#34;&gt;writeln&lt;/span&gt;(&lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#34;&lt;/span&gt;&lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #a5a5a5;&#34;&gt;text in green &#39;&amp;lt;info&amp;gt;&lt;/span&gt;&lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #a5a5a5;&#34;&gt;text&amp;lt;/info&amp;gt;&#39; and in red: &amp;lt;error&amp;gt;&lt;/span&gt;&lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #a5a5a5;&#34;&gt;text&amp;lt;/error&amp;gt;&#34;&lt;/span&gt;);
+    }
+}
+&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;
+and then run:
+&lt;/p&gt;
+
+&lt;div class=&#34;org-src-container&#34;&gt;
+
+&lt;pre class=&#34;src src-sh&#34;&gt;bin/console say:mynamebitch Jacek
+&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;
+You will get some nice colorized output.
+&lt;/p&gt;
+
+&lt;p&gt;
+Enjoy!
+&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Linux Shell Tips - watch</title>
+      <link>http://wysocki.in/linux-shell-tips-watch</link>
+      <pubDate>Tue, 26 Jun 2012 00:00:00 +0000</pubDate>
+      
+      <guid>http://wysocki.in/linux-shell-tips-watch</guid>
+      <description>If you want to monitor some command execution in time like &#34;tail -f&#34; for files, probably your linux box have nice solution for you:&lt;br /&gt;
+&lt;br /&gt;
+&lt;pre class=&#34;brush:bash&#34;&gt;watch -n 1 &#39;ls -l&#39;
+&lt;/pre&gt;&lt;br /&gt;
+Where:&lt;br /&gt;
+&#39;-n 1&#39;  - time (in seconds) to refresh command output&lt;br /&gt;
+&#39;ls -l&#39; - command to execute in interval above&lt;br /&gt;
+&lt;br /&gt;
+When we add &#39;-d&#39; option (help: highlight changes between updates), watch inform Us what was changed between command executions.&lt;br /&gt;
+&lt;br /&gt;
+Example for &#39;ls&#39; command below:&lt;br /&gt;
+&lt;br /&gt;
+&lt;br /&gt;
+&lt;pre class=&#34;brush:bash&#34;&gt;watch --color -n 10 -d &#39;ls -la&#39;&lt;/pre&gt;&lt;br /&gt;
+Output:&lt;br /&gt;
+&lt;br /&gt;
+&lt;br /&gt;
+&lt;div class=&#34;separator&#34; style=&#34;clear: both; text-align: center;&#34;&gt;&lt;a href=&#34;http://1.bp.blogspot.com/-hWdWtskK6gk/TZteizdEJfI/AAAAAAAABE0/ET9I3HB39iU/s1600/screenshot13.png&#34; imageanchor=&#34;1&#34; style=&#34;margin-bottom: 1em; margin-right: 1em;&#34;&gt;&lt;img border=&#34;0&#34; height=&#34;148&#34; src=&#34;http://1.bp.blogspot.com/-hWdWtskK6gk/TZteizdEJfI/AAAAAAAABE0/ET9I3HB39iU/s320/screenshot13.png&#34; width=&#34;320&#34; /&gt;&lt;/a&gt;&lt;/div&gt;&lt;br /&gt;
+After change in directory structure watch informs us about changes:&lt;br /&gt;
+&lt;div class=&#34;separator&#34; style=&#34;clear: both; text-align: center;&#34;&gt;&lt;a href=&#34;http://1.bp.blogspot.com/-E-DmRqYVeT8/TZtenHXr0FI/AAAAAAAABE8/9Lxnznlbf5c/s1600/screenshot14.png&#34; imageanchor=&#34;1&#34; style=&#34;margin-bottom: 1em; margin-right: 1em;&#34;&gt;&lt;img border=&#34;0&#34; height=&#34;126&#34; src=&#34;http://1.bp.blogspot.com/-E-DmRqYVeT8/TZtenHXr0FI/AAAAAAAABE8/9Lxnznlbf5c/s320/screenshot14.png&#34; width=&#34;320&#34; /&gt;&lt;/a&gt;&lt;/div&gt;&lt;br /&gt;&lt;img src=&#34;http://feeds.feedburner.com/~r/JacekWysocki/~4/ElkzEVxUDLs&#34; height=&#34;1&#34; width=&#34;1&#34;/&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Linux Shell Tips - rm exclude emulation</title>
+      <link>http://wysocki.in/linux-shell-tips-rm-exclude-emulation</link>
+      <pubDate>Thu, 21 Jun 2012 00:00:00 +0000</pubDate>
+      
+      <guid>http://wysocki.in/linux-shell-tips-rm-exclude-emulation</guid>
+      <description>If you want to remove all files and&amp;nbsp;sub-directories&amp;nbsp;from directory exept some files you can use &amp;nbsp;rm and find combination as described below:&amp;nbsp;&lt;span style=&#34;background-color: white;&#34;&gt;:&lt;/span&gt;&lt;br /&gt;
+&lt;br /&gt;
+&lt;pre class=&#34;brush: bash&#34;&gt;rm -rf $(find . ! -wholename &#39;./web/index.php&#39; ! -wholename &#39;./web/.htaccess&#39; ! -name &#39;.&#39; ! -name &#39;web&#39;)
+&lt;/pre&gt;
+&lt;br /&gt;
+You can see more find power examples on &amp;nbsp;&lt;a href=&#34;http://www.infoanda.com/resources/find.htm&#34;&gt;http://www.infoanda.com/resources/find.htm&lt;/a&gt;&lt;img src=&#34;http://feeds.feedburner.com/~r/JacekWysocki/~4/NcDsPXFMvYc&#34; height=&#34;1&#34; width=&#34;1&#34;/&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Merge many PDF files into one in linux shell</title>
+      <link>http://wysocki.in/merge-many-pdf-files-into-one-in-linux-shell</link>
+      <pubDate>Thu, 21 Jun 2012 00:00:00 +0000</pubDate>
+      
+      <guid>http://wysocki.in/merge-many-pdf-files-into-one-in-linux-shell</guid>
+      <description>Do you want to merge many PDF files into one? There you are&lt;span style=&#34;background-color: white;&#34;&gt;:&lt;/span&gt;&lt;br /&gt;
+&lt;br /&gt;
+Shell code:&lt;br /&gt;
+&lt;pre class=&#34;brush: bash&#34;&gt;$ gs -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite -sOutputFile=out.pdf in1.pdf in2.pdf
+&lt;/pre&gt;
+&lt;br /&gt;
+- out.pdf - destination file name&lt;br /&gt;
+- in1.pdf, in2.pdf - source file names&lt;br /&gt;
+&lt;br /&gt;
+(gs - Ghost Script - on Ubuntu 12.04 and OpenSuse 11.3 is installed by default)&lt;img src=&#34;http://feeds.feedburner.com/~r/JacekWysocki/~4/X-2uL0On7jE&#34; height=&#34;1&#34; width=&#34;1&#34;/&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

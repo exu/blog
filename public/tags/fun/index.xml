@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Fun on Jacek Wysocki DevLog</title>
+    <link>http://wysocki.in/tags/fun/</link>
+    <description>Recent content in Fun on Jacek Wysocki DevLog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 03 Apr 2014 00:00:00 +0000</lastBuildDate>
+    <atom:link href="http://wysocki.in/tags/fun/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Real Programmers Explanation - What&#39;s http://xkcd.com/378/ about?</title>
+      <link>http://wysocki.in/emacs-real-programmers-xkcd-explanation</link>
+      <pubDate>Thu, 03 Apr 2014 00:00:00 +0000</pubDate>
+      
+      <guid>http://wysocki.in/emacs-real-programmers-xkcd-explanation</guid>
+      <description>&lt;div id=&#34;outline-container-sec-1&#34; class=&#34;outline-2&#34;&gt;
+&lt;h2 id=&#34;sec-1&#34;&gt;Emacs &lt;a href=&#34;http://xkcd.com/378/&#34;&gt;http://xkcd.com/378/&lt;/a&gt;&lt;/h2&gt;
+&lt;div class=&#34;outline-text-2&#34; id=&#34;text-1&#34;&gt;
+&lt;p&gt;
+If you aren&#39;t emacs user it&#39;ll be incomprehensible for you. So here is explanation
+I want to add that it&#39;s included in emacs core (no plugins required)
+&lt;/p&gt;
+
+&lt;img src=&#34;http://wysocki.in/img/m-x-butterfly-emacs.gif&#34; class=&#34;img-responsive&#34; alt=&#34;M-x butterfly Emacs command animation&#34;&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Ruby development is fun</title>
+      <link>http://wysocki.in/ruby-development-is-fun</link>
+      <pubDate>Fri, 23 Sep 2011 00:00:00 +0000</pubDate>
+      
+      <guid>http://wysocki.in/ruby-development-is-fun</guid>
+      <description>&lt;div class=&#34;separator&#34; style=&#34;clear: both; text-align: left;&#34;&gt;
+&lt;a href=&#34;http://3.bp.blogspot.com/-1HtfZq71UYo/TnxYzSxzLBI/AAAAAAAABcw/A3rPjPO9hCU/s1600/863724227.png&#34; imageanchor=&#34;1&#34;&gt;&lt;img border=&#34;0&#34; height=&#34;200&#34; src=&#34;http://3.bp.blogspot.com/-1HtfZq71UYo/TnxYzSxzLBI/AAAAAAAABcw/A3rPjPO9hCU/s200/863724227.png&#34; width=&#34;200&#34; /&gt;&lt;/a&gt;&lt;/div&gt;
+
+&lt;pre class=&#34;brush:bash&#34;&gt;
+thin -v
+&lt;/pre&gt;
+
+&lt;div style=&#34;text-align: left;&#34;&gt;
+Proof:
+
+Thin web server (v1.2.11 codename &lt;b&gt;&lt;i&gt;Bat-Shit Crazy&lt;/i&gt;&lt;/b&gt;) ...&lt;/div&gt;
+&lt;div class=&#34;separator&#34; style=&#34;clear: both; text-align: center;&#34;&gt;
+&lt;/div&gt;
+&lt;img src=&#34;http://feeds.feedburner.com/~r/JacekWysocki/~4/VYds29A8XEw&#34; height=&#34;1&#34; width=&#34;1&#34;/&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Find on Jacek Wysocki DevLog</title>
+    <link>http://wysocki.in/tags/find/</link>
+    <description>Recent content in Find on Jacek Wysocki DevLog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 15 Jun 2012 00:00:00 +0000</lastBuildDate>
+    <atom:link href="http://wysocki.in/tags/find/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>VIM &#43; gpicker = SublimeText 2 like files fuzzy searching</title>
+      <link>http://wysocki.in/vim-gpicker-sublimetext-2-like-files-fuzzy-searching</link>
+      <pubDate>Fri, 15 Jun 2012 00:00:00 +0000</pubDate>
+      
+      <guid>http://wysocki.in/vim-gpicker-sublimetext-2-like-files-fuzzy-searching</guid>
+      <description>Authors of SublimeText2 make great job with Fuzzy searching. In the past&amp;nbsp;I&#39;ve&amp;nbsp;used &lt;a href=&#34;https://wincent.com/products/command-t&#34; target=&#34;_blank&#34;&gt;Command-T&lt;/a&gt; and &lt;a href=&#34;https://github.com/kien/ctrlp.vim&#34; target=&#34;_blank&#34;&gt;CtrlP&lt;/a&gt; plugins but both of them doesn&#39;t works well for me. Then i found &lt;a href=&#34;https://github.com/alk/gpicker&#34; target=&#34;_blank&#34;&gt;Gpicker&lt;/a&gt; project it is written in C so its very fast and can be used in two most&amp;nbsp;powerful&amp;nbsp;editors: VIM (gpicker.vim) or Emacs (gpicker.el). I&#39;m using now gpicker for both of them. It&#39;s not so&amp;nbsp;powerful&amp;nbsp;like SublimeText but it get the job done very well.&lt;br /&gt;
+&lt;br /&gt;
+You can install gpicker in ubuntu&lt;br /&gt;
+&lt;br /&gt;
+&lt;pre class=&#34;brush:bash&#34;&gt;$ sudo apt-get install gpicker
+&lt;/pre&gt;
+&lt;br /&gt;
+Next step is to configure your favourite editor. In VIM you must put&amp;nbsp;&lt;b&gt;gpicker.vim&lt;/b&gt; to &lt;b&gt;~/.vim/plugins&lt;/b&gt; directory (or use any other technique pathogen, vundle or whatever). In emacs you must load gpicker.el in your init.el file (I&#39;m using prelude for that ~/.emacs.d/vendor/).&amp;nbsp;It is working out of the box for me (Ubuntu 12.04, Vim 7.3.429, Emacs-snapshot - 24.1.50.1).&lt;br /&gt;
+&lt;br /&gt;
+My&amp;nbsp;key bindings&amp;nbsp;in VIM:&lt;br /&gt;
+&lt;br /&gt;
+&lt;pre class=&#34;brush:bash&#34;&gt;map &amp;lt;Leader&amp;gt;p :GPickFile&amp;lt;CR&amp;gt;
+noremap &amp;lt;C-p&amp;gt; :GPickFile&amp;lt;CR&amp;gt;
+map &amp;lt;Leader&amp;gt;. :GPickBuffer&amp;lt;CR&amp;gt;
+
+&lt;/pre&gt;
+&lt;br /&gt;
+Final result:&lt;br /&gt;
+&lt;br /&gt;
+&lt;div class=&#34;separator&#34; style=&#34;clear: both; text-align: center;&#34;&gt;
+&lt;a href=&#34;http://4.bp.blogspot.com/-TaUFafNGFJ8/T9rtpO2psJI/AAAAAAAAFtA/tSlfo5UlJMA/s1600/Snap+2012-06-15+at+10.08.41.png&#34; imageanchor=&#34;1&#34; style=&#34;margin-left: 1em; margin-right: 1em;&#34;&gt;&lt;img border=&#34;0&#34; height=&#34;408&#34; src=&#34;http://4.bp.blogspot.com/-TaUFafNGFJ8/T9rtpO2psJI/AAAAAAAAFtA/tSlfo5UlJMA/s640/Snap+2012-06-15+at+10.08.41.png&#34; width=&#34;640&#34; /&gt;&lt;/a&gt;&lt;/div&gt;
+&lt;div style=&#34;text-align: center;&#34;&gt;
+Gpicker in VIM&lt;/div&gt;
+&lt;div style=&#34;text-align: center;&#34;&gt;
+&lt;br /&gt;&lt;/div&gt;
+&lt;div style=&#34;text-align: center;&#34;&gt;
+&lt;br /&gt;&lt;/div&gt;
+&lt;div class=&#34;separator&#34; style=&#34;clear: both; text-align: center;&#34;&gt;
+&lt;a href=&#34;http://3.bp.blogspot.com/-KGMdsnTypSQ/T9ruArP65vI/AAAAAAAAFtI/uL0KxaQVTdw/s1600/Snap+2012-06-15+at+10.10.23.png&#34; imageanchor=&#34;1&#34; style=&#34;margin-left: 1em; margin-right: 1em;&#34;&gt;&lt;img border=&#34;0&#34; height=&#34;574&#34; src=&#34;http://3.bp.blogspot.com/-KGMdsnTypSQ/T9ruArP65vI/AAAAAAAAFtI/uL0KxaQVTdw/s640/Snap+2012-06-15+at+10.10.23.png&#34; width=&#34;640&#34; /&gt;&lt;/a&gt;&lt;/div&gt;
+&lt;div style=&#34;text-align: center;&#34;&gt;
+Gpicker in Emacs&lt;/div&gt;
+&lt;div style=&#34;text-align: center;&#34;&gt;
+&lt;br /&gt;&lt;/div&gt;
+&lt;div style=&#34;text-align: left;&#34;&gt;
+&lt;br /&gt;&lt;/div&gt;
+&lt;div style=&#34;text-align: left;&#34;&gt;
+&lt;br /&gt;&lt;/div&gt;
+&lt;div style=&#34;text-align: left;&#34;&gt;
+You can use it in shell too:&amp;nbsp;&lt;/div&gt;
+&lt;div class=&#34;separator&#34; style=&#34;clear: both; text-align: center;&#34;&gt;
+&lt;a href=&#34;http://4.bp.blogspot.com/-pMnKhvNlwDA/T9rvAYmyMaI/AAAAAAAAFtQ/HbB38dJvebU/s1600/Snap+2012-06-15+at+10.12.07.png&#34; imageanchor=&#34;1&#34; style=&#34;margin-left: 1em; margin-right: 1em;&#34;&gt;&lt;img border=&#34;0&#34; height=&#34;410&#34; src=&#34;http://4.bp.blogspot.com/-pMnKhvNlwDA/T9rvAYmyMaI/AAAAAAAAFtQ/HbB38dJvebU/s640/Snap+2012-06-15+at+10.12.07.png&#34; width=&#34;640&#34; /&gt;&lt;/a&gt;&lt;/div&gt;
+&lt;br /&gt;
+&lt;div class=&#34;separator&#34; style=&#34;clear: both; text-align: center;&#34;&gt;
+&lt;a href=&#34;http://1.bp.blogspot.com/-z8B1eZ2o3w0/T9rvBVOAG4I/AAAAAAAAFtU/cPZgKLj9nR0/s1600/Snap+2012-06-15+at+10.14.25.png&#34; imageanchor=&#34;1&#34; style=&#34;margin-left: 1em; margin-right: 1em;&#34;&gt;&lt;img border=&#34;0&#34; height=&#34;406&#34; src=&#34;http://1.bp.blogspot.com/-z8B1eZ2o3w0/T9rvBVOAG4I/AAAAAAAAFtU/cPZgKLj9nR0/s640/Snap+2012-06-15+at+10.14.25.png&#34; width=&#34;640&#34; /&gt;&lt;/a&gt;&lt;/div&gt;
+&lt;div style=&#34;text-align: left;&#34;&gt;
+&lt;br /&gt;
+You can look in my &lt;a href=&#34;https://github.com/exu/vim-dotfiles&#34; target=&#34;_blank&#34;&gt;vim dotfiles&lt;/a&gt; for more information.&amp;nbsp;If you want try my VIM configs you can run command below in your shell&lt;br /&gt;
+&lt;br /&gt;
+&lt;pre class=&#34;brush:bash&#34;&gt;$ curl -L https://raw.github.com/exu/vim-dotfiles/master/gitinstall|bash&lt;/pre&gt;
+&lt;br /&gt;
+&lt;span style=&#34;color: red; font-size: large;&#34;&gt;&lt;b&gt;WARNING &lt;/b&gt;this command will kill your .vimrc file and .vim/ directory so &lt;b&gt;BACKUP &lt;/b&gt;your old configs! look at &lt;a href=&#34;https://raw.github.com/exu/vim-dotfiles/master/gitinstall&#34; target=&#34;_blank&#34;&gt;https://raw.github.com/exu/vim-dotfiles/master/gitinstall&lt;/a&gt; for more details&lt;/span&gt;&lt;br /&gt;
+&lt;br /&gt;&lt;/div&gt;&lt;img src=&#34;http://feeds.feedburner.com/~r/JacekWysocki/~4/wMpp9uJrixw&#34; height=&#34;1&#34; width=&#34;1&#34;/&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

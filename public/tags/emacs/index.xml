@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Emacs on Jacek Wysocki DevLog</title>
+    <link>http://wysocki.in/tags/emacs/</link>
+    <description>Recent content in Emacs on Jacek Wysocki DevLog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 03 Apr 2014 00:00:00 +0000</lastBuildDate>
+    <atom:link href="http://wysocki.in/tags/emacs/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Real Programmers Explanation - What&#39;s http://xkcd.com/378/ about?</title>
+      <link>http://wysocki.in/emacs-real-programmers-xkcd-explanation</link>
+      <pubDate>Thu, 03 Apr 2014 00:00:00 +0000</pubDate>
+      
+      <guid>http://wysocki.in/emacs-real-programmers-xkcd-explanation</guid>
+      <description>&lt;div id=&#34;outline-container-sec-1&#34; class=&#34;outline-2&#34;&gt;
+&lt;h2 id=&#34;sec-1&#34;&gt;Emacs &lt;a href=&#34;http://xkcd.com/378/&#34;&gt;http://xkcd.com/378/&lt;/a&gt;&lt;/h2&gt;
+&lt;div class=&#34;outline-text-2&#34; id=&#34;text-1&#34;&gt;
+&lt;p&gt;
+If you aren&#39;t emacs user it&#39;ll be incomprehensible for you. So here is explanation
+I want to add that it&#39;s included in emacs core (no plugins required)
+&lt;/p&gt;
+
+&lt;img src=&#34;http://wysocki.in/img/m-x-butterfly-emacs.gif&#34; class=&#34;img-responsive&#34; alt=&#34;M-x butterfly Emacs command animation&#34;&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Finding perfect text editor - Emacs</title>
+      <link>http://wysocki.in/finding-perfect-text-editor-part-129021</link>
+      <pubDate>Mon, 15 Oct 2012 00:00:00 +0000</pubDate>
+      
+      <guid>http://wysocki.in/finding-perfect-text-editor-part-129021</guid>
+      <description>I&#39;m putting my emacs configs back to all my linux machines. New prelude based configs, nice and shining (and working) with Emacs 24. Configs are machine based (work machine - different projects from home machine).&lt;br /&gt;
+&lt;br /&gt;
+Some of nice plugins in My config:&lt;br /&gt;
+&lt;br /&gt;
+&lt;ul&gt;
+&lt;li&gt;GPicker&lt;/li&gt;
+&lt;li&gt;Multiple-cursors&lt;/li&gt;
+&lt;li&gt;php-mode&lt;/li&gt;
+&lt;li&gt;twittering-mode&lt;/li&gt;
+&lt;li&gt;and many many more ... see install_vendors.rb for details.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;br /&gt;
+&lt;br /&gt;
+TODO&lt;br /&gt;
+&lt;br /&gt;
+&lt;ul&gt;
+&lt;li&gt;Update this blog post&lt;/li&gt;
+&lt;li&gt;yasnippets integration with used PHP projects (Symfony1 Symfony2 Silex) - rewrite existing vim &amp;nbsp; snippets (UltiSnips) python -&amp;gt; elisp.&lt;/li&gt;
+&lt;li&gt;find some&amp;nbsp;&amp;nbsp;system independent&amp;nbsp;nice way to run emacs server on system startup,&lt;/li&gt;
+&lt;/ul&gt;
+&lt;br /&gt;
+&lt;br /&gt;
+After cleaning up configs from unused mess my emacs starts 2 times faster. &lt;br /&gt;
+&lt;br /&gt;
+My config on GitHub &lt;a href=&#34;https://github.com/exu/emacs.d&#34;&gt;https://github.com/exu/emacs.d&lt;/a&gt;&lt;br /&gt;
+&lt;br /&gt;
+&lt;div class=&#34;separator&#34; style=&#34;clear: both; text-align: center;&#34;&gt;
+&lt;a href=&#34;http://1.bp.blogspot.com/-gthGCNSj6bU/UHx_Z2ySa-I/AAAAAAAAJDk/853YawjW2Nc/s1600/emacs.png&#34; imageanchor=&#34;1&#34; style=&#34;margin-left: 1em; margin-right: 1em;&#34;&gt;&lt;img border=&#34;0&#34; height=&#34;352&#34; src=&#34;http://1.bp.blogspot.com/-gthGCNSj6bU/UHx_Z2ySa-I/AAAAAAAAJDk/853YawjW2Nc/s640/emacs.png&#34; width=&#34;640&#34; /&gt;&lt;/a&gt;&lt;/div&gt;
+&lt;br /&gt;
+&lt;br /&gt;
+&lt;div style=&#34;text-align: center;&#34;&gt;
+&lt;span style=&#34;color: #999999;&#34;&gt;img: my emacs&lt;/span&gt;&lt;/div&gt;
+&lt;img src=&#34;http://feeds.feedburner.com/~r/JacekWysocki/~4/Zrv74f1M5CQ&#34; height=&#34;1&#34; width=&#34;1&#34;/&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>VIM &#43; gpicker = SublimeText 2 like files fuzzy searching</title>
+      <link>http://wysocki.in/vim-gpicker-sublimetext-2-like-files-fuzzy-searching</link>
+      <pubDate>Fri, 15 Jun 2012 00:00:00 +0000</pubDate>
+      
+      <guid>http://wysocki.in/vim-gpicker-sublimetext-2-like-files-fuzzy-searching</guid>
+      <description>Authors of SublimeText2 make great job with Fuzzy searching. In the past&amp;nbsp;I&#39;ve&amp;nbsp;used &lt;a href=&#34;https://wincent.com/products/command-t&#34; target=&#34;_blank&#34;&gt;Command-T&lt;/a&gt; and &lt;a href=&#34;https://github.com/kien/ctrlp.vim&#34; target=&#34;_blank&#34;&gt;CtrlP&lt;/a&gt; plugins but both of them doesn&#39;t works well for me. Then i found &lt;a href=&#34;https://github.com/alk/gpicker&#34; target=&#34;_blank&#34;&gt;Gpicker&lt;/a&gt; project it is written in C so its very fast and can be used in two most&amp;nbsp;powerful&amp;nbsp;editors: VIM (gpicker.vim) or Emacs (gpicker.el). I&#39;m using now gpicker for both of them. It&#39;s not so&amp;nbsp;powerful&amp;nbsp;like SublimeText but it get the job done very well.&lt;br /&gt;
+&lt;br /&gt;
+You can install gpicker in ubuntu&lt;br /&gt;
+&lt;br /&gt;
+&lt;pre class=&#34;brush:bash&#34;&gt;$ sudo apt-get install gpicker
+&lt;/pre&gt;
+&lt;br /&gt;
+Next step is to configure your favourite editor. In VIM you must put&amp;nbsp;&lt;b&gt;gpicker.vim&lt;/b&gt; to &lt;b&gt;~/.vim/plugins&lt;/b&gt; directory (or use any other technique pathogen, vundle or whatever). In emacs you must load gpicker.el in your init.el file (I&#39;m using prelude for that ~/.emacs.d/vendor/).&amp;nbsp;It is working out of the box for me (Ubuntu 12.04, Vim 7.3.429, Emacs-snapshot - 24.1.50.1).&lt;br /&gt;
+&lt;br /&gt;
+My&amp;nbsp;key bindings&amp;nbsp;in VIM:&lt;br /&gt;
+&lt;br /&gt;
+&lt;pre class=&#34;brush:bash&#34;&gt;map &amp;lt;Leader&amp;gt;p :GPickFile&amp;lt;CR&amp;gt;
+noremap &amp;lt;C-p&amp;gt; :GPickFile&amp;lt;CR&amp;gt;
+map &amp;lt;Leader&amp;gt;. :GPickBuffer&amp;lt;CR&amp;gt;
+
+&lt;/pre&gt;
+&lt;br /&gt;
+Final result:&lt;br /&gt;
+&lt;br /&gt;
+&lt;div class=&#34;separator&#34; style=&#34;clear: both; text-align: center;&#34;&gt;
+&lt;a href=&#34;http://4.bp.blogspot.com/-TaUFafNGFJ8/T9rtpO2psJI/AAAAAAAAFtA/tSlfo5UlJMA/s1600/Snap+2012-06-15+at+10.08.41.png&#34; imageanchor=&#34;1&#34; style=&#34;margin-left: 1em; margin-right: 1em;&#34;&gt;&lt;img border=&#34;0&#34; height=&#34;408&#34; src=&#34;http://4.bp.blogspot.com/-TaUFafNGFJ8/T9rtpO2psJI/AAAAAAAAFtA/tSlfo5UlJMA/s640/Snap+2012-06-15+at+10.08.41.png&#34; width=&#34;640&#34; /&gt;&lt;/a&gt;&lt;/div&gt;
+&lt;div style=&#34;text-align: center;&#34;&gt;
+Gpicker in VIM&lt;/div&gt;
+&lt;div style=&#34;text-align: center;&#34;&gt;
+&lt;br /&gt;&lt;/div&gt;
+&lt;div style=&#34;text-align: center;&#34;&gt;
+&lt;br /&gt;&lt;/div&gt;
+&lt;div class=&#34;separator&#34; style=&#34;clear: both; text-align: center;&#34;&gt;
+&lt;a href=&#34;http://3.bp.blogspot.com/-KGMdsnTypSQ/T9ruArP65vI/AAAAAAAAFtI/uL0KxaQVTdw/s1600/Snap+2012-06-15+at+10.10.23.png&#34; imageanchor=&#34;1&#34; style=&#34;margin-left: 1em; margin-right: 1em;&#34;&gt;&lt;img border=&#34;0&#34; height=&#34;574&#34; src=&#34;http://3.bp.blogspot.com/-KGMdsnTypSQ/T9ruArP65vI/AAAAAAAAFtI/uL0KxaQVTdw/s640/Snap+2012-06-15+at+10.10.23.png&#34; width=&#34;640&#34; /&gt;&lt;/a&gt;&lt;/div&gt;
+&lt;div style=&#34;text-align: center;&#34;&gt;
+Gpicker in Emacs&lt;/div&gt;
+&lt;div style=&#34;text-align: center;&#34;&gt;
+&lt;br /&gt;&lt;/div&gt;
+&lt;div style=&#34;text-align: left;&#34;&gt;
+&lt;br /&gt;&lt;/div&gt;
+&lt;div style=&#34;text-align: left;&#34;&gt;
+&lt;br /&gt;&lt;/div&gt;
+&lt;div style=&#34;text-align: left;&#34;&gt;
+You can use it in shell too:&amp;nbsp;&lt;/div&gt;
+&lt;div class=&#34;separator&#34; style=&#34;clear: both; text-align: center;&#34;&gt;
+&lt;a href=&#34;http://4.bp.blogspot.com/-pMnKhvNlwDA/T9rvAYmyMaI/AAAAAAAAFtQ/HbB38dJvebU/s1600/Snap+2012-06-15+at+10.12.07.png&#34; imageanchor=&#34;1&#34; style=&#34;margin-left: 1em; margin-right: 1em;&#34;&gt;&lt;img border=&#34;0&#34; height=&#34;410&#34; src=&#34;http://4.bp.blogspot.com/-pMnKhvNlwDA/T9rvAYmyMaI/AAAAAAAAFtQ/HbB38dJvebU/s640/Snap+2012-06-15+at+10.12.07.png&#34; width=&#34;640&#34; /&gt;&lt;/a&gt;&lt;/div&gt;
+&lt;br /&gt;
+&lt;div class=&#34;separator&#34; style=&#34;clear: both; text-align: center;&#34;&gt;
+&lt;a href=&#34;http://1.bp.blogspot.com/-z8B1eZ2o3w0/T9rvBVOAG4I/AAAAAAAAFtU/cPZgKLj9nR0/s1600/Snap+2012-06-15+at+10.14.25.png&#34; imageanchor=&#34;1&#34; style=&#34;margin-left: 1em; margin-right: 1em;&#34;&gt;&lt;img border=&#34;0&#34; height=&#34;406&#34; src=&#34;http://1.bp.blogspot.com/-z8B1eZ2o3w0/T9rvBVOAG4I/AAAAAAAAFtU/cPZgKLj9nR0/s640/Snap+2012-06-15+at+10.14.25.png&#34; width=&#34;640&#34; /&gt;&lt;/a&gt;&lt;/div&gt;
+&lt;div style=&#34;text-align: left;&#34;&gt;
+&lt;br /&gt;
+You can look in my &lt;a href=&#34;https://github.com/exu/vim-dotfiles&#34; target=&#34;_blank&#34;&gt;vim dotfiles&lt;/a&gt; for more information.&amp;nbsp;If you want try my VIM configs you can run command below in your shell&lt;br /&gt;
+&lt;br /&gt;
+&lt;pre class=&#34;brush:bash&#34;&gt;$ curl -L https://raw.github.com/exu/vim-dotfiles/master/gitinstall|bash&lt;/pre&gt;
+&lt;br /&gt;
+&lt;span style=&#34;color: red; font-size: large;&#34;&gt;&lt;b&gt;WARNING &lt;/b&gt;this command will kill your .vimrc file and .vim/ directory so &lt;b&gt;BACKUP &lt;/b&gt;your old configs! look at &lt;a href=&#34;https://raw.github.com/exu/vim-dotfiles/master/gitinstall&#34; target=&#34;_blank&#34;&gt;https://raw.github.com/exu/vim-dotfiles/master/gitinstall&lt;/a&gt; for more details&lt;/span&gt;&lt;br /&gt;
+&lt;br /&gt;&lt;/div&gt;&lt;img src=&#34;http://feeds.feedburner.com/~r/JacekWysocki/~4/wMpp9uJrixw&#34; height=&#34;1&#34; width=&#34;1&#34;/&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>My new color theme (Zenburn based) for Emacs exu-theme.el</title>
+      <link>http://wysocki.in/my-new-color-theme-zenburn-based-for-emacs</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://wysocki.in/my-new-color-theme-zenburn-based-for-emacs</guid>
+      <description>&lt;div id=&#34;outline-container-sec-1&#34; class=&#34;outline-2&#34;&gt;
+&lt;h2 id=&#34;sec-1&#34;&gt;Why one more colortheme?&lt;/h2&gt;
+&lt;div class=&#34;outline-text-2&#34; id=&#34;text-1&#34;&gt;
+&lt;p&gt;
+In my office i have very big windows and after 1PM brightness is killing my
+ability to see letters in my previous emacs setup with Zenburn colortheme.
+&lt;/p&gt;
+
+&lt;p&gt;
+It&#39;s good to see shiny day but my low contrast &lt;a href=&#34;https://github.com/bbatsov/zenburn-emacs&#34;&gt;Zenburn Theme&lt;/a&gt; is too bright and I
+often don&#39;t see elements with lower contrast.
+&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id=&#34;outline-container-sec-2&#34; class=&#34;outline-2&#34;&gt;
+&lt;h2 id=&#34;sec-2&#34;&gt;How to install exu-theme.el&lt;/h2&gt;
+&lt;div class=&#34;outline-text-2&#34; id=&#34;text-2&#34;&gt;
+&lt;/div&gt;&lt;div id=&#34;outline-container-sec-2-1&#34; class=&#34;outline-3&#34;&gt;
+&lt;h3 id=&#34;sec-2-1&#34;&gt;Installation&lt;/h3&gt;
+&lt;div class=&#34;outline-text-3&#34; id=&#34;text-2-1&#34;&gt;
+&lt;p&gt;
+You can grab it from my &lt;a href=&#34;https://github.com/exu/emacs.d/blob/master/themes/exu-theme.el&#34;&gt;emacs github repository&lt;/a&gt; (if You are using Emacs 24
+simply put it into `~/.emacs.d/themes` directory and add lines below into
+your `~/.emacs.d/init.el` file to load this theme
+&lt;/p&gt;
+
+&lt;div class=&#34;org-src-container&#34;&gt;
+
+&lt;pre class=&#34;src src-elisp&#34;&gt;(add-to-list &#39;custom-theme-load-path &lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#34;~/.emacs.d/themes&#34;&lt;/span&gt;)
+(load-theme &#39;exu t)
+&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div id=&#34;outline-container-sec-2-2&#34; class=&#34;outline-3&#34;&gt;
+&lt;h3 id=&#34;sec-2-2&#34;&gt;Below are some screenshots of my new theme:&lt;/h3&gt;
+&lt;div class=&#34;outline-text-3&#34; id=&#34;text-2-2&#34;&gt;
+
+&lt;div class=&#34;figure&#34;&gt;
+&lt;p&gt;&lt;img src=&#34;http://wysocki.in/img/exu-emacs-theme-01.png&#34; alt=&#34;exu-emacs-theme-01.png&#34; /&gt;
+&lt;/p&gt;
+&lt;/div&gt;
+
+
+&lt;div class=&#34;figure&#34;&gt;
+&lt;p&gt;&lt;img src=&#34;http://wysocki.in/img/exu-emacs-theme-02.png&#34; alt=&#34;exu-emacs-theme-02.png&#34; /&gt;
+&lt;/p&gt;
+&lt;/div&gt;
+
+
+&lt;div class=&#34;figure&#34;&gt;
+&lt;p&gt;&lt;img src=&#34;http://wysocki.in/img/exu-emacs-theme-03.png&#34; alt=&#34;exu-emacs-theme-03.png&#34; /&gt;
+&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

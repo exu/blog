@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Blog on Jacek Wysocki DevLog</title>
+    <link>http://wysocki.in/tags/blog/</link>
+    <description>Recent content in Blog on Jacek Wysocki DevLog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <atom:link href="http://wysocki.in/tags/blog/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Migration to Jekyll</title>
+      <link>http://wysocki.in/migration-to-jekyll</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://wysocki.in/migration-to-jekyll</guid>
+      <description>&lt;div id=&#34;outline-container-sec-1&#34; class=&#34;outline-2&#34;&gt;
+&lt;h2 id=&#34;sec-1&#34;&gt;The blogger exodus&lt;/h2&gt;
+&lt;div class=&#34;outline-text-2&#34; id=&#34;text-1&#34;&gt;
+&lt;p&gt;
+I wan&#39;t to start writting some blog posts so I&#39;ve thought that I will start from
+migration of My old blog on Blogger (&lt;a href=&#34;http://wysocki.in&#34;&gt;http://wysocki.in&lt;/a&gt;) to new and shiny
+Jekyll powered blog engine (&lt;a href=&#34;http://exu.github.io&#34;&gt;http://exu.github.io&lt;/a&gt;) - domain will be changed later.
+Why? It looks like good idea to have everything in git. And what is most important
+I can write my posts in Org-mode (markdown sucks so much!)
+&lt;/p&gt;
+&lt;/div&gt;
+
+
+&lt;div id=&#34;outline-container-sec-1-1&#34; class=&#34;outline-3&#34;&gt;
+&lt;h3 id=&#34;sec-1-1&#34;&gt;I&#39;ve used several tools to complete this job:&lt;/h3&gt;
+&lt;div class=&#34;outline-text-3&#34; id=&#34;text-1-1&#34;&gt;
+&lt;ul class=&#34;org-ul&#34;&gt;
+&lt;li&gt;Jekyll &lt;a href=&#34;http://jekyllrb.com/&#34;&gt;http://jekyllrb.com/&lt;/a&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://jekyllbootstrap.com/&#34;&gt;http://jekyllbootstrap.com/&lt;/a&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://gist.github.com/kennym/1115810&#34;&gt;https://gist.github.com/kennym/1115810&lt;/a&gt; (I&#39;ve changed &lt;code&gt;Config&lt;/code&gt; to &lt;code&gt;RbConfig&lt;/code&gt; because of deprecation warning)&#39;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id=&#34;outline-container-sec-1-2&#34; class=&#34;outline-3&#34;&gt;
+&lt;h3 id=&#34;sec-1-2&#34;&gt;Org-mode integration&lt;/h3&gt;
+&lt;div class=&#34;outline-text-3&#34; id=&#34;text-1-2&#34;&gt;
+&lt;p&gt;
+&lt;code&gt;_org&lt;/code&gt; directory in jekyll root directory structure similar to root directory.
+I have &lt;code&gt;_posts&lt;/code&gt; directory with org files inside
+&lt;/p&gt;
+
+&lt;p&gt;
+To avoid &lt;code&gt;&amp;lt;p&amp;gt;&lt;/code&gt; tags in jekyll parameters I&#39;ve put them between &lt;code&gt;#+BEGIN_HTML&lt;/code&gt; and &lt;code&gt;#+END_HTML&lt;/code&gt; tags
+&lt;/p&gt;
+
+&lt;div class=&#34;org-src-container&#34;&gt;
+
+&lt;pre class=&#34;src src-org&#34;&gt;&lt;span style=&#34;color: #5f7f5f;&#34;&gt;#+STARTUP: showall indent&lt;/span&gt;
+&lt;span style=&#34;color: #5f7f5f;&#34;&gt;#+STARTUP: hidestars&lt;/span&gt;
+&lt;span style=&#34;color: #5f7f5f;&#34;&gt;#+OPTIONS: H:4 num:nil tags:nil toc:nil timestamps:t&lt;/span&gt;
+&lt;span style=&#34;color: #5f7f5f;&#34;&gt;#+BEGIN_HTML&lt;/span&gt;
+&lt;span style=&#34;color: #b3b3b3;&#34;&gt;---&lt;/span&gt;
+&lt;span style=&#34;color: #b3b3b3;&#34;&gt;layout: post&lt;/span&gt;
+&lt;span style=&#34;color: #b3b3b3;&#34;&gt;title: &#34;Migration to Jekyll&#34;&lt;/span&gt;
+&lt;span style=&#34;color: #b3b3b3;&#34;&gt;description: &#34;&#34;&lt;/span&gt;
+&lt;span style=&#34;color: #b3b3b3;&#34;&gt;comments: true&lt;/span&gt;
+&lt;span style=&#34;color: #b3b3b3;&#34;&gt;category: blog&lt;/span&gt;
+&lt;span style=&#34;color: #b3b3b3;&#34;&gt;tags: [migration, blog, posts, import]&lt;/span&gt;
+&lt;span style=&#34;color: #b3b3b3;&#34;&gt;---&lt;/span&gt;
+&lt;span style=&#34;color: #b3b3b3;&#34;&gt;&lt;/span&gt;
+&lt;span style=&#34;color: #5f7f5f;&#34;&gt;#+END_HTML&lt;/span&gt;
+&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;
+I&#39;ve added some little helper to publish org files by hitting one key:
+&lt;/p&gt;
+
+&lt;div class=&#34;org-src-container&#34;&gt;
+
+&lt;pre class=&#34;src src-elisp&#34;&gt;(setq org-publish-project-alist
+      &#39;(
+
+  (&lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#34;github&#34;&lt;/span&gt;
+          &lt;span style=&#34;color: #5f7f5f;&#34;&gt;;; &lt;/span&gt;&lt;span style=&#34;color: #5f7f5f;&#34;&gt;Path to your org files.&lt;/span&gt;
+          &lt;span style=&#34;color: #93e0e3;&#34;&gt;:base-directory&lt;/span&gt; &lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#34;~/Workspace/exu.github.com/_org/&#34;&lt;/span&gt;
+          &lt;span style=&#34;color: #93e0e3;&#34;&gt;:base-extension&lt;/span&gt; &lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#34;org&#34;&lt;/span&gt;
+
+          &lt;span style=&#34;color: #5f7f5f;&#34;&gt;;; &lt;/span&gt;&lt;span style=&#34;color: #5f7f5f;&#34;&gt;Path to your Jekyll project.&lt;/span&gt;
+          &lt;span style=&#34;color: #93e0e3;&#34;&gt;:publishing-directory&lt;/span&gt; &lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#34;~/Workspace/exu.github.com/&#34;&lt;/span&gt;
+          &lt;span style=&#34;color: #93e0e3;&#34;&gt;:recursive&lt;/span&gt; t
+          &lt;span style=&#34;color: #93e0e3;&#34;&gt;:publishing-function&lt;/span&gt; org-publish-org-to-html
+          &lt;span style=&#34;color: #93e0e3;&#34;&gt;:headline-levels&lt;/span&gt; 4
+          &lt;span style=&#34;color: #93e0e3;&#34;&gt;:html-extension&lt;/span&gt; &lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#34;html&#34;&lt;/span&gt;
+          &lt;span style=&#34;color: #93e0e3;&#34;&gt;:body-only&lt;/span&gt; t &lt;span style=&#34;color: #5f7f5f;&#34;&gt;;; &lt;/span&gt;&lt;span style=&#34;color: #5f7f5f;&#34;&gt;Only export section between &amp;lt;body&amp;gt; &amp;lt;/body&amp;gt;&lt;/span&gt;
+    )
+))
+
+(&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;defun&lt;/span&gt; &lt;span style=&#34;color: #a2d7fb;&#34;&gt;publish-blog&lt;/span&gt; ()
+  (interactive)
+  (org-publish &lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#34;github&#34;&lt;/span&gt;)
+  )
+
+(global-set-key (kbd &lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#34;&amp;lt;f12&amp;gt;&#34;&lt;/span&gt;) &#39;publish-blog)
+&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div id=&#34;outline-container-sec-1-3&#34; class=&#34;outline-3&#34;&gt;
+&lt;h3 id=&#34;sec-1-3&#34;&gt;Todo Left &lt;code&gt;[3/6]&lt;/code&gt;:&lt;/h3&gt;
+&lt;div class=&#34;outline-text-3&#34; id=&#34;text-1-3&#34;&gt;
+&lt;ul class=&#34;org-ul&#34;&gt;
+&lt;li&gt;&lt;code&gt;[X]&lt;/code&gt; Make new home page
+&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;[X]&lt;/code&gt; Integrate Org-mode to work on github pages
+&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;[&amp;#xa0;]&lt;/code&gt; Add some static pages with informations
+&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;[&amp;#xa0;]&lt;/code&gt; Migrate domain: wysocki.in
+&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;[&amp;#xa0;]&lt;/code&gt; Make some Bootstrap layout
+&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;[X]&lt;/code&gt; Find some nice font
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

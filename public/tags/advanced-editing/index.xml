@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Advanced Editing on Jacek Wysocki DevLog</title>
+    <link>http://wysocki.in/tags/advanced-editing/</link>
+    <description>Recent content in Advanced Editing on Jacek Wysocki DevLog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Mon, 18 Jun 2012 00:00:00 +0000</lastBuildDate>
+    <atom:link href="http://wysocki.in/tags/advanced-editing/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>VIM faster Text-blocks with onoremap</title>
+      <link>http://wysocki.in/vim-faster-text-blocks-with-onoremap</link>
+      <pubDate>Mon, 18 Jun 2012 00:00:00 +0000</pubDate>
+      
+      <guid>http://wysocki.in/vim-faster-text-blocks-with-onoremap</guid>
+      <description>I&#39;ve found nice VIM feature to add mapping to operators &lt;br /&gt;
+&lt;br /&gt;
+&lt;pre class=&#34;brush:bash&#34;&gt;onoremap p i(
+onoremap m i{
+onoremap &#34; i&#34;
+onoremap &#39; i&#39;
+&lt;/pre&gt;
+&lt;br /&gt;
+Now i can press &lt;br /&gt;
+&lt;pre&gt;c&#39; d&#39;&lt;/pre&gt;
+to use defined text-blocks &lt;br /&gt;
+&lt;br /&gt;
+This technique didn&#39;t work with visual mode (you must press &lt;span style=&#34;font-family: &#39;Courier New&#39;, Courier, monospace;&#34;&gt;vi&#39;&lt;/span&gt;&lt;span style=&#34;font-family: inherit;&#34;&gt;)&lt;/span&gt;&lt;img src=&#34;http://feeds.feedburner.com/~r/JacekWysocki/~4/OrR24mzbwUI&#34; height=&#34;1&#34; width=&#34;1&#34;/&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

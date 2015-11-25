@@ -1,0 +1,153 @@
+/* Custom container */
+@import url(http://fonts.googleapis.com/css?family=Exo:200&subset=latin-ext,latin);
+
+body {
+    font-size: 16px;
+    font-family: monospace;
+    padding-top: 60px;
+}
+
+
+footer {
+    text-align: center;
+}
+
+a.navbar-brand {
+    font-family: 'Exo', sans-serif;
+    text-shadow: 1px 1px 0 #000;
+    color: rgb(224, 203, 255) !important;
+}
+
+h1, h2, h3, h4, h5 {
+    font-family: 'Exo', sans-serif;
+}
+
+.page-header { min-height: 75px; }
+.page-header h1 { font-size: 34px; }
+
+h1 { font-size: 28px; color: rgb(155, 0, 194); }
+h2 { font-size: 24px; color: rgb(134, 0, 168); }
+h3 { font-size: 20px; color: rgb(103, 0, 129); }
+h4 { font-size: 20px; color: rgb(93, 0, 110); }
+h5 { font-size: 20px; color: rgb(73, 0, 90); }
+h1 { font-size: 18px; }
+
+
+.container-narrow {
+  margin: 0 auto;
+  max-width: 700px; }
+
+.container-narrow > hr {
+  margin: 30px 0; }
+
+.navbar .nav {
+  float: right; }
+
+/* posts index */
+.post > h3.title {
+  position: relative;
+  padding-top: 10px; }
+
+.post > h3.title span.date {
+  position: absolute;
+  right: 0;
+  font-size: 0.9em; }
+
+.post > .more {
+  margin: 10px 0;
+  text-align: left;
+}
+
+/* post-full*/
+.post-full .date {
+  margin-bottom: 20px;
+  font-weight: bold; }
+
+/* tag_box */
+.tag_box {
+  list-style: none;
+  margin: 0;
+  overflow: hidden;
+  margin: 10px 0;
+}
+
+.tag_box li {
+  line-height: 28px; }
+
+.tag_box li i {
+  opacity: 0.9; }
+
+.tag_box.inline li {
+  float: left; }
+
+.tag_box a {
+  padding: 3px 6px;
+  margin: 2px;
+  background: #eee;
+  color: #555;
+  border-radius: 3px;
+  text-decoration: none;
+  border: 1px dashed #cccccc; }
+
+.tag_box a span {
+  vertical-align: super;
+  font-size: 0.8em; }
+
+.tag_box a:hover {
+  background-color: #e5e5e5; }
+
+.tag_box a.active {
+  background: #57A957;
+  border: 1px solid #4c964d;
+  color: #FFF; }
+
+.posts {
+    list-style: none;
+}
+
+.posts li.current {
+    font-size: 19px;
+    line-height: 26px;
+    margin: 10px 0;
+}
+
+.posts li.current .label {
+    width: 130px;
+    display: inline-block;
+}
+
+.posts li.current span {
+    line-height: 24px;
+    text-align: center;
+}
+
+
+.posts li {
+    list-style: none;
+    font-size: 16px;
+    line-height: 24px;
+}
+
+.posts li span {
+    line-height: 20px;
+    margin: 2px 5px 2px 0 ;
+    width: 80px;
+    text-align: center;
+}
+
+pre {
+    color: white;
+    background: #101010;
+}
+
+ul.posts {
+    padding: 0;
+}
+
+div.social-media {
+    padding: 1em;
+    margin: 1em;
+    background: aliceblue;
+    border-radius: 10px;
+    margin-top: -1em;
+}

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Files on Jacek Wysocki DevLog</title>
+    <link>http://wysocki.in/files/</link>
+    <description>Recent content in Files on Jacek Wysocki DevLog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 09 Sep 2012 00:00:00 +0000</lastBuildDate>
+    <atom:link href="http://wysocki.in/files/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Handling archives in linux (ranger file manager)</title>
+      <link>http://wysocki.in/files/2012/09/09-Handling-archives-in-linux-%28ranger-file-manager%29/</link>
+      <pubDate>Sun, 09 Sep 2012 00:00:00 +0000</pubDate>
+      
+      <guid>http://wysocki.in/files/2012/09/09-Handling-archives-in-linux-%28ranger-file-manager%29/</guid>
+      <description>Today I was looking for a some plugin for unpacking files in Ranger file manager. I found great tool ( atool :) ). It is nice and simple command for packing and unpacking many types of archives.&lt;br /&gt;
+&lt;br /&gt;
+First install atool, in ubuntu you do it with apt-get:&lt;br /&gt;
+&lt;pre class=&#34;brush:bash&#34;&gt;sudo apt-get install atool
+&lt;/pre&gt;&lt;br /&gt;
+&lt;br /&gt;
+Now update your rc.conf in ranger (after default instalation you need to copy-config from default skeleton. &lt;code&gt;ranger --copy-config all&lt;/code&gt;). Now edit your bindings in &lt;code&gt;~/.config/ranger/rc.conf&lt;/code&gt; &lt;br /&gt;
+&lt;br /&gt;
+&lt;pre class=&#34;brush:bash&#34;&gt;map Pu shell atool -x %s
+map Pa shell atool -a %s
+&lt;/pre&gt;&lt;br /&gt;
+Now after pressing Pu/Pa archive is unpacked or directory/file is packed.&lt;img src=&#34;http://feeds.feedburner.com/~r/JacekWysocki/~4/al6DcNe5SGM&#34; height=&#34;1&#34; width=&#34;1&#34;/&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

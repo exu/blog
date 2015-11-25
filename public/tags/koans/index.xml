@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Koans on Jacek Wysocki DevLog</title>
+    <link>http://wysocki.in/tags/koans/</link>
+    <description>Recent content in Koans on Jacek Wysocki DevLog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 03 Jul 2012 00:00:00 +0000</lastBuildDate>
+    <atom:link href="http://wysocki.in/tags/koans/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>VIM - Python Koans plugin</title>
+      <link>http://wysocki.in/vim-python-koans-plugin</link>
+      <pubDate>Tue, 03 Jul 2012 00:00:00 +0000</pubDate>
+      
+      <guid>http://wysocki.in/vim-python-koans-plugin</guid>
+      <description>Yesterday I&#39;ve started (again) python koans, and switching into terminal to run again and again pissed me off. So from now i press 1 combination and shell has gone away :), koans run in background and My lovely editor put cursor on last error.&lt;br /&gt;
+&lt;br /&gt;
+Meet the VIM python koans helper: &lt;br /&gt;
+&lt;br /&gt;
+&lt;a href=&#34;https://github.com/exu/vim-python_koans&#34;&gt;https://github.com/exu/vim-python_koans&lt;/a&gt;&lt;br /&gt;
+&lt;br /&gt;
+Output format sucks a little (because my VimL skills sucks - I didn&#39;t find solution for this ^@ ^] symbols) but it is great productivity improvement.&lt;br /&gt;
+&lt;br /&gt;
+&lt;a href=&#34;http://2.bp.blogspot.com/--wc-yuEJnY4/T_KVhxt2PpI/AAAAAAAAHLA/SGX29_1h1Ps/s1600/Snap%2B2012-07-03%2Bat%2B08.41.49.png&#34; imageanchor=&#34;1&#34;&gt;&lt;img border=&#34;0&#34; height=&#34;328&#34; src=&#34;http://2.bp.blogspot.com/--wc-yuEJnY4/T_KVhxt2PpI/AAAAAAAAHLA/SGX29_1h1Ps/s640/Snap%2B2012-07-03%2Bat%2B08.41.49.png&#34; width=&#34;640&#34; /&gt;&lt;/a&gt;&lt;br /&gt;
+Picture 1: Output window with cursor on last error&lt;img src=&#34;http://feeds.feedburner.com/~r/JacekWysocki/~4/Kqj5zIbZ2gI&#34; height=&#34;1&#34; width=&#34;1&#34;/&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

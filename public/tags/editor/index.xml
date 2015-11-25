@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Editor on Jacek Wysocki DevLog</title>
+    <link>http://wysocki.in/tags/editor/</link>
+    <description>Recent content in Editor on Jacek Wysocki DevLog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Mon, 15 Oct 2012 00:00:00 +0000</lastBuildDate>
+    <atom:link href="http://wysocki.in/tags/editor/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Finding perfect text editor - Emacs</title>
+      <link>http://wysocki.in/finding-perfect-text-editor-part-129021</link>
+      <pubDate>Mon, 15 Oct 2012 00:00:00 +0000</pubDate>
+      
+      <guid>http://wysocki.in/finding-perfect-text-editor-part-129021</guid>
+      <description>I&#39;m putting my emacs configs back to all my linux machines. New prelude based configs, nice and shining (and working) with Emacs 24. Configs are machine based (work machine - different projects from home machine).&lt;br /&gt;
+&lt;br /&gt;
+Some of nice plugins in My config:&lt;br /&gt;
+&lt;br /&gt;
+&lt;ul&gt;
+&lt;li&gt;GPicker&lt;/li&gt;
+&lt;li&gt;Multiple-cursors&lt;/li&gt;
+&lt;li&gt;php-mode&lt;/li&gt;
+&lt;li&gt;twittering-mode&lt;/li&gt;
+&lt;li&gt;and many many more ... see install_vendors.rb for details.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;br /&gt;
+&lt;br /&gt;
+TODO&lt;br /&gt;
+&lt;br /&gt;
+&lt;ul&gt;
+&lt;li&gt;Update this blog post&lt;/li&gt;
+&lt;li&gt;yasnippets integration with used PHP projects (Symfony1 Symfony2 Silex) - rewrite existing vim &amp;nbsp; snippets (UltiSnips) python -&amp;gt; elisp.&lt;/li&gt;
+&lt;li&gt;find some&amp;nbsp;&amp;nbsp;system independent&amp;nbsp;nice way to run emacs server on system startup,&lt;/li&gt;
+&lt;/ul&gt;
+&lt;br /&gt;
+&lt;br /&gt;
+After cleaning up configs from unused mess my emacs starts 2 times faster. &lt;br /&gt;
+&lt;br /&gt;
+My config on GitHub &lt;a href=&#34;https://github.com/exu/emacs.d&#34;&gt;https://github.com/exu/emacs.d&lt;/a&gt;&lt;br /&gt;
+&lt;br /&gt;
+&lt;div class=&#34;separator&#34; style=&#34;clear: both; text-align: center;&#34;&gt;
+&lt;a href=&#34;http://1.bp.blogspot.com/-gthGCNSj6bU/UHx_Z2ySa-I/AAAAAAAAJDk/853YawjW2Nc/s1600/emacs.png&#34; imageanchor=&#34;1&#34; style=&#34;margin-left: 1em; margin-right: 1em;&#34;&gt;&lt;img border=&#34;0&#34; height=&#34;352&#34; src=&#34;http://1.bp.blogspot.com/-gthGCNSj6bU/UHx_Z2ySa-I/AAAAAAAAJDk/853YawjW2Nc/s640/emacs.png&#34; width=&#34;640&#34; /&gt;&lt;/a&gt;&lt;/div&gt;
+&lt;br /&gt;
+&lt;br /&gt;
+&lt;div style=&#34;text-align: center;&#34;&gt;
+&lt;span style=&#34;color: #999999;&#34;&gt;img: my emacs&lt;/span&gt;&lt;/div&gt;
+&lt;img src=&#34;http://feeds.feedburner.com/~r/JacekWysocki/~4/Zrv74f1M5CQ&#34; height=&#34;1&#34; width=&#34;1&#34;/&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>
