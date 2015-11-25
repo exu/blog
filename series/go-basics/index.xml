@@ -10,11 +10,11 @@
     <atom:link href="http://wysocki.in/series/go-basics/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
-      <title>Golang Channels Basics</title>
-      <link>http://wysocki.in/golang-channels-basics</link>
+      <title>Golang Channels - Basics</title>
+      <link>http://wysocki.in/golang-channels---basics</link>
       <pubDate>Wed, 25 Nov 2015 16:56:07 +0100</pubDate>
       
-      <guid>http://wysocki.in/golang-channels-basics</guid>
+      <guid>http://wysocki.in/golang-channels---basics</guid>
       <description>
 
 &lt;h2 id=&#34;channels-basic-example:b7f1cb643094ee3dbf988083964d7342&#34;&gt;Channels basic example:&lt;/h2&gt;
