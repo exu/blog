@@ -6,6 +6,8 @@ theme = "steam"
 disqusShortname = "wysocki"
 paginate = 10
 canonifyurls = false
+pygmentsstyle = "monokai"
+pygmentsuseclasses = false
 
 [permalinks]
   post = "/:slug"

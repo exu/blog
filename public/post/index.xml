@@ -6,8 +6,70 @@
     <description>Recent content in Posts on Jacek Wysocki DevLog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 22 Jan 2015 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 25 Nov 2015 16:56:07 +0100</lastBuildDate>
     <atom:link href="http://wysocki.in/post/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Golang Channels Basics</title>
+      <link>http://wysocki.in/golang-channels-basics</link>
+      <pubDate>Wed, 25 Nov 2015 16:56:07 +0100</pubDate>
+      
+      <guid>http://wysocki.in/golang-channels-basics</guid>
+      <description>
+
+&lt;h2 id=&#34;channels-basic-example:b7f1cb643094ee3dbf988083964d7342&#34;&gt;Channels basic example:&lt;/h2&gt;
+
+&lt;p&gt;Channels was made for synchronizing data between concurrently working goroutines (golang
+light threads). By default operations on channel (reading and writing) are blocking.&lt;/p&gt;
+
+&lt;p&gt;Let&amp;rsquo;s look for simple example below:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;    &lt;span style=&#34;color: #f92672&#34;&gt;package&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;main&lt;/span&gt;
+
+    &lt;span style=&#34;color: #f92672&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;fmt&amp;quot;&lt;/span&gt;
+    &lt;span style=&#34;color: #f92672&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;time&amp;quot;&lt;/span&gt;
+
+    &lt;span style=&#34;color: #66d9ef&#34;&gt;func&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;doIt&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;done&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;chan&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;bool&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+    	&lt;span style=&#34;color: #a6e22e&#34;&gt;fmt&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;Print&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;working...&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
+    	&lt;span style=&#34;color: #a6e22e&#34;&gt;time&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;Sleep&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;time&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;Second&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
+    	&lt;span style=&#34;color: #a6e22e&#34;&gt;fmt&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;Println&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;done&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
+
+        &lt;span style=&#34;color: #75715e&#34;&gt;// send value to channel&lt;/span&gt;
+    	&lt;span style=&#34;color: #a6e22e&#34;&gt;done&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;true&lt;/span&gt;
+    &lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+
+    &lt;span style=&#34;color: #66d9ef&#34;&gt;func&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;main&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+        &lt;span style=&#34;color: #75715e&#34;&gt;// We&amp;#39;re creating channel and&lt;/span&gt;
+        &lt;span style=&#34;color: #75715e&#34;&gt;// starting doIt function as gorouine&lt;/span&gt;
+    	&lt;span style=&#34;color: #a6e22e&#34;&gt;done&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;make(&lt;/span&gt;&lt;span style=&#34;color: #66d9ef&#34;&gt;chan&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;bool&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
+    	&lt;span style=&#34;color: #66d9ef&#34;&gt;go&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;doIt&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;done&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
+
+        &lt;span style=&#34;color: #75715e&#34;&gt;// reading from channel with `&amp;lt;-` blocks program until&lt;/span&gt;
+        &lt;span style=&#34;color: #75715e&#34;&gt;// we receive value after one second in `doIt` function&lt;/span&gt;
+    	&lt;span style=&#34;color: #a6e22e&#34;&gt;a&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;-&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;done&lt;/span&gt;
+    	&lt;span style=&#34;color: #a6e22e&#34;&gt;fmt&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;Println&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;a&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
+    &lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&lt;a href=&#34;http://play.golang.org/p/gh5ihivC4L&#34; target=&#34;_new&#34;&gt;Run it on play.golang.org&lt;/a&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;code-summary:b7f1cb643094ee3dbf988083964d7342&#34;&gt;Code Summary&lt;/h3&gt;
+
+&lt;p&gt;This simple example contains several important points about channels:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Go block on reading from channel&lt;/li&gt;
+&lt;li&gt;There is no control of running goroutines, try to remove reading from channel (&lt;code&gt;a := &amp;lt;-done&lt;/code&gt;) You&amp;rsquo;ll see that your program will not complete &lt;code&gt;doIt&lt;/code&gt; function&lt;/li&gt;
+&lt;li&gt;We&amp;rsquo;re passing channels to functions as something similar to reference (channels are
+used on both sides - goroutine which write to channel, and goroutine which reads from it - main function in this example)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;want-more:b7f1cb643094ee3dbf988083964d7342&#34;&gt;Want More?&lt;/h3&gt;
+
+&lt;p&gt;If you like My Go basics series feel free to read more at &lt;a href=&#34;http://wysocki.in/series/go-basics/&#34;&gt;Go Basics Series&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>Golang SQL handling with sqlx package</title>
@@ -3210,35 +3272,6 @@ Output format sucks a little (because my VimL skills sucks - I didn&#39;t find s
 &lt;br /&gt;
 &lt;a href=&#34;http://2.bp.blogspot.com/--wc-yuEJnY4/T_KVhxt2PpI/AAAAAAAAHLA/SGX29_1h1Ps/s1600/Snap%2B2012-07-03%2Bat%2B08.41.49.png&#34; imageanchor=&#34;1&#34;&gt;&lt;img border=&#34;0&#34; height=&#34;328&#34; src=&#34;http://2.bp.blogspot.com/--wc-yuEJnY4/T_KVhxt2PpI/AAAAAAAAHLA/SGX29_1h1Ps/s640/Snap%2B2012-07-03%2Bat%2B08.41.49.png&#34; width=&#34;640&#34; /&gt;&lt;/a&gt;&lt;br /&gt;
 Picture 1: Output window with cursor on last error&lt;img src=&#34;http://feeds.feedburner.com/~r/JacekWysocki/~4/Kqj5zIbZ2gI&#34; height=&#34;1&#34; width=&#34;1&#34;/&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Linux Shell Tips - watch</title>
-      <link>http://wysocki.in/linux-shell-tips-watch</link>
-      <pubDate>Tue, 26 Jun 2012 00:00:00 +0000</pubDate>
-      
-      <guid>http://wysocki.in/linux-shell-tips-watch</guid>
-      <description>If you want to monitor some command execution in time like &#34;tail -f&#34; for files, probably your linux box have nice solution for you:&lt;br /&gt;
-&lt;br /&gt;
-&lt;pre class=&#34;brush:bash&#34;&gt;watch -n 1 &#39;ls -l&#39;
-&lt;/pre&gt;&lt;br /&gt;
-Where:&lt;br /&gt;
-&#39;-n 1&#39;  - time (in seconds) to refresh command output&lt;br /&gt;
-&#39;ls -l&#39; - command to execute in interval above&lt;br /&gt;
-&lt;br /&gt;
-When we add &#39;-d&#39; option (help: highlight changes between updates), watch inform Us what was changed between command executions.&lt;br /&gt;
-&lt;br /&gt;
-Example for &#39;ls&#39; command below:&lt;br /&gt;
-&lt;br /&gt;
-&lt;br /&gt;
-&lt;pre class=&#34;brush:bash&#34;&gt;watch --color -n 10 -d &#39;ls -la&#39;&lt;/pre&gt;&lt;br /&gt;
-Output:&lt;br /&gt;
-&lt;br /&gt;
-&lt;br /&gt;
-&lt;div class=&#34;separator&#34; style=&#34;clear: both; text-align: center;&#34;&gt;&lt;a href=&#34;http://1.bp.blogspot.com/-hWdWtskK6gk/TZteizdEJfI/AAAAAAAABE0/ET9I3HB39iU/s1600/screenshot13.png&#34; imageanchor=&#34;1&#34; style=&#34;margin-bottom: 1em; margin-right: 1em;&#34;&gt;&lt;img border=&#34;0&#34; height=&#34;148&#34; src=&#34;http://1.bp.blogspot.com/-hWdWtskK6gk/TZteizdEJfI/AAAAAAAABE0/ET9I3HB39iU/s320/screenshot13.png&#34; width=&#34;320&#34; /&gt;&lt;/a&gt;&lt;/div&gt;&lt;br /&gt;
-After change in directory structure watch informs us about changes:&lt;br /&gt;
-&lt;div class=&#34;separator&#34; style=&#34;clear: both; text-align: center;&#34;&gt;&lt;a href=&#34;http://1.bp.blogspot.com/-E-DmRqYVeT8/TZtenHXr0FI/AAAAAAAABE8/9Lxnznlbf5c/s1600/screenshot14.png&#34; imageanchor=&#34;1&#34; style=&#34;margin-bottom: 1em; margin-right: 1em;&#34;&gt;&lt;img border=&#34;0&#34; height=&#34;126&#34; src=&#34;http://1.bp.blogspot.com/-E-DmRqYVeT8/TZtenHXr0FI/AAAAAAAABE8/9Lxnznlbf5c/s320/screenshot14.png&#34; width=&#34;320&#34; /&gt;&lt;/a&gt;&lt;/div&gt;&lt;br /&gt;&lt;img src=&#34;http://feeds.feedburner.com/~r/JacekWysocki/~4/ElkzEVxUDLs&#34; height=&#34;1&#34; width=&#34;1&#34;/&gt;
 </description>
     </item>
     
