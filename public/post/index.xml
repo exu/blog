@@ -6,18 +6,207 @@
     <description>Recent content in Posts on Jacek Wysocki DevLog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 25 Nov 2015 16:56:07 +0100</lastBuildDate>
+    <lastBuildDate>Thu, 26 Nov 2015 15:49:43 +0100</lastBuildDate>
     <atom:link href="http://wysocki.in/post/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
-      <title>Golang Channels - Basics</title>
-      <link>http://wysocki.in/golang-channels---basics</link>
-      <pubDate>Wed, 25 Nov 2015 16:56:07 +0100</pubDate>
+      <title>Golang channels - buffered semaphor</title>
+      <link>http://wysocki.in/golang-channels-buffered-semaphor</link>
+      <pubDate>Thu, 26 Nov 2015 15:49:43 +0100</pubDate>
       
-      <guid>http://wysocki.in/golang-channels---basics</guid>
+      <guid>http://wysocki.in/golang-channels-buffered-semaphor</guid>
       <description>
 
-&lt;h2 id=&#34;channels-basic-example:b7f1cb643094ee3dbf988083964d7342&#34;&gt;Channels basic example:&lt;/h2&gt;
+&lt;p&gt;We try to run 20 concurrent goroutines (all of them will start), in example below
+We&amp;rsquo;re setting channel buffer value to &lt;code&gt;5&lt;/code&gt;, go blocks on write where there is no
+more room in our channel buffer (we currently have &lt;code&gt;5&lt;/code&gt;) when first &lt;code&gt;5&lt;/code&gt; goroutines run
+buffer will be full and next &lt;code&gt;15&lt;/code&gt; will wait on write. After first goroutine complete and
+read from channel next hunged goroutine write data to goroutine.&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #f92672&#34;&gt;package&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;main&lt;/span&gt;
+
+&lt;span style=&#34;color: #f92672&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;
+	&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;fmt&amp;quot;&lt;/span&gt;
+	&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;time&amp;quot;&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
+
+&lt;span style=&#34;color: #66d9ef&#34;&gt;var&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;sem&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;make(&lt;/span&gt;&lt;span style=&#34;color: #66d9ef&#34;&gt;chan&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;int&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;5&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
+
+&lt;span style=&#34;color: #66d9ef&#34;&gt;func&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;main&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+	&lt;span style=&#34;color: #66d9ef&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;i&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;0&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;;&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;i&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;20&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;;&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;i&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;++&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+		&lt;span style=&#34;color: #66d9ef&#34;&gt;go&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;handle&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;()&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+
+	&lt;span style=&#34;color: #a6e22e&#34;&gt;time&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;Sleep&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;time&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;Second&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;10&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+
+&lt;span style=&#34;color: #66d9ef&#34;&gt;func&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;handle&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;println(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;starting&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
+	&lt;span style=&#34;color: #a6e22e&#34;&gt;sem&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;1&lt;/span&gt;
+	&lt;span style=&#34;color: #a6e22e&#34;&gt;fmt&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;Println&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;Step&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;time&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;Now&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;())&lt;/span&gt;
+	&lt;span style=&#34;color: #a6e22e&#34;&gt;time&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;Sleep&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;time&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;Second&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
+	&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;-&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;sem&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p class=&#34;play-go&#34;&gt;
+    &lt;a class=&#34;btn&#34; href=&#34;http://play.golang.org/p/zpUiSJoPv3&#34; target=&#34;_new&#34;&gt;
+        &lt;i class=&#34;fa fa-play-circle-o&#34;&gt;&lt;/i&gt; Run it on play.golang.org
+    &lt;/a&gt;
+&lt;/p&gt;
+
+
+&lt;h3 id=&#34;code-summary:374d01683790e6e902acefd695c3a4ba&#34;&gt;Code Summary&lt;/h3&gt;
+
+&lt;p&gt;In context of writing to channels there are some important things:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Writing to channels blocks&lt;/li&gt;
+&lt;li&gt;If buffer is set (second param in &lt;code&gt;make&lt;/code&gt; function) writing is blocked after buffer is full
+until that all goroutines can write to this channel.&lt;/li&gt;
+&lt;li&gt;In our example all goroutines have started (5 are working, 15 are blocked on write)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Play around change buffer value to other, look how it will work with your changes.&lt;/p&gt;
+
+&lt;h3 id=&#34;want-more:374d01683790e6e902acefd695c3a4ba&#34;&gt;Want More?&lt;/h3&gt;
+
+&lt;p&gt;If you like My Go basics series feel free to read more at &lt;a href=&#34;http://wysocki.in/series/go-basics/&#34;&gt;Go Basics Series&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Golang channels - quit channel</title>
+      <link>http://wysocki.in/golang-channels-quit-channel</link>
+      <pubDate>Thu, 26 Nov 2015 15:49:43 +0100</pubDate>
+      
+      <guid>http://wysocki.in/golang-channels-quit-channel</guid>
+      <description>
+
+&lt;p&gt;Sometimes you may want to break your program running inside goroutine from
+other goroutine or simply from main function. Below You can see My simple
+implementation of go quit channel.&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #f92672&#34;&gt;package&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;main&lt;/span&gt;
+
+&lt;span style=&#34;color: #f92672&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;
+	&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;time&amp;quot;&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
+
+&lt;span style=&#34;color: #66d9ef&#34;&gt;func&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;main&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+	&lt;span style=&#34;color: #a6e22e&#34;&gt;quit&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;make(&lt;/span&gt;&lt;span style=&#34;color: #66d9ef&#34;&gt;chan&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;bool&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
+	&lt;span style=&#34;color: #66d9ef&#34;&gt;go&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;func&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+		&lt;span style=&#34;color: #66d9ef&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+			&lt;span style=&#34;color: #66d9ef&#34;&gt;select&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+			&lt;span style=&#34;color: #66d9ef&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;-&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;quit&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt;
+				&lt;span style=&#34;color: #66d9ef&#34;&gt;return&lt;/span&gt;
+			&lt;span style=&#34;color: #66d9ef&#34;&gt;default&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt;
+				&lt;span style=&#34;color: #f8f8f2&#34;&gt;println(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;.&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
+				&lt;span style=&#34;color: #a6e22e&#34;&gt;time&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;Sleep&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;time&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;Millisecond&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;100&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
+			&lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+		&lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;}()&lt;/span&gt;
+
+	&lt;span style=&#34;color: #75715e&#34;&gt;// Do stuff&lt;/span&gt;
+	&lt;span style=&#34;color: #a6e22e&#34;&gt;time&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;Sleep&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;time&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;Second&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
+
+	&lt;span style=&#34;color: #75715e&#34;&gt;// Quit goroutine&lt;/span&gt;
+	&lt;span style=&#34;color: #a6e22e&#34;&gt;quit&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;true&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p class=&#34;play-go&#34;&gt;
+    &lt;a class=&#34;btn&#34; href=&#34;http://play.golang.org/p/LCtaucaU65&#34; target=&#34;_new&#34;&gt;
+        &lt;i class=&#34;fa fa-play-circle-o&#34;&gt;&lt;/i&gt; Run it on play.golang.org
+    &lt;/a&gt;
+&lt;/p&gt;
+
+
+&lt;h3 id=&#34;code-summary:56f482da4276e03cb54534c3a9fb674f&#34;&gt;Code Summary&lt;/h3&gt;
+
+&lt;p&gt;In context of communicating from external goroutines:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Use &lt;code&gt;select&lt;/code&gt; to read from multiple channels (in our example We only want
+to break infinite loop)&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;default&lt;/code&gt; is always run when there is no value from channel&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;want-more:56f482da4276e03cb54534c3a9fb674f&#34;&gt;Want More?&lt;/h3&gt;
+
+&lt;p&gt;If you like My Go basics series feel free to read more at &lt;a href=&#34;http://wysocki.in/series/go-basics/&#34;&gt;Go Basics Series&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Golang channels - rate limiting</title>
+      <link>http://wysocki.in/golang-channels-rate-limiting</link>
+      <pubDate>Thu, 26 Nov 2015 15:49:43 +0100</pubDate>
+      
+      <guid>http://wysocki.in/golang-channels-rate-limiting</guid>
+      <description>
+
+&lt;p&gt;When you need to limit rate of operations done by your program (e.g. low resources
+on node) go gives you very nice tool fo that. We&amp;rsquo;ll use &lt;code&gt;ticker&lt;/code&gt; which creates
+a &lt;code&gt;time.Time&lt;/code&gt; channel and sends to it value with configured interval.&lt;/p&gt;
+
+&lt;p&gt;First we add &lt;code&gt;50&lt;/code&gt; values to our requests channel. We know that there will not be
+new data, so we can close channel. Next we define ticker and iterate through
+our &lt;code&gt;requests&lt;/code&gt; channel.&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #f92672&#34;&gt;package&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;main&lt;/span&gt;
+
+&lt;span style=&#34;color: #f92672&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;
+	&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;fmt&amp;quot;&lt;/span&gt;
+	&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;time&amp;quot;&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
+
+&lt;span style=&#34;color: #66d9ef&#34;&gt;func&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;main&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+	&lt;span style=&#34;color: #a6e22e&#34;&gt;requests&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;make(&lt;/span&gt;&lt;span style=&#34;color: #66d9ef&#34;&gt;chan&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;int&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;50&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
+
+	&lt;span style=&#34;color: #66d9ef&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;i&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;1&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;;&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;i&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;=&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;50&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;;&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;i&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;++&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+		&lt;span style=&#34;color: #a6e22e&#34;&gt;requests&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;i&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;close(&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;requests&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
+
+	&lt;span style=&#34;color: #a6e22e&#34;&gt;limiter&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;time&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;Tick&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;time&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;Millisecond&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;200&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
+
+	&lt;span style=&#34;color: #66d9ef&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;req&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;range&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;requests&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+		&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;-&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;limiter&lt;/span&gt;
+		&lt;span style=&#34;color: #a6e22e&#34;&gt;fmt&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;Println&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;request&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;req&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;time&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;Now&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;())&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p class=&#34;play-go&#34;&gt;
+    &lt;a class=&#34;btn&#34; href=&#34;http://play.golang.org/p/wHYHe_DA7s&#34; target=&#34;_new&#34;&gt;
+        &lt;i class=&#34;fa fa-play-circle-o&#34;&gt;&lt;/i&gt; Run it on play.golang.org
+    &lt;/a&gt;
+&lt;/p&gt;
+
+
+&lt;h3 id=&#34;code-summary:2899a68356cc78ff99fd1c3cf580a0ab&#34;&gt;Code Summary&lt;/h3&gt;
+
+&lt;p&gt;Why we simply don&amp;rsquo;t use &lt;code&gt;time.Sleep()&lt;/code&gt;? Ticker is better for that
+because it can be canceled what gives us control over it.&lt;/p&gt;
+
+&lt;h3 id=&#34;want-more:2899a68356cc78ff99fd1c3cf580a0ab&#34;&gt;Want More?&lt;/h3&gt;
+
+&lt;p&gt;If you like My Go basics series feel free to read more at &lt;a href=&#34;http://wysocki.in/series/go-basics/&#34;&gt;Go Basics Series&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Golang Channels - Basics</title>
+      <link>http://wysocki.in/golang-channels-basics</link>
+      <pubDate>Wed, 25 Nov 2015 16:56:07 +0100</pubDate>
+      
+      <guid>http://wysocki.in/golang-channels-basics</guid>
+      <description>
 
 &lt;p&gt;Channels was made for synchronizing data between concurrently working goroutines (golang
 light threads). By default operations on channel (reading and writing) are blocking.&lt;/p&gt;
@@ -52,7 +241,12 @@ light threads). By default operations on channel (reading and writing) are block
 &lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;p&gt;&lt;a href=&#34;http://play.golang.org/p/gh5ihivC4L&#34; target=&#34;_new&#34;&gt;Run it on play.golang.org&lt;/a&gt;&lt;/p&gt;
+&lt;p class=&#34;play-go&#34;&gt;
+    &lt;a class=&#34;btn&#34; href=&#34;http://play.golang.org/p/gh5ihivC4L&#34; target=&#34;_new&#34;&gt;
+        &lt;i class=&#34;fa fa-play-circle-o&#34;&gt;&lt;/i&gt; Run it on play.golang.org
+    &lt;/a&gt;
+&lt;/p&gt;
+
 
 &lt;h3 id=&#34;code-summary:b7f1cb643094ee3dbf988083964d7342&#34;&gt;Code Summary&lt;/h3&gt;
 
@@ -78,8 +272,6 @@ used on both sides - goroutine which write to channel, and goroutine which reads
       
       <guid>http://wysocki.in/golang-channels-receiving-data-from-multiple-channels</guid>
       <description>
-
-&lt;h2 id=&#34;channels-basic-example:efe161ef779bd2b7a6dadc547c487606&#34;&gt;Channels basic example:&lt;/h2&gt;
 
 &lt;p&gt;When we want to receive data from multiple channels (probably filled by
 multiple goroutines) we should use &lt;code&gt;select&lt;/code&gt; statement. It simply choose
@@ -114,7 +306,12 @@ channel which receive value as first (It&amp;rsquo;s in context of time)&lt;/p&g
 &lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;p&gt;&lt;a href=&#34;http://play.golang.org/p/wnusjAPW1g&#34; target=&#34;_new&#34;&gt;Run it on play.golang.org&lt;/a&gt;&lt;/p&gt;
+&lt;p class=&#34;play-go&#34;&gt;
+    &lt;a class=&#34;btn&#34; href=&#34;http://play.golang.org/p/wnusjAPW1g&#34; target=&#34;_new&#34;&gt;
+        &lt;i class=&#34;fa fa-play-circle-o&#34;&gt;&lt;/i&gt; Run it on play.golang.org
+    &lt;/a&gt;
+&lt;/p&gt;
+
 
 &lt;h3 id=&#34;code-summary:efe161ef779bd2b7a6dadc547c487606&#34;&gt;Code Summary&lt;/h3&gt;
 
@@ -3083,239 +3280,6 @@ Enjoy!
 &lt;script src=&#34;https://gist.github.com/exu/7770302.js&#34;&gt;&lt;/script&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Symfony2 Behat - check checkbox if not checked yet (with onclick event)</title>
-      <link>http://wysocki.in/symfony2-behat-check-checkbox-if-not-checked-yet-with-onclick-event</link>
-      <pubDate>Fri, 07 Jun 2013 00:00:00 +0000</pubDate>
-      
-      <guid>http://wysocki.in/symfony2-behat-check-checkbox-if-not-checked-yet-with-onclick-event</guid>
-      <description>&lt;div id=&#34;outline-container-sec-1&#34; class=&#34;outline-2&#34;&gt;
-&lt;h2 id=&#34;sec-1&#34;&gt;&#39;I check &#34;checkbox\&lt;sub&gt;id&lt;/sub&gt;&#34;&#39; doesn&#39;t work for me&lt;/h2&gt;
-&lt;div class=&#34;outline-text-2&#34; id=&#34;text-1&#34;&gt;
-&lt;p&gt;
-Behat includes method for checking checkboxes, but it have one disadvantage - when it is run on Selenium server
-it only tacks checkbox value but don&#39;t fire onclick event. I write some small snippet to handle this flaw.
-&lt;/p&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div id=&#34;outline-container-sec-2&#34; class=&#34;outline-2&#34;&gt;
-&lt;h2 id=&#34;sec-2&#34;&gt;Code snippet&lt;/h2&gt;
-&lt;div class=&#34;outline-text-2&#34; id=&#34;text-2&#34;&gt;
-&lt;div class=&#34;org-src-container&#34;&gt;
-
-&lt;pre class=&#34;src src-php&#34;&gt;&lt;span style=&#34;color: #5f7f5f;&#34;&gt;/**&lt;/span&gt;
-&lt;span style=&#34;color: #5f7f5f;&#34;&gt; * &lt;/span&gt;&lt;span style=&#34;color: #b0deff; background-color: #0b0b0b;&#34;&gt;@When&lt;/span&gt;&lt;span style=&#34;color: #5f7f5f;&#34;&gt; /^I check &#34;([^&#34;]*)&#34; if not checked yet&lt;/span&gt;&lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #5f7f5f;&#34;&gt;/&lt;/span&gt;
-&lt;span style=&#34;color: #5f7f5f;&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color: #5f7f5f;&#34;&gt;*/&lt;/span&gt;
-&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;function&lt;/span&gt; &lt;span style=&#34;color: #a2d7fb;&#34;&gt;iCheckIfNotCheckedYet&lt;/span&gt;(&lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #e2b1f4;&#34;&gt;id&lt;/span&gt;)
-{
-    &lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #e2b1f4;&#34;&gt;Page&lt;/span&gt; = &lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #b0deff;&#34;&gt;this&lt;/span&gt;-&amp;gt;&lt;span style=&#34;color: #cfcfcf; &#34;&gt;getSession&lt;/span&gt;()-&amp;gt;&lt;span style=&#34;color: #cfcfcf; background-color: #1f1f1f;&#34;&gt;getPage&lt;/span&gt;();
-    &lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #e2b1f4;&#34;&gt;isChecked&lt;/span&gt; = &lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #e2b1f4;&#34;&gt;Page&lt;/span&gt;-&amp;gt;&lt;span style=&#34;color: #cfcfcf; &#34;&gt;find&lt;/span&gt;(&lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#39;css&#39;&lt;/span&gt;, &lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#39;input[type=&#34;checkbox&#34;]:checked#&#39;&lt;/span&gt; . &lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #e2b1f4;&#34;&gt;id&lt;/span&gt;);
-    &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;if&lt;/span&gt; (!&lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #e2b1f4;&#34;&gt;isChecked&lt;/span&gt;) {
-        &lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #e2b1f4;&#34;&gt;Page&lt;/span&gt;-&amp;gt;&lt;span style=&#34;color: #cfcfcf; &#34;&gt;find&lt;/span&gt;(&lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#39;css&#39;&lt;/span&gt;, &lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#39;#&#39;&lt;/span&gt; . &lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #e2b1f4;&#34;&gt;id&lt;/span&gt;)-&amp;gt;&lt;span style=&#34;color: #cfcfcf; background-color: #1f1f1f;&#34;&gt;click&lt;/span&gt;();
-    }
-}
-&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;
-It checks if checkbox is checked, if not it fire click action on it.
-&lt;/p&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Vagrant with puppet - Install webserver environment with Symfony2 project</title>
-      <link>http://wysocki.in/vagrant-puppet-install-php-nginx-based-symfony2-environment</link>
-      <pubDate>Fri, 26 Apr 2013 00:00:00 +0000</pubDate>
-      
-      <guid>http://wysocki.in/vagrant-puppet-install-php-nginx-based-symfony2-environment</guid>
-      <description>&lt;div class=&#34;figure&#34;&gt;
-&lt;p&gt;&lt;img src=&#34;http://wysocki.in/img/vagrant-puppet-symfony.jpg&#34; alt=&#34;vagrant-puppet-symfony.jpg&#34; /&gt;
-&lt;/p&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;
-Before incoming Symfony2 training I&#39;ve decided to upgrade a little &lt;a href=&#34;https://github.com/exu/puppet-symfony&#34;&gt;puppet-symfony
-configuration for our developers&lt;/a&gt; (original on &lt;a href=&#34;https://github.com/l3l0/puppet-symfony&#34;&gt;https://github.com/l3l0/puppet-symfony&lt;/a&gt;).
-&lt;/p&gt;
-
-
-
-&lt;div id=&#34;outline-container-sec-1&#34; class=&#34;outline-2&#34;&gt;
-&lt;h2 id=&#34;sec-1&#34;&gt;Requirements:&lt;/h2&gt;
-&lt;div class=&#34;outline-text-2&#34; id=&#34;text-1&#34;&gt;
-&lt;ul class=&#34;org-ul&#34;&gt;
-&lt;li&gt;Virtualbox 4.2+ (I&#39;ve installed from deb package on VBox site &lt;a href=&#34;https://www.virtualbox.org/wiki/Linux_Downloads&#34;&gt;https://www.virtualbox.org/wiki/Linux_Downloads&lt;/a&gt;)
-&lt;/li&gt;
-&lt;li&gt;Vagrant - installed it from &lt;a href=&#34;http://downloads.vagrantup.com/tags/v1.2.2&#34;&gt;http://downloads.vagrantup.com/tags/v1.2.2&lt;/a&gt;
-&lt;/li&gt;
-&lt;li&gt;Puppet - installed from &lt;code&gt;gem install puppet&lt;/code&gt; (You&#39;ll need &lt;a href=&#34;https://rvm.io/rvm/install/&#34;&gt;ruby&lt;/a&gt;)
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div id=&#34;outline-container-sec-2&#34; class=&#34;outline-2&#34;&gt;
-&lt;h2 id=&#34;sec-2&#34;&gt;Next Clone the puppet modules and manifests into your project:&lt;/h2&gt;
-&lt;div class=&#34;outline-text-2&#34; id=&#34;text-2&#34;&gt;
-&lt;div class=&#34;org-src-container&#34;&gt;
-
-&lt;pre class=&#34;src src-sh&#34;&gt;&lt;span style=&#34;color: #93e0e3;&#34;&gt;cd&lt;/span&gt; your-project
-git clone git://github.com/exu/puppet-symfony.git .puppet
-&lt;/pre&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div id=&#34;outline-container-sec-3&#34; class=&#34;outline-2&#34;&gt;
-&lt;h2 id=&#34;sec-3&#34;&gt;Create symlink to a Vagrantfile:&lt;/h2&gt;
-&lt;div class=&#34;outline-text-2&#34; id=&#34;text-3&#34;&gt;
-&lt;div class=&#34;org-src-container&#34;&gt;
-
-&lt;pre class=&#34;src src-sh&#34;&gt;ln -s .puppet/Vagrantfile ./Vagrantfile
-&lt;/pre&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-
-&lt;div id=&#34;outline-container-sec-4&#34; class=&#34;outline-2&#34;&gt;
-&lt;h2 id=&#34;sec-4&#34;&gt;Boot your virtual machine:&lt;/h2&gt;
-&lt;div class=&#34;outline-text-2&#34; id=&#34;text-4&#34;&gt;
-&lt;div class=&#34;org-src-container&#34;&gt;
-
-&lt;pre class=&#34;src src-sh&#34;&gt;vagrant up
-&lt;/pre&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div id=&#34;outline-container-sec-5&#34; class=&#34;outline-2&#34;&gt;
-&lt;h2 id=&#34;sec-5&#34;&gt;Finally ssh into it once it boots:&lt;/h2&gt;
-&lt;div class=&#34;outline-text-2&#34; id=&#34;text-5&#34;&gt;
-&lt;div class=&#34;org-src-container&#34;&gt;
-
-&lt;pre class=&#34;src src-sh&#34;&gt;vagrant ssh
-&lt;/pre&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div id=&#34;outline-container-sec-6&#34; class=&#34;outline-2&#34;&gt;
-&lt;h2 id=&#34;sec-6&#34;&gt;Networking details&lt;/h2&gt;
-&lt;div class=&#34;outline-text-2&#34; id=&#34;text-6&#34;&gt;
-&lt;ul class=&#34;org-ul&#34;&gt;
-&lt;li&gt;VMs network is configured in host-only mode to handle IP 10.0.100.110.
-&lt;/li&gt;
-&lt;li&gt;Your client accessing it with IP: 10.0.100.1.
-&lt;/li&gt;
-&lt;li&gt;You can &lt;code&gt;ssh vagrant@10.0.100.110&lt;/code&gt; (default password is &lt;code&gt;vagrant&lt;/code&gt;)
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div id=&#34;outline-container-sec-7&#34; class=&#34;outline-2&#34;&gt;
-&lt;h2 id=&#34;sec-7&#34;&gt;Next you should add vagrant.dev to your hosts file (&lt;a href=&#34;https://en.wikipedia.org/wiki/Hosts_(file)&#34;&gt;/etc/hosts&lt;/a&gt;)&lt;/h2&gt;
-&lt;div class=&#34;outline-text-2&#34; id=&#34;text-7&#34;&gt;
-&lt;div class=&#34;org-src-container&#34;&gt;
-
-&lt;pre class=&#34;src src-sh&#34;&gt;sudo sh -c &lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#39;echo &#34;10.0.100.110 vagrant.dev&#34; &amp;gt;&amp;gt; /etc/hosts&#39;&lt;/span&gt;
-&lt;/pre&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div id=&#34;outline-container-sec-8&#34; class=&#34;outline-2&#34;&gt;
-&lt;h2 id=&#34;sec-8&#34;&gt;Editing files on VM&lt;/h2&gt;
-&lt;div class=&#34;outline-text-2&#34; id=&#34;text-8&#34;&gt;
-&lt;p&gt;
-To edit files you can install sshfs &lt;code&gt;sudo apt-get install sshfs&lt;/code&gt; and then mount project directory
-wherever you want (I&#39;ve mounted it in  &lt;code&gt;/home/exu/Training directory&lt;/code&gt;, use directory where you want to mount it)
-&lt;/p&gt;
-
-&lt;div class=&#34;org-src-container&#34;&gt;
-
-&lt;pre class=&#34;src src-sh&#34;&gt;sudo apt-get install sshfs
-sshfs vagrant@10.0.100.110:/home/vagrant/vagrant.dev /home/exu/Training
-&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;
-If you don&#39;t want to enter your password you can execute &lt;code&gt;ssh-copy-id vagrant@10.0.100.110&lt;/code&gt; first (if you use &lt;a href=&#34;http://en.wikipedia.org/wiki/Public-key_infrastructure&#34;&gt;PKI&lt;/a&gt;).
-&lt;/p&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div id=&#34;outline-container-sec-9&#34; class=&#34;outline-2&#34;&gt;
-&lt;h2 id=&#34;sec-9&#34;&gt;Additional tips:&lt;/h2&gt;
-&lt;div class=&#34;outline-text-2&#34; id=&#34;text-9&#34;&gt;
-&lt;p&gt;
-If you don&#39;t want to provision machine after each restart (with new basic Symfony project) use &lt;code&gt;--no-provision&lt;/code&gt;
-when you run &lt;code&gt;vagrant up&lt;/code&gt; command
-&lt;/p&gt;
-
-&lt;div class=&#34;org-src-container&#34;&gt;
-
-&lt;pre class=&#34;src src-sh&#34;&gt;vagrant up --no-provision
-&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;
-I&#39;ve added alias to speed up VM start
-&lt;/p&gt;
-
-&lt;div class=&#34;org-src-container&#34;&gt;
-
-&lt;pre class=&#34;src src-sh&#34;&gt;&lt;span style=&#34;color: #93e0e3;&#34;&gt;alias&lt;/span&gt; &lt;span style=&#34;color: #e2b1f4;&#34;&gt;vup&lt;/span&gt;=&lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#39;vagrant up --no-provision&#39;&lt;/span&gt;
-&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;
-You can put it in your &lt;code&gt;.bashrc&lt;/code&gt; or &lt;code&gt;.zshrc&lt;/code&gt; file
-&lt;/p&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Finding perfect text editor - Emacs</title>
-      <link>http://wysocki.in/finding-perfect-text-editor-part-129021</link>
-      <pubDate>Mon, 15 Oct 2012 00:00:00 +0000</pubDate>
-      
-      <guid>http://wysocki.in/finding-perfect-text-editor-part-129021</guid>
-      <description>I&#39;m putting my emacs configs back to all my linux machines. New prelude based configs, nice and shining (and working) with Emacs 24. Configs are machine based (work machine - different projects from home machine).&lt;br /&gt;
-&lt;br /&gt;
-Some of nice plugins in My config:&lt;br /&gt;
-&lt;br /&gt;
-&lt;ul&gt;
-&lt;li&gt;GPicker&lt;/li&gt;
-&lt;li&gt;Multiple-cursors&lt;/li&gt;
-&lt;li&gt;php-mode&lt;/li&gt;
-&lt;li&gt;twittering-mode&lt;/li&gt;
-&lt;li&gt;and many many more ... see install_vendors.rb for details.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;br /&gt;
-&lt;br /&gt;
-TODO&lt;br /&gt;
-&lt;br /&gt;
-&lt;ul&gt;
-&lt;li&gt;Update this blog post&lt;/li&gt;
-&lt;li&gt;yasnippets integration with used PHP projects (Symfony1 Symfony2 Silex) - rewrite existing vim &amp;nbsp; snippets (UltiSnips) python -&amp;gt; elisp.&lt;/li&gt;
-&lt;li&gt;find some&amp;nbsp;&amp;nbsp;system independent&amp;nbsp;nice way to run emacs server on system startup,&lt;/li&gt;
-&lt;/ul&gt;
-&lt;br /&gt;
-&lt;br /&gt;
-After cleaning up configs from unused mess my emacs starts 2 times faster. &lt;br /&gt;
-&lt;br /&gt;
-My config on GitHub &lt;a href=&#34;https://github.com/exu/emacs.d&#34;&gt;https://github.com/exu/emacs.d&lt;/a&gt;&lt;br /&gt;
-&lt;br /&gt;
-&lt;div class=&#34;separator&#34; style=&#34;clear: both; text-align: center;&#34;&gt;
-&lt;a href=&#34;http://1.bp.blogspot.com/-gthGCNSj6bU/UHx_Z2ySa-I/AAAAAAAAJDk/853YawjW2Nc/s1600/emacs.png&#34; imageanchor=&#34;1&#34; style=&#34;margin-left: 1em; margin-right: 1em;&#34;&gt;&lt;img border=&#34;0&#34; height=&#34;352&#34; src=&#34;http://1.bp.blogspot.com/-gthGCNSj6bU/UHx_Z2ySa-I/AAAAAAAAJDk/853YawjW2Nc/s640/emacs.png&#34; width=&#34;640&#34; /&gt;&lt;/a&gt;&lt;/div&gt;
-&lt;br /&gt;
-&lt;br /&gt;
-&lt;div style=&#34;text-align: center;&#34;&gt;
-&lt;span style=&#34;color: #999999;&#34;&gt;img: my emacs&lt;/span&gt;&lt;/div&gt;
-&lt;img src=&#34;http://feeds.feedburner.com/~r/JacekWysocki/~4/Zrv74f1M5CQ&#34; height=&#34;1&#34; width=&#34;1&#34;/&gt;
 </description>
     </item>
     

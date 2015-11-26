@@ -4,10 +4,8 @@ title = "Golang Channels - Receiving data"
 description = "Receiving data from multiple channels"
 tags = ["go", "channels", "concurrency"]
 slug = "golang-channels-receiving-data-from-multiple-channels"
+series = ["Go basics"]
 +++
-
-
-## Channels basic example:
 
 When we want to receive data from multiple channels (probably filled by
 multiple goroutines) we should use `select` statement. It simply choose
@@ -43,7 +41,7 @@ func main() {
 
 {{< /highlight >}}
 
-<a href="http://play.golang.org/p/wnusjAPW1g" target="_new">Run it on play.golang.org</a>
+{{< play "wnusjAPW1g" >}}
 
 ### Code Summary
 

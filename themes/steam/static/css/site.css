@@ -26,3 +26,16 @@ pre {
     float: left;
     margin-right: 12px;
 }
+
+.btn {
+    background-color: #4285f4;
+    color: #fff !important;
+    display: inline-block;
+    position: relative;
+    height: 32px;
+    line-height: 32px;
+    border-radius: 2px;
+    font-size: 0.9em;
+    padding: 6px 12px;
+    border-radius: 3px;
+}

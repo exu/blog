@@ -4,10 +4,8 @@ title = "Golang Channels - Basics"
 description = "Golang Channels - Basic channels usage in simple examples"
 tags = ["go", "channels", "concurrency"]
 series = ["Go basics"]
+slug = "golang-channels-basics"
 +++
-
-
-## Channels basic example:
 
 Channels was made for synchronizing data between concurrently working goroutines (golang
 light threads). By default operations on channel (reading and writing) are blocking.
@@ -40,9 +38,10 @@ Let's look for simple example below:
     	a := <-done
     	fmt.Println(a)
     }
+
 {{< /highlight >}}
 
-<a href="http://play.golang.org/p/gh5ihivC4L" target="_new">Run it on play.golang.org</a>
+{{< play "gh5ihivC4L" >}}
 
 ### Code Summary
 

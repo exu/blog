@@ -11,13 +11,11 @@
     
     <item>
       <title>Golang Channels - Basics</title>
-      <link>http://wysocki.in/golang-channels---basics</link>
+      <link>http://wysocki.in/golang-channels-basics</link>
       <pubDate>Wed, 25 Nov 2015 16:56:07 +0100</pubDate>
       
-      <guid>http://wysocki.in/golang-channels---basics</guid>
+      <guid>http://wysocki.in/golang-channels-basics</guid>
       <description>
-
-&lt;h2 id=&#34;channels-basic-example:b7f1cb643094ee3dbf988083964d7342&#34;&gt;Channels basic example:&lt;/h2&gt;
 
 &lt;p&gt;Channels was made for synchronizing data between concurrently working goroutines (golang
 light threads). By default operations on channel (reading and writing) are blocking.&lt;/p&gt;
@@ -52,7 +50,12 @@ light threads). By default operations on channel (reading and writing) are block
 &lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;p&gt;&lt;a href=&#34;http://play.golang.org/p/gh5ihivC4L&#34; target=&#34;_new&#34;&gt;Run it on play.golang.org&lt;/a&gt;&lt;/p&gt;
+&lt;p class=&#34;play-go&#34;&gt;
+    &lt;a class=&#34;btn&#34; href=&#34;http://play.golang.org/p/gh5ihivC4L&#34; target=&#34;_new&#34;&gt;
+        &lt;i class=&#34;fa fa-play-circle-o&#34;&gt;&lt;/i&gt; Run it on play.golang.org
+    &lt;/a&gt;
+&lt;/p&gt;
+
 
 &lt;h3 id=&#34;code-summary:b7f1cb643094ee3dbf988083964d7342&#34;&gt;Code Summary&lt;/h3&gt;
 
@@ -78,8 +81,6 @@ used on both sides - goroutine which write to channel, and goroutine which reads
       
       <guid>http://wysocki.in/golang-channels-receiving-data-from-multiple-channels</guid>
       <description>
-
-&lt;h2 id=&#34;channels-basic-example:efe161ef779bd2b7a6dadc547c487606&#34;&gt;Channels basic example:&lt;/h2&gt;
 
 &lt;p&gt;When we want to receive data from multiple channels (probably filled by
 multiple goroutines) we should use &lt;code&gt;select&lt;/code&gt; statement. It simply choose
@@ -114,7 +115,12 @@ channel which receive value as first (It&amp;rsquo;s in context of time)&lt;/p&g
 &lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;p&gt;&lt;a href=&#34;http://play.golang.org/p/wnusjAPW1g&#34; target=&#34;_new&#34;&gt;Run it on play.golang.org&lt;/a&gt;&lt;/p&gt;
+&lt;p class=&#34;play-go&#34;&gt;
+    &lt;a class=&#34;btn&#34; href=&#34;http://play.golang.org/p/wnusjAPW1g&#34; target=&#34;_new&#34;&gt;
+        &lt;i class=&#34;fa fa-play-circle-o&#34;&gt;&lt;/i&gt; Run it on play.golang.org
+    &lt;/a&gt;
+&lt;/p&gt;
+
 
 &lt;h3 id=&#34;code-summary:efe161ef779bd2b7a6dadc547c487606&#34;&gt;Code Summary&lt;/h3&gt;
 
