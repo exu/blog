@@ -6,18 +6,207 @@
     <description>Recent content on Jacek Wysocki DevLog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 25 Nov 2015 16:56:07 +0100</lastBuildDate>
+    <lastBuildDate>Thu, 26 Nov 2015 15:49:43 +0100</lastBuildDate>
     <atom:link href="http://wysocki.in/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
-      <title>Golang Channels - Basics</title>
-      <link>http://wysocki.in/golang-channels---basics</link>
-      <pubDate>Wed, 25 Nov 2015 16:56:07 +0100</pubDate>
+      <title>Golang channels - buffered semaphor</title>
+      <link>http://wysocki.in/golang-channels-buffered-semaphor</link>
+      <pubDate>Thu, 26 Nov 2015 15:49:43 +0100</pubDate>
       
-      <guid>http://wysocki.in/golang-channels---basics</guid>
+      <guid>http://wysocki.in/golang-channels-buffered-semaphor</guid>
       <description>
 
-&lt;h2 id=&#34;channels-basic-example:b7f1cb643094ee3dbf988083964d7342&#34;&gt;Channels basic example:&lt;/h2&gt;
+&lt;p&gt;We try to run 20 concurrent goroutines (all of them will start), in example below
+We&amp;rsquo;re setting channel buffer value to &lt;code&gt;5&lt;/code&gt;, go blocks on write where there is no
+more room in our channel buffer (we currently have &lt;code&gt;5&lt;/code&gt;) when first &lt;code&gt;5&lt;/code&gt; goroutines run
+buffer will be full and next &lt;code&gt;15&lt;/code&gt; will wait on write. After first goroutine complete and
+read from channel next hunged goroutine write data to goroutine.&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #f92672&#34;&gt;package&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;main&lt;/span&gt;
+
+&lt;span style=&#34;color: #f92672&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;
+	&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;fmt&amp;quot;&lt;/span&gt;
+	&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;time&amp;quot;&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
+
+&lt;span style=&#34;color: #66d9ef&#34;&gt;var&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;sem&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;make(&lt;/span&gt;&lt;span style=&#34;color: #66d9ef&#34;&gt;chan&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;int&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;5&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
+
+&lt;span style=&#34;color: #66d9ef&#34;&gt;func&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;main&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+	&lt;span style=&#34;color: #66d9ef&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;i&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;0&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;;&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;i&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;20&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;;&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;i&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;++&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+		&lt;span style=&#34;color: #66d9ef&#34;&gt;go&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;handle&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;()&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+
+	&lt;span style=&#34;color: #a6e22e&#34;&gt;time&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;Sleep&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;time&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;Second&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;10&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+
+&lt;span style=&#34;color: #66d9ef&#34;&gt;func&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;handle&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;println(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;starting&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
+	&lt;span style=&#34;color: #a6e22e&#34;&gt;sem&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;1&lt;/span&gt;
+	&lt;span style=&#34;color: #a6e22e&#34;&gt;fmt&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;Println&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;Step&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;time&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;Now&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;())&lt;/span&gt;
+	&lt;span style=&#34;color: #a6e22e&#34;&gt;time&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;Sleep&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;time&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;Second&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
+	&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;-&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;sem&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p class=&#34;play-go&#34;&gt;
+    &lt;a class=&#34;btn&#34; href=&#34;http://play.golang.org/p/zpUiSJoPv3&#34; target=&#34;_new&#34;&gt;
+        &lt;i class=&#34;fa fa-play-circle-o&#34;&gt;&lt;/i&gt; Run it on play.golang.org
+    &lt;/a&gt;
+&lt;/p&gt;
+
+
+&lt;h3 id=&#34;code-summary:374d01683790e6e902acefd695c3a4ba&#34;&gt;Code Summary&lt;/h3&gt;
+
+&lt;p&gt;In context of writing to channels there are some important things:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Writing to channels blocks&lt;/li&gt;
+&lt;li&gt;If buffer is set (second param in &lt;code&gt;make&lt;/code&gt; function) writing is blocked after buffer is full
+until that all goroutines can write to this channel.&lt;/li&gt;
+&lt;li&gt;In our example all goroutines have started (5 are working, 15 are blocked on write)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Play around change buffer value to other, look how it will work with your changes.&lt;/p&gt;
+
+&lt;h3 id=&#34;want-more:374d01683790e6e902acefd695c3a4ba&#34;&gt;Want More?&lt;/h3&gt;
+
+&lt;p&gt;If you like My Go basics series feel free to read more at &lt;a href=&#34;http://wysocki.in/series/go-basics/&#34;&gt;Go Basics Series&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Golang channels - quit channel</title>
+      <link>http://wysocki.in/golang-channels-quit-channel</link>
+      <pubDate>Thu, 26 Nov 2015 15:49:43 +0100</pubDate>
+      
+      <guid>http://wysocki.in/golang-channels-quit-channel</guid>
+      <description>
+
+&lt;p&gt;Sometimes you may want to break your program running inside goroutine from
+other goroutine or simply from main function. Below You can see My simple
+implementation of go quit channel.&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #f92672&#34;&gt;package&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;main&lt;/span&gt;
+
+&lt;span style=&#34;color: #f92672&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;
+	&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;time&amp;quot;&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
+
+&lt;span style=&#34;color: #66d9ef&#34;&gt;func&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;main&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+	&lt;span style=&#34;color: #a6e22e&#34;&gt;quit&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;make(&lt;/span&gt;&lt;span style=&#34;color: #66d9ef&#34;&gt;chan&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;bool&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
+	&lt;span style=&#34;color: #66d9ef&#34;&gt;go&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;func&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+		&lt;span style=&#34;color: #66d9ef&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+			&lt;span style=&#34;color: #66d9ef&#34;&gt;select&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+			&lt;span style=&#34;color: #66d9ef&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;-&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;quit&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt;
+				&lt;span style=&#34;color: #66d9ef&#34;&gt;return&lt;/span&gt;
+			&lt;span style=&#34;color: #66d9ef&#34;&gt;default&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;:&lt;/span&gt;
+				&lt;span style=&#34;color: #f8f8f2&#34;&gt;println(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;.&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
+				&lt;span style=&#34;color: #a6e22e&#34;&gt;time&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;Sleep&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;time&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;Millisecond&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;100&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
+			&lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+		&lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;}()&lt;/span&gt;
+
+	&lt;span style=&#34;color: #75715e&#34;&gt;// Do stuff&lt;/span&gt;
+	&lt;span style=&#34;color: #a6e22e&#34;&gt;time&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;Sleep&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;time&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;Second&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
+
+	&lt;span style=&#34;color: #75715e&#34;&gt;// Quit goroutine&lt;/span&gt;
+	&lt;span style=&#34;color: #a6e22e&#34;&gt;quit&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;true&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p class=&#34;play-go&#34;&gt;
+    &lt;a class=&#34;btn&#34; href=&#34;http://play.golang.org/p/LCtaucaU65&#34; target=&#34;_new&#34;&gt;
+        &lt;i class=&#34;fa fa-play-circle-o&#34;&gt;&lt;/i&gt; Run it on play.golang.org
+    &lt;/a&gt;
+&lt;/p&gt;
+
+
+&lt;h3 id=&#34;code-summary:56f482da4276e03cb54534c3a9fb674f&#34;&gt;Code Summary&lt;/h3&gt;
+
+&lt;p&gt;In context of communicating from external goroutines:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Use &lt;code&gt;select&lt;/code&gt; to read from multiple channels (in our example We only want
+to break infinite loop)&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;default&lt;/code&gt; is always run when there is no value from channel&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;want-more:56f482da4276e03cb54534c3a9fb674f&#34;&gt;Want More?&lt;/h3&gt;
+
+&lt;p&gt;If you like My Go basics series feel free to read more at &lt;a href=&#34;http://wysocki.in/series/go-basics/&#34;&gt;Go Basics Series&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Golang channels - rate limiting</title>
+      <link>http://wysocki.in/golang-channels-rate-limiting</link>
+      <pubDate>Thu, 26 Nov 2015 15:49:43 +0100</pubDate>
+      
+      <guid>http://wysocki.in/golang-channels-rate-limiting</guid>
+      <description>
+
+&lt;p&gt;When you need to limit rate of operations done by your program (e.g. low resources
+on node) go gives you very nice tool fo that. We&amp;rsquo;ll use &lt;code&gt;ticker&lt;/code&gt; which creates
+a &lt;code&gt;time.Time&lt;/code&gt; channel and sends to it value with configured interval.&lt;/p&gt;
+
+&lt;p&gt;First we add &lt;code&gt;50&lt;/code&gt; values to our requests channel. We know that there will not be
+new data, so we can close channel. Next we define ticker and iterate through
+our &lt;code&gt;requests&lt;/code&gt; channel.&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #f92672&#34;&gt;package&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;main&lt;/span&gt;
+
+&lt;span style=&#34;color: #f92672&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;
+	&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;fmt&amp;quot;&lt;/span&gt;
+	&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;time&amp;quot;&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
+
+&lt;span style=&#34;color: #66d9ef&#34;&gt;func&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;main&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+	&lt;span style=&#34;color: #a6e22e&#34;&gt;requests&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;make(&lt;/span&gt;&lt;span style=&#34;color: #66d9ef&#34;&gt;chan&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;int&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;50&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
+
+	&lt;span style=&#34;color: #66d9ef&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;i&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;1&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;;&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;i&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;=&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;50&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;;&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;i&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;++&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+		&lt;span style=&#34;color: #a6e22e&#34;&gt;requests&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;i&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;close(&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;requests&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
+
+	&lt;span style=&#34;color: #a6e22e&#34;&gt;limiter&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;time&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;Tick&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;time&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;Millisecond&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;200&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
+
+	&lt;span style=&#34;color: #66d9ef&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;req&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;range&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;requests&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+		&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;-&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;limiter&lt;/span&gt;
+		&lt;span style=&#34;color: #a6e22e&#34;&gt;fmt&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;Println&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;request&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;req&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;time&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;Now&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;())&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p class=&#34;play-go&#34;&gt;
+    &lt;a class=&#34;btn&#34; href=&#34;http://play.golang.org/p/wHYHe_DA7s&#34; target=&#34;_new&#34;&gt;
+        &lt;i class=&#34;fa fa-play-circle-o&#34;&gt;&lt;/i&gt; Run it on play.golang.org
+    &lt;/a&gt;
+&lt;/p&gt;
+
+
+&lt;h3 id=&#34;code-summary:2899a68356cc78ff99fd1c3cf580a0ab&#34;&gt;Code Summary&lt;/h3&gt;
+
+&lt;p&gt;Why we simply don&amp;rsquo;t use &lt;code&gt;time.Sleep()&lt;/code&gt;? Ticker is better for that
+because it can be canceled what gives us control over it.&lt;/p&gt;
+
+&lt;h3 id=&#34;want-more:2899a68356cc78ff99fd1c3cf580a0ab&#34;&gt;Want More?&lt;/h3&gt;
+
+&lt;p&gt;If you like My Go basics series feel free to read more at &lt;a href=&#34;http://wysocki.in/series/go-basics/&#34;&gt;Go Basics Series&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Golang Channels - Basics</title>
+      <link>http://wysocki.in/golang-channels-basics</link>
+      <pubDate>Wed, 25 Nov 2015 16:56:07 +0100</pubDate>
+      
+      <guid>http://wysocki.in/golang-channels-basics</guid>
+      <description>
 
 &lt;p&gt;Channels was made for synchronizing data between concurrently working goroutines (golang
 light threads). By default operations on channel (reading and writing) are blocking.&lt;/p&gt;
@@ -52,7 +241,12 @@ light threads). By default operations on channel (reading and writing) are block
 &lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;p&gt;&lt;a href=&#34;http://play.golang.org/p/gh5ihivC4L&#34; target=&#34;_new&#34;&gt;Run it on play.golang.org&lt;/a&gt;&lt;/p&gt;
+&lt;p class=&#34;play-go&#34;&gt;
+    &lt;a class=&#34;btn&#34; href=&#34;http://play.golang.org/p/gh5ihivC4L&#34; target=&#34;_new&#34;&gt;
+        &lt;i class=&#34;fa fa-play-circle-o&#34;&gt;&lt;/i&gt; Run it on play.golang.org
+    &lt;/a&gt;
+&lt;/p&gt;
+
 
 &lt;h3 id=&#34;code-summary:b7f1cb643094ee3dbf988083964d7342&#34;&gt;Code Summary&lt;/h3&gt;
 
@@ -78,8 +272,6 @@ used on both sides - goroutine which write to channel, and goroutine which reads
       
       <guid>http://wysocki.in/golang-channels-receiving-data-from-multiple-channels</guid>
       <description>
-
-&lt;h2 id=&#34;channels-basic-example:efe161ef779bd2b7a6dadc547c487606&#34;&gt;Channels basic example:&lt;/h2&gt;
 
 &lt;p&gt;When we want to receive data from multiple channels (probably filled by
 multiple goroutines) we should use &lt;code&gt;select&lt;/code&gt; statement. It simply choose
@@ -114,7 +306,12 @@ channel which receive value as first (It&amp;rsquo;s in context of time)&lt;/p&g
 &lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;p&gt;&lt;a href=&#34;http://play.golang.org/p/wnusjAPW1g&#34; target=&#34;_new&#34;&gt;Run it on play.golang.org&lt;/a&gt;&lt;/p&gt;
+&lt;p class=&#34;play-go&#34;&gt;
+    &lt;a class=&#34;btn&#34; href=&#34;http://play.golang.org/p/wnusjAPW1g&#34; target=&#34;_new&#34;&gt;
+        &lt;i class=&#34;fa fa-play-circle-o&#34;&gt;&lt;/i&gt; Run it on play.golang.org
+    &lt;/a&gt;
+&lt;/p&gt;
+
 
 &lt;h3 id=&#34;code-summary:efe161ef779bd2b7a6dadc547c487606&#34;&gt;Code Summary&lt;/h3&gt;
 
@@ -2341,1266 +2538,6 @@ with other in the same excercise
 
 &lt;ul class=&#34;org-ul&#34;&gt;
 &lt;li&gt;&lt;a href=&#34;http://wysocki.in/bdd-excercise-1-calc-bdd-in-php-with-phpspec&#34;&gt;PHP and PHPSpec&lt;/a&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;http://wysocki.in/bdd-excercise-1-calc-bdd-in-golang-and-ginkgo&#34;&gt;Golang and Ginkgo&lt;/a&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>(Excercise 1 - Javascript) Numbers statistics- Javascript with Mocha</title>
-      <link>http://wysocki.in/programming/2014/03/21-excercise-1-calc-bdd-in-javascript-with-mocha/</link>
-      <pubDate>Sun, 16 Mar 2014 00:00:00 +0000</pubDate>
-      
-      <guid>http://wysocki.in/programming/2014/03/21-excercise-1-calc-bdd-in-javascript-with-mocha/</guid>
-      <description>&lt;img src=&#34;http://wysocki.in/img/js-bdd.png&#34; class=&#34;img-responsive&#34; alt=&#34;&#34;&gt;
-
-&lt;div id=&#34;outline-container-sec-1&#34; class=&#34;outline-2&#34;&gt;
-&lt;h2 id=&#34;sec-1&#34;&gt;Part 1 - Using Javascript with Mocha&lt;/h2&gt;
-&lt;div class=&#34;outline-text-2&#34; id=&#34;text-1&#34;&gt;
-&lt;p&gt;
-Your task is to process a sequence of integer numbers
-to determine the following statistics:
-&lt;/p&gt;
-
-&lt;ul class=&#34;org-ul&#34;&gt;
-&lt;li&gt;minimum value
-&lt;/li&gt;
-&lt;li&gt;maximum value
-&lt;/li&gt;
-&lt;li&gt;number of elements in the sequence
-&lt;/li&gt;
-&lt;li&gt;average value
-&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;
-For example: &lt;code&gt;[6, 9, 15, -2, 92, 11]&lt;/code&gt;
-&lt;/p&gt;
-
-&lt;ul class=&#34;org-ul&#34;&gt;
-&lt;li&gt;minimum value = -2
-&lt;/li&gt;
-&lt;li&gt;maximum value = 92
-&lt;/li&gt;
-&lt;li&gt;number of elements in the sequence = 6
-&lt;/li&gt;
-&lt;li&gt;average value = 21.833333
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div id=&#34;outline-container-sec-2&#34; class=&#34;outline-2&#34;&gt;
-&lt;h2 id=&#34;sec-2&#34;&gt;&lt;span class=&#34;todo TODO&#34;&gt;TODO&lt;/span&gt; Start in Mocha&lt;/h2&gt;
-&lt;div class=&#34;outline-text-2&#34; id=&#34;text-2&#34;&gt;
-&lt;/div&gt;&lt;div id=&#34;outline-container-sec-2-1&#34; class=&#34;outline-3&#34;&gt;
-&lt;h3 id=&#34;sec-2-1&#34;&gt;Setup your tools&lt;/h3&gt;
-&lt;div class=&#34;outline-text-3&#34; id=&#34;text-2-1&#34;&gt;
-&lt;p&gt;
-In first excercise we&#39;ll do everything from scratch. First prepare your tools:
-&lt;/p&gt;
-&lt;/div&gt;
-
-&lt;div id=&#34;outline-container-sec-2-1-1&#34; class=&#34;outline-4&#34;&gt;
-&lt;h4 id=&#34;sec-2-1-1&#34;&gt;Project structure&lt;/h4&gt;
-&lt;div class=&#34;outline-text-4&#34; id=&#34;text-2-1-1&#34;&gt;
-&lt;p&gt;
-First create project directory and cwd to it
-&lt;/p&gt;
-
-&lt;div class=&#34;org-src-container&#34;&gt;
-
-&lt;pre class=&#34;src src-sh&#34;&gt;mkdir jsbdds
-&lt;span style=&#34;color: #93e0e3;&#34;&gt;cd&lt;/span&gt; jsbdds
-
-npm install mocha --save-dev
-npm install should --save-dev
-&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;
-I&#39;m using Should.js as assert library so last
-line above will install it.
-&lt;/p&gt;
-
-
-&lt;p&gt;
-NPM will add Mocha to &lt;code&gt;devDependencies&lt;/code&gt; and install all related packages into node&lt;sub&gt;modules&lt;/sub&gt; directory
-&lt;/p&gt;
-
-&lt;p&gt;
-In examples to simplify project structure we&#39;ll make tests in tests directory
-and code in root directory.
-&lt;/p&gt;
-&lt;div class=&#34;org-src-container&#34;&gt;
-
-&lt;pre class=&#34;src src-txt&#34;&gt;. - your sources
-test/  - your specs
-package.json - your npm package management
-&lt;/pre&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-
-&lt;div id=&#34;outline-container-sec-2-2&#34; class=&#34;outline-3&#34;&gt;
-&lt;h3 id=&#34;sec-2-2&#34;&gt;Spec your code&lt;/h3&gt;
-&lt;div class=&#34;outline-text-3&#34; id=&#34;text-2-2&#34;&gt;
-&lt;p&gt;
-put &lt;code&gt;calc.js&lt;/code&gt; into your project &lt;code&gt;tests/&lt;/code&gt; directory
-&lt;/p&gt;
-
-&lt;p&gt;
-and write some tests
-&lt;/p&gt;
-
-&lt;div class=&#34;org-src-container&#34;&gt;
-
-&lt;pre class=&#34;src src-javascript&#34;&gt;&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;var&lt;/span&gt; &lt;span style=&#34;color: #e2b1f4;&#34;&gt;stat&lt;/span&gt; = require(&lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#39;calc&#39;&lt;/span&gt;);
-&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;var&lt;/span&gt; &lt;span style=&#34;color: #e2b1f4;&#34;&gt;should&lt;/span&gt; = require(&lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#39;should&#39;&lt;/span&gt;);
-
-describe(&lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#39;Stat&#39;&lt;/span&gt;, &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;function&lt;/span&gt; () {
-    &lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#39;use strict&#39;&lt;/span&gt;;
-
-    describe(&lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#39;#collect()&#39;&lt;/span&gt;, &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;function&lt;/span&gt; () {
-        &lt;span style=&#34;color: #5f7f5f;&#34;&gt;// &lt;/span&gt;&lt;span style=&#34;color: #5f7f5f;&#34;&gt;here will be our spec&lt;/span&gt;
-    });
-})
-&lt;/pre&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-
-&lt;div id=&#34;outline-container-sec-3&#34; class=&#34;outline-2&#34;&gt;
-&lt;h2 id=&#34;sec-3&#34;&gt;Write your Spec&lt;/h2&gt;
-&lt;div class=&#34;outline-text-2&#34; id=&#34;text-3&#34;&gt;
-&lt;/div&gt;&lt;div id=&#34;outline-container-sec-3-1&#34; class=&#34;outline-3&#34;&gt;
-&lt;h3 id=&#34;sec-3-1&#34;&gt;Example input data&lt;/h3&gt;
-&lt;div class=&#34;outline-text-3&#34; id=&#34;text-3-1&#34;&gt;
-&lt;p&gt;
-Our example input data which We will be using in our spec methods:
-&lt;/p&gt;
-
-&lt;div class=&#34;org-src-container&#34;&gt;
-
-&lt;pre class=&#34;src src-javascript&#34;&gt;&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;var&lt;/span&gt; &lt;span style=&#34;color: #e2b1f4;&#34;&gt;data&lt;/span&gt; = [3, 3, 4, 5, 6, 99, -99, 7, 8, 64];
-&lt;/pre&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-
-&lt;div id=&#34;outline-container-sec-3-2&#34; class=&#34;outline-3&#34;&gt;
-&lt;h3 id=&#34;sec-3-2&#34;&gt;Our object project:&lt;/h3&gt;
-&lt;div class=&#34;outline-text-3&#34; id=&#34;text-3-2&#34;&gt;
-&lt;p&gt;
-We create &lt;code&gt;collect&lt;/code&gt; method which will return
-object with &lt;code&gt;min&lt;/code&gt;, &lt;code&gt;max&lt;/code&gt;, &lt;code&gt;avg&lt;/code&gt;,
-&lt;code&gt;sum&lt;/code&gt;, &lt;code&gt;count&lt;/code&gt; keys.
-&lt;/p&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-
-&lt;div id=&#34;outline-container-sec-3-3&#34; class=&#34;outline-3&#34;&gt;
-&lt;h3 id=&#34;sec-3-3&#34;&gt;When We have plan, we can start writing specs&lt;/h3&gt;
-&lt;div class=&#34;outline-text-3&#34; id=&#34;text-3-3&#34;&gt;
-&lt;/div&gt;&lt;div id=&#34;outline-container-sec-3-3-1&#34; class=&#34;outline-4&#34;&gt;
-&lt;h4 id=&#34;sec-3-3-1&#34;&gt;Prerequisities (creating matcher)&lt;/h4&gt;
-&lt;div class=&#34;outline-text-4&#34; id=&#34;text-3-3-1&#34;&gt;
-&lt;p&gt;
-Our first task is to calculate minimum value from
-given input.
-&lt;/p&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-
-&lt;div id=&#34;outline-container-sec-3-3-2&#34; class=&#34;outline-4&#34;&gt;
-&lt;h4 id=&#34;sec-3-3-2&#34;&gt;Min specification&lt;/h4&gt;
-&lt;div class=&#34;outline-text-4&#34; id=&#34;text-3-3-2&#34;&gt;
-&lt;p&gt;
-Now We&#39;re ready for specifing.
-&lt;/p&gt;
-
-&lt;div class=&#34;org-src-container&#34;&gt;
-
-&lt;pre class=&#34;src src-javascript&#34;&gt;it(&lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#39;calculates min from given integers&#39;&lt;/span&gt;, &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;function&lt;/span&gt; () {
-    stat.collect(data).min.should.equal(-99);
-});
-&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;div class=&#34;org-src-container&#34;&gt;
-
-&lt;pre class=&#34;src src-sh&#34;&gt;mocha
-&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;
-Mocha should fail with message:
-&lt;/p&gt;
-&lt;div class=&#34;org-src-container&#34;&gt;
-
-&lt;pre class=&#34;src src-sh&#34;&gt;Stat &lt;span style=&#34;color: #5f7f5f;&#34;&gt;#&lt;/span&gt;&lt;span style=&#34;color: #5f7f5f;&#34;&gt;collect() calculates min from given integers:&lt;/span&gt;
-    TypeError: Cannot read property &lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#39;should&#39;&lt;/span&gt; of undefined
-&lt;/pre&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-
-&lt;div id=&#34;outline-container-sec-3-3-3&#34; class=&#34;outline-4&#34;&gt;
-&lt;h4 id=&#34;sec-3-3-3&#34;&gt;Other specifications&lt;/h4&gt;
-&lt;div class=&#34;outline-text-4&#34; id=&#34;text-3-3-3&#34;&gt;
-&lt;ol class=&#34;org-ol&#34;&gt;
-&lt;li&gt;With above technique We&#39;ll generate:
-&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;div class=&#34;org-src-container&#34;&gt;
-
-&lt;pre class=&#34;src src-php&#34;&gt;&lt;span style=&#34;color: #cfcfcf; &#34;&gt;it&lt;/span&gt;(&lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#39;calculates max from given integers&#39;&lt;/span&gt;, &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;function&lt;/span&gt; () {
-    &lt;span style=&#34;color: #d0bf8f; font-weight: bold;&#34;&gt;stat&lt;/span&gt;.&lt;span style=&#34;color: #cfcfcf; &#34;&gt;collect&lt;/span&gt;(&lt;span style=&#34;color: #d0bf8f; font-weight: bold;&#34;&gt;data&lt;/span&gt;).&lt;span style=&#34;color: #d0bf8f; font-weight: bold;&#34;&gt;max&lt;/span&gt;.&lt;span style=&#34;color: #d0bf8f; font-weight: bold;&#34;&gt;should&lt;/span&gt;.&lt;span style=&#34;color: #cfcfcf; background-color: #1f1f1f;&#34;&gt;equal&lt;/span&gt;(&lt;span style=&#34;color: #ff5555;&#34;&gt;99&lt;/span&gt;);
-});
-
-&lt;span style=&#34;color: #cfcfcf; &#34;&gt;it&lt;/span&gt;(&lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#39;calculates avg from given integers&#39;&lt;/span&gt;, &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;function&lt;/span&gt; () {
-    &lt;span style=&#34;color: #d0bf8f; font-weight: bold;&#34;&gt;stat&lt;/span&gt;.&lt;span style=&#34;color: #cfcfcf; &#34;&gt;collect&lt;/span&gt;(&lt;span style=&#34;color: #d0bf8f; font-weight: bold;&#34;&gt;data&lt;/span&gt;).&lt;span style=&#34;color: #d0bf8f; font-weight: bold;&#34;&gt;avg&lt;/span&gt;.&lt;span style=&#34;color: #d0bf8f; font-weight: bold;&#34;&gt;should&lt;/span&gt;.&lt;span style=&#34;color: #cfcfcf; background-color: #1f1f1f;&#34;&gt;equal&lt;/span&gt;(&lt;span style=&#34;color: #ff5555;&#34;&gt;10&lt;/span&gt;);
-});
-
-&lt;span style=&#34;color: #cfcfcf; &#34;&gt;it&lt;/span&gt;(&lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#39;calculates count from given integers&#39;&lt;/span&gt;, &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;function&lt;/span&gt; () {
-    &lt;span style=&#34;color: #d0bf8f; font-weight: bold;&#34;&gt;stat&lt;/span&gt;.&lt;span style=&#34;color: #cfcfcf; &#34;&gt;collect&lt;/span&gt;(&lt;span style=&#34;color: #d0bf8f; font-weight: bold;&#34;&gt;data&lt;/span&gt;).&lt;span style=&#34;color: #d0bf8f; font-weight: bold;&#34;&gt;count&lt;/span&gt;.&lt;span style=&#34;color: #d0bf8f; font-weight: bold;&#34;&gt;should&lt;/span&gt;.&lt;span style=&#34;color: #cfcfcf; background-color: #1f1f1f;&#34;&gt;equal&lt;/span&gt;(&lt;span style=&#34;color: #ff5555;&#34;&gt;10&lt;/span&gt;);
-});
-
-&lt;span style=&#34;color: #cfcfcf; &#34;&gt;it&lt;/span&gt;(&lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#39;calculates sum from given integers&#39;&lt;/span&gt;, &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;function&lt;/span&gt; () {
-    &lt;span style=&#34;color: #d0bf8f; font-weight: bold;&#34;&gt;stat&lt;/span&gt;.&lt;span style=&#34;color: #cfcfcf; &#34;&gt;collect&lt;/span&gt;(&lt;span style=&#34;color: #d0bf8f; font-weight: bold;&#34;&gt;data&lt;/span&gt;).&lt;span style=&#34;color: #d0bf8f; font-weight: bold;&#34;&gt;sum&lt;/span&gt;.&lt;span style=&#34;color: #d0bf8f; font-weight: bold;&#34;&gt;should&lt;/span&gt;.&lt;span style=&#34;color: #cfcfcf; background-color: #1f1f1f;&#34;&gt;equal&lt;/span&gt;(&lt;span style=&#34;color: #ff5555;&#34;&gt;100&lt;/span&gt;);
-});
-&lt;/pre&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div id=&#34;outline-container-sec-3-4&#34; class=&#34;outline-3&#34;&gt;
-&lt;h3 id=&#34;sec-3-4&#34;&gt;Writing code&lt;/h3&gt;
-&lt;div class=&#34;outline-text-3&#34; id=&#34;text-3-4&#34;&gt;
-&lt;p&gt;
-Now our spec is ready - it&#39;ll be our library documentation - we can
-start writing code.
-&lt;/p&gt;
-
-&lt;p&gt;
-&lt;b&gt;Remember&lt;/b&gt; to run &lt;code&gt;mocha&lt;/code&gt; after each change.
-&lt;/p&gt;
-&lt;/div&gt;
-
-
-&lt;div id=&#34;outline-container-sec-3-4-1&#34; class=&#34;outline-4&#34;&gt;
-&lt;h4 id=&#34;sec-3-4-1&#34;&gt;Now it&#39;s time to implement minimum calculation from given input&lt;/h4&gt;
-&lt;div class=&#34;outline-text-4&#34; id=&#34;text-3-4-1&#34;&gt;
-&lt;div class=&#34;org-src-container&#34;&gt;
-
-&lt;pre class=&#34;src src-php&#34;&gt;&lt;span style=&#34;color: #d0bf8f; font-weight: bold;&#34;&gt;module&lt;/span&gt;.&lt;span style=&#34;color: #d0bf8f; font-weight: bold;&#34;&gt;exports&lt;/span&gt; = {
-    &lt;span style=&#34;color: #d0bf8f; font-weight: bold;&#34;&gt;collect&lt;/span&gt; : &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;function&lt;/span&gt; (&lt;span style=&#34;color: #d0bf8f; font-weight: bold;&#34;&gt;arr&lt;/span&gt;) {
-        &lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#39;use strict&#39;&lt;/span&gt;;
-
-        &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;return&lt;/span&gt; {
-            &lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#39;min&#39;&lt;/span&gt; : &lt;span style=&#34;color: #d0bf8f; font-weight: bold;&#34;&gt;Math&lt;/span&gt;.&lt;span style=&#34;color: #d0bf8f; font-weight: bold;&#34;&gt;min&lt;/span&gt;.&lt;span style=&#34;color: #cfcfcf; &#34;&gt;apply&lt;/span&gt;(&lt;span style=&#34;color: #b0deff;&#34;&gt;null&lt;/span&gt;, &lt;span style=&#34;color: #d0bf8f; font-weight: bold;&#34;&gt;arr&lt;/span&gt;),
-        };
-    }
-};
-&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;
-Run mocha
-&lt;/p&gt;
-
-&lt;div class=&#34;org-src-container&#34;&gt;
-
-&lt;pre class=&#34;src src-sh&#34;&gt;$ mocha
-
-  &amp;#8228;&amp;#8228;&amp;#8228;&amp;#8228;&amp;#8228;
-
-  1 passing (26ms)
-  4 failing
-
-... undefined messages ...
-&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;
-Wow horray! First test passed. Now it&#39;s time to implement rest
-You can do it in little steps one by one, after each
-run &lt;code&gt;mocha&lt;/code&gt; to check if you don&#39;t brake something
-in other tests.
-&lt;/p&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-
-
-&lt;div id=&#34;outline-container-sec-3-4-2&#34; class=&#34;outline-4&#34;&gt;
-&lt;h4 id=&#34;sec-3-4-2&#34;&gt;Whole library looks like this one below:&lt;/h4&gt;
-&lt;div class=&#34;outline-text-4&#34; id=&#34;text-3-4-2&#34;&gt;
-&lt;div class=&#34;org-src-container&#34;&gt;
-
-&lt;pre class=&#34;src src-javascript&#34;&gt;module.exports = {
-    &lt;span style=&#34;color: #a2d7fb;&#34;&gt;collect&lt;/span&gt; : &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;function&lt;/span&gt; (&lt;span style=&#34;color: #e2b1f4;&#34;&gt;arr&lt;/span&gt;) {
-        &lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#39;use strict&#39;&lt;/span&gt;;
-
-        &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;var&lt;/span&gt; &lt;span style=&#34;color: #e2b1f4;&#34;&gt;sum&lt;/span&gt; = arr.reduce(&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;function&lt;/span&gt; (&lt;span style=&#34;color: #e2b1f4;&#34;&gt;pv&lt;/span&gt;, &lt;span style=&#34;color: #e2b1f4;&#34;&gt;cv&lt;/span&gt;) { &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;return&lt;/span&gt; pv + cv; }, 0);
-        &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;var&lt;/span&gt; &lt;span style=&#34;color: #e2b1f4;&#34;&gt;length&lt;/span&gt; = arr.length;
-
-        &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;return&lt;/span&gt; {
-            &lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#39;min&#39;&lt;/span&gt; : Math.min.apply(&lt;span style=&#34;color: #b0deff;&#34;&gt;null&lt;/span&gt;, arr),
-            &lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#39;max&#39;&lt;/span&gt;: Math.max.apply(&lt;span style=&#34;color: #b0deff;&#34;&gt;null&lt;/span&gt;, arr),
-            &lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#39;avg&#39;&lt;/span&gt;: sum / length,
-            &lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#39;count&#39;&lt;/span&gt;: length,
-            &lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#39;sum&#39;&lt;/span&gt;: sum
-        };
-    }
-};
-&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;
-Run
-&lt;/p&gt;
-
-&lt;div class=&#34;org-src-container&#34;&gt;
-
-&lt;pre class=&#34;src src-sh&#34;&gt;&amp;#10095; mocha test/calc.js
-
-  &amp;#8228;&amp;#8228;&amp;#8228;&amp;#8228;&amp;#8228;
-
-  5 passing (29ms)
-&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;
-Now all tests should go green :D
-&lt;/p&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-
-&lt;div id=&#34;outline-container-sec-3-5&#34; class=&#34;outline-3&#34;&gt;
-&lt;h3 id=&#34;sec-3-5&#34;&gt;Conslusions&lt;/h3&gt;
-&lt;div class=&#34;outline-text-3&#34; id=&#34;text-3-5&#34;&gt;
-&lt;p&gt;
-You can compare Javascript with Mocha technique
-with other in the same excercise
-&lt;/p&gt;
-
-&lt;ul class=&#34;org-ul&#34;&gt;
-&lt;li&gt;&lt;a href=&#34;http://wysocki.in/bdd-excercise-1-calc-bdd-in-php-with-phpspec&#34;&gt;PHP and PHPSpec&lt;/a&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;http://wysocki.in/bdd-excercise-1-calc-bdd-in-golang-and-ginkgo&#34;&gt;Golang and Ginkgo&lt;/a&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>(Excercise 1 - PHP) Numbers statistics- PHP with PHPSpec</title>
-      <link>http://wysocki.in/bdd-excercise-1-calc-bdd-in-javascript-with-mocha</link>
-      <pubDate>Sun, 16 Mar 2014 00:00:00 +0000</pubDate>
-      
-      <guid>http://wysocki.in/bdd-excercise-1-calc-bdd-in-javascript-with-mocha</guid>
-      <description>&lt;img src=&#34;http://wysocki.in/img/php-bdd.png&#34; class=&#34;img-responsive&#34; alt=&#34;&#34;&gt;
-
-
-&lt;div id=&#34;outline-container-sec-1&#34; class=&#34;outline-2&#34;&gt;
-&lt;h2 id=&#34;sec-1&#34;&gt;Part 1 - Using PHP and PHPSpec&lt;/h2&gt;
-&lt;div class=&#34;outline-text-2&#34; id=&#34;text-1&#34;&gt;
-&lt;p&gt;
-Your task is to process a sequence of integer numbers
-to determine the following statistics:
-&lt;/p&gt;
-
-&lt;ul class=&#34;org-ul&#34;&gt;
-&lt;li&gt;minimum value
-&lt;/li&gt;
-&lt;li&gt;maximum value
-&lt;/li&gt;
-&lt;li&gt;number of elements in the sequence
-&lt;/li&gt;
-&lt;li&gt;average value
-&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;
-For example: &lt;code&gt;[6, 9, 15, -2, 92, 11]&lt;/code&gt;
-&lt;/p&gt;
-
-&lt;ul class=&#34;org-ul&#34;&gt;
-&lt;li&gt;minimum value = -2
-&lt;/li&gt;
-&lt;li&gt;maximum value = 92
-&lt;/li&gt;
-&lt;li&gt;number of elements in the sequence = 6
-&lt;/li&gt;
-&lt;li&gt;average value = 21.833333
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div id=&#34;outline-container-sec-2&#34; class=&#34;outline-2&#34;&gt;
-&lt;h2 id=&#34;sec-2&#34;&gt;&lt;span class=&#34;todo TODO&#34;&gt;TODO&lt;/span&gt; Start in PHPSpec&lt;/h2&gt;
-&lt;div class=&#34;outline-text-2&#34; id=&#34;text-2&#34;&gt;
-&lt;/div&gt;&lt;div id=&#34;outline-container-sec-2-1&#34; class=&#34;outline-3&#34;&gt;
-&lt;h3 id=&#34;sec-2-1&#34;&gt;Setup your tools&lt;/h3&gt;
-&lt;div class=&#34;outline-text-3&#34; id=&#34;text-2-1&#34;&gt;
-&lt;p&gt;
-In first excercise we&#39;ll do everything from scratch. First prepare your tools:
-&lt;/p&gt;
-&lt;/div&gt;
-
-&lt;div id=&#34;outline-container-sec-2-1-1&#34; class=&#34;outline-4&#34;&gt;
-&lt;h4 id=&#34;sec-2-1-1&#34;&gt;Project structure&lt;/h4&gt;
-&lt;div class=&#34;outline-text-4&#34; id=&#34;text-2-1-1&#34;&gt;
-&lt;p&gt;
-First create project directory and cwd to it
-&lt;/p&gt;
-
-&lt;div class=&#34;org-src-container&#34;&gt;
-
-&lt;pre class=&#34;src src-sh&#34;&gt;mkdir php-tdds
-&lt;span style=&#34;color: #93e0e3;&#34;&gt;cd&lt;/span&gt; php-tdds
-&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;
-PHPSpec will have following file and directories structure
-&lt;/p&gt;
-
-&lt;div class=&#34;org-src-container&#34;&gt;
-
-&lt;pre class=&#34;src src-txt&#34;&gt;.
-spec/ - your specifications
-src/  - your classes
-composer.json
-&lt;/pre&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-
-
-&lt;div id=&#34;outline-container-sec-2-1-2&#34; class=&#34;outline-4&#34;&gt;
-&lt;h4 id=&#34;sec-2-1-2&#34;&gt;Composer&lt;/h4&gt;
-&lt;div class=&#34;outline-text-4&#34; id=&#34;text-2-1-2&#34;&gt;
-&lt;p&gt;
-This project is based on composer so you will need it. To
-install composer. I prefer installing composer globally so
-everything what you should do is
-&lt;/p&gt;
-
-&lt;div class=&#34;org-src-container&#34;&gt;
-
-&lt;pre class=&#34;src src-sh&#34;&gt;curl -sS https://getcomposer.org/installer | php
-sudo mv composer.phar /usr/local/bin/composer
-&lt;/pre&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div id=&#34;outline-container-sec-2-1-3&#34; class=&#34;outline-4&#34;&gt;
-&lt;h4 id=&#34;sec-2-1-3&#34;&gt;PHPSpec&lt;/h4&gt;
-&lt;div class=&#34;outline-text-4&#34; id=&#34;text-2-1-3&#34;&gt;
-&lt;p&gt;
-Next You should add PHPSpec to your dev dependencies
-&lt;/p&gt;
-
-&lt;div class=&#34;org-src-container&#34;&gt;
-
-&lt;pre class=&#34;src src-php&#34;&gt;{
-    &lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#34;require-dev&#34;&lt;/span&gt;: {
-        &lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#34;phpspec&#34;&lt;/span&gt;: &lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#34;*&#34;&lt;/span&gt;
-    }
-}
-&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;
-Thats all!. Run &lt;code&gt;composer install&lt;/code&gt; and You are ready to start writing code.
-&lt;/p&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div id=&#34;outline-container-sec-2-2&#34; class=&#34;outline-3&#34;&gt;
-&lt;h3 id=&#34;sec-2-2&#34;&gt;Spec your classes&lt;/h3&gt;
-&lt;div class=&#34;outline-text-3&#34; id=&#34;text-2-2&#34;&gt;
-&lt;p&gt;
-We&#39;ll doing Test(Spec) First Developement so we should start from
-specify our Calculation statistics class.
-&lt;/p&gt;
-
-&lt;div class=&#34;org-src-container&#34;&gt;
-
-&lt;pre class=&#34;src src-sh&#34;&gt;phpspec desc Exc01/Calc
-&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;
-PHPSpec will generate main class for You, and add it&lt;sub&gt;is&lt;/sub&gt;&lt;sub&gt;instantiable&lt;/sub&gt; method in your specification.
-Next we should run phpspec suite.
-&lt;/p&gt;
-
-&lt;div class=&#34;org-src-container&#34;&gt;
-
-&lt;pre class=&#34;src src-sh&#34;&gt;phpspec run
-&lt;/pre&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-
-&lt;div id=&#34;outline-container-sec-3&#34; class=&#34;outline-2&#34;&gt;
-&lt;h2 id=&#34;sec-3&#34;&gt;Write your Spec&lt;/h2&gt;
-&lt;div class=&#34;outline-text-2&#34; id=&#34;text-3&#34;&gt;
-&lt;/div&gt;&lt;div id=&#34;outline-container-sec-3-1&#34; class=&#34;outline-3&#34;&gt;
-&lt;h3 id=&#34;sec-3-1&#34;&gt;Example input data&lt;/h3&gt;
-&lt;div class=&#34;outline-text-3&#34; id=&#34;text-3-1&#34;&gt;
-&lt;p&gt;
-Our example input data which will We be using in our spec methods:
-&lt;/p&gt;
-
-&lt;div class=&#34;org-src-container&#34;&gt;
-
-&lt;pre class=&#34;src src-php&#34;&gt;&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;protected&lt;/span&gt; &lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #e2b1f4;&#34;&gt;data&lt;/span&gt; = [&lt;span style=&#34;color: #ff5555;&#34;&gt;3&lt;/span&gt;,&lt;span style=&#34;color: #ff5555;&#34;&gt;3&lt;/span&gt;,&lt;span style=&#34;color: #ff5555;&#34;&gt;4&lt;/span&gt;,&lt;span style=&#34;color: #ff5555;&#34;&gt;5&lt;/span&gt;,&lt;span style=&#34;color: #ff5555;&#34;&gt;6&lt;/span&gt;,&lt;span style=&#34;color: #ff5555;&#34;&gt;99&lt;/span&gt;,-&lt;span style=&#34;color: #ff5555;&#34;&gt;99&lt;/span&gt;,&lt;span style=&#34;color: #ff5555;&#34;&gt;7&lt;/span&gt;,&lt;span style=&#34;color: #ff5555;&#34;&gt;8&lt;/span&gt;,&lt;span style=&#34;color: #ff5555;&#34;&gt;64&lt;/span&gt;];
-&lt;/pre&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-
-&lt;div id=&#34;outline-container-sec-3-2&#34; class=&#34;outline-3&#34;&gt;
-&lt;h3 id=&#34;sec-3-2&#34;&gt;We need to handle some exceptions:&lt;/h3&gt;
-&lt;div class=&#34;outline-text-3&#34; id=&#34;text-3-2&#34;&gt;
-&lt;p&gt;
-We should throw exception when input is empty array.
-&lt;/p&gt;
-
-&lt;div class=&#34;org-src-container&#34;&gt;
-
-&lt;pre class=&#34;src src-php&#34;&gt;&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;function&lt;/span&gt; &lt;span style=&#34;color: #a2d7fb;&#34;&gt;it_throws_exception_on_empty_array_input&lt;/span&gt;()
-{
-    &lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #b0deff;&#34;&gt;this&lt;/span&gt;-&amp;gt;&lt;span style=&#34;color: #cfcfcf; &#34;&gt;shouldThrow&lt;/span&gt;(&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;new&lt;/span&gt; &lt;span style=&#34;color: #9dd7ff;&#34;&gt;\InvalidArgumentException&lt;/span&gt;(&lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#39;You cannot pass empty array&#39;&lt;/span&gt;))
-        -&amp;gt;&lt;span style=&#34;color: #cfcfcf; &#34;&gt;duringCollect&lt;/span&gt;([]);
-}
-&lt;/pre&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-
-&lt;div id=&#34;outline-container-sec-3-3&#34; class=&#34;outline-3&#34;&gt;
-&lt;h3 id=&#34;sec-3-3&#34;&gt;Our class project:&lt;/h3&gt;
-&lt;div class=&#34;outline-text-3&#34; id=&#34;text-3-3&#34;&gt;
-&lt;p&gt;
-We create &lt;code&gt;collect&lt;/code&gt; method which will return
-associative array with &lt;code&gt;min&lt;/code&gt;, &lt;code&gt;max&lt;/code&gt;, &lt;code&gt;avg&lt;/code&gt;,
-&lt;code&gt;sum&lt;/code&gt;, &lt;code&gt;count&lt;/code&gt; keys.
-&lt;/p&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-
-&lt;div id=&#34;outline-container-sec-3-4&#34; class=&#34;outline-3&#34;&gt;
-&lt;h3 id=&#34;sec-3-4&#34;&gt;When We have plan, we can start writing specs&lt;/h3&gt;
-&lt;div class=&#34;outline-text-3&#34; id=&#34;text-3-4&#34;&gt;
-&lt;/div&gt;&lt;div id=&#34;outline-container-sec-3-4-1&#34; class=&#34;outline-4&#34;&gt;
-&lt;h4 id=&#34;sec-3-4-1&#34;&gt;Prerequisities (creating matcher)&lt;/h4&gt;
-&lt;div class=&#34;outline-text-4&#34; id=&#34;text-3-4-1&#34;&gt;
-&lt;p&gt;
-Our first task is to calculate minimum value from
-given input.
-&lt;/p&gt;
-
-
-&lt;p&gt;
-We&#39;ll need method which will check if array contains
-expected value in given associative array key. In spec/
-We can do this by defining new matcher. We do this
-be returning new matchers array in &lt;code&gt;getMatchers&lt;/code&gt;
-each matcher is closure function which returns boolean
-value. You can define as many matchers as You want.
-&lt;/p&gt;
-
-&lt;p&gt;
-When You define e.g. &lt;code&gt;haveElement&lt;/code&gt; matcher you can
-call it by &lt;code&gt;shouldHaveElement&lt;/code&gt; method inside your spec
-methods.
-&lt;/p&gt;
-
-&lt;div class=&#34;org-src-container&#34;&gt;
-
-&lt;pre class=&#34;src src-php&#34;&gt;&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;function&lt;/span&gt; &lt;span style=&#34;color: #a2d7fb;&#34;&gt;getMatchers&lt;/span&gt;()
-{
-    &lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #e2b1f4;&#34;&gt;matchers&lt;/span&gt; = [
-        &lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#39;haveElement&#39;&lt;/span&gt; =&amp;gt; &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;function&lt;/span&gt;(&lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #e2b1f4;&#34;&gt;result&lt;/span&gt;, &lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #e2b1f4;&#34;&gt;key&lt;/span&gt;, &lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #e2b1f4;&#34;&gt;value&lt;/span&gt;) {
-            &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;return&lt;/span&gt;  &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;isset&lt;/span&gt;(&lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #e2b1f4;&#34;&gt;result&lt;/span&gt;[&lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #e2b1f4;&#34;&gt;key&lt;/span&gt;]) &amp;amp;&amp;amp; &lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #e2b1f4;&#34;&gt;result&lt;/span&gt;[&lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #e2b1f4;&#34;&gt;key&lt;/span&gt;] === &lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #e2b1f4;&#34;&gt;value&lt;/span&gt;;
-        }
-    ];
-
-    &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #e2b1f4;&#34;&gt;matchers&lt;/span&gt;;
-}
-&lt;/pre&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div id=&#34;outline-container-sec-3-4-2&#34; class=&#34;outline-4&#34;&gt;
-&lt;h4 id=&#34;sec-3-4-2&#34;&gt;Min specification&lt;/h4&gt;
-&lt;div class=&#34;outline-text-4&#34; id=&#34;text-3-4-2&#34;&gt;
-&lt;p&gt;
-Now We&#39;re ready for specifing.
-&lt;/p&gt;
-
-&lt;div class=&#34;org-src-container&#34;&gt;
-
-&lt;pre class=&#34;src src-php&#34;&gt;&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;function&lt;/span&gt; &lt;span style=&#34;color: #a2d7fb;&#34;&gt;it_calculates_min_from_given_integers&lt;/span&gt;()
-{
-    &lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #b0deff;&#34;&gt;this&lt;/span&gt;-&amp;gt;&lt;span style=&#34;color: #cfcfcf; &#34;&gt;collect&lt;/span&gt;(&lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #b0deff;&#34;&gt;this&lt;/span&gt;-&amp;gt;&lt;span style=&#34;color: #e2b1f4;&#34;&gt;data&lt;/span&gt;)
-        -&amp;gt;&lt;span style=&#34;color: #cfcfcf; &#34;&gt;shouldHaveElement&lt;/span&gt;(&lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#39;min&#39;&lt;/span&gt;, -&lt;span style=&#34;color: #ff5555;&#34;&gt;99&lt;/span&gt;);
-}
-&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;div class=&#34;org-src-container&#34;&gt;
-
-&lt;pre class=&#34;src src-sh&#34;&gt;bin/phpspec run
-&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;
-We&#39;ll be asked to create new method. Press &lt;code&gt;ENTER&lt;/code&gt;
-and our class will have new &lt;code&gt;collect&lt;/code&gt; method which
-should be implemented.
-&lt;/p&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-
-&lt;div id=&#34;outline-container-sec-3-4-3&#34; class=&#34;outline-4&#34;&gt;
-&lt;h4 id=&#34;sec-3-4-3&#34;&gt;Other specifications&lt;/h4&gt;
-&lt;div class=&#34;outline-text-4&#34; id=&#34;text-3-4-3&#34;&gt;
-&lt;ol class=&#34;org-ol&#34;&gt;
-&lt;li&gt;With above technique We&#39;ll generate
-&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;div class=&#34;org-src-container&#34;&gt;
-
-&lt;pre class=&#34;src src-php&#34;&gt;&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;function&lt;/span&gt; &lt;span style=&#34;color: #a2d7fb;&#34;&gt;it_calculates_max_from_given_integers&lt;/span&gt;()
-{
-    &lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #b0deff;&#34;&gt;this&lt;/span&gt;-&amp;gt;&lt;span style=&#34;color: #cfcfcf; &#34;&gt;collect&lt;/span&gt;(&lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #b0deff;&#34;&gt;this&lt;/span&gt;-&amp;gt;&lt;span style=&#34;color: #e2b1f4;&#34;&gt;data&lt;/span&gt;)
-        -&amp;gt;&lt;span style=&#34;color: #cfcfcf; &#34;&gt;shouldHaveElement&lt;/span&gt;(&lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#39;max&#39;&lt;/span&gt;, &lt;span style=&#34;color: #ff5555;&#34;&gt;99&lt;/span&gt;);
-}
-
-&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;function&lt;/span&gt; &lt;span style=&#34;color: #a2d7fb;&#34;&gt;it_calculates_avg_from_given_integers&lt;/span&gt;()
-{
-    &lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #b0deff;&#34;&gt;this&lt;/span&gt;-&amp;gt;&lt;span style=&#34;color: #cfcfcf; &#34;&gt;collect&lt;/span&gt;(&lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #b0deff;&#34;&gt;this&lt;/span&gt;-&amp;gt;&lt;span style=&#34;color: #e2b1f4;&#34;&gt;data&lt;/span&gt;)
-        -&amp;gt;&lt;span style=&#34;color: #cfcfcf; &#34;&gt;shouldHaveElement&lt;/span&gt;(&lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#39;avg&#39;&lt;/span&gt;, &lt;span style=&#34;color: #ff5555;&#34;&gt;10&lt;/span&gt;.&lt;span style=&#34;color: #ff5555;&#34;&gt;0&lt;/span&gt;);
-}
-
-&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;function&lt;/span&gt; &lt;span style=&#34;color: #a2d7fb;&#34;&gt;it_calculates_count_from_given_integers&lt;/span&gt;()
-{
-    &lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #b0deff;&#34;&gt;this&lt;/span&gt;-&amp;gt;&lt;span style=&#34;color: #cfcfcf; &#34;&gt;collect&lt;/span&gt;(&lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #b0deff;&#34;&gt;this&lt;/span&gt;-&amp;gt;&lt;span style=&#34;color: #e2b1f4;&#34;&gt;data&lt;/span&gt;)
-        -&amp;gt;&lt;span style=&#34;color: #cfcfcf; &#34;&gt;shouldHaveElement&lt;/span&gt;(&lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#39;count&#39;&lt;/span&gt;, &lt;span style=&#34;color: #ff5555;&#34;&gt;10&lt;/span&gt;);
-}
-&lt;/pre&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div id=&#34;outline-container-sec-3-5&#34; class=&#34;outline-3&#34;&gt;
-&lt;h3 id=&#34;sec-3-5&#34;&gt;Writing code&lt;/h3&gt;
-&lt;div class=&#34;outline-text-3&#34; id=&#34;text-3-5&#34;&gt;
-&lt;p&gt;
-Now our spec is ready - it&#39;ll be our library documentation - we can
-start writing code.
-&lt;/p&gt;
-
-&lt;p&gt;
-Run &lt;code&gt;bin/phpspec run&lt;/code&gt; after each change.
-&lt;/p&gt;
-&lt;/div&gt;
-
-
-&lt;div id=&#34;outline-container-sec-3-5-1&#34; class=&#34;outline-4&#34;&gt;
-&lt;h4 id=&#34;sec-3-5-1&#34;&gt;Handling spec&#39;ed exception&lt;/h4&gt;
-&lt;div class=&#34;outline-text-4&#34; id=&#34;text-3-5-1&#34;&gt;
-&lt;div class=&#34;org-src-container&#34;&gt;
-
-&lt;pre class=&#34;src src-php&#34;&gt;&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;function&lt;/span&gt; &lt;span style=&#34;color: #a2d7fb;&#34;&gt;collect&lt;/span&gt;(&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;array&lt;/span&gt; &lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #e2b1f4;&#34;&gt;input&lt;/span&gt;)
-{
-    &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;if&lt;/span&gt; (&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;empty&lt;/span&gt;(&lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #e2b1f4;&#34;&gt;input&lt;/span&gt;)) {
-        &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;throw&lt;/span&gt; &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;new&lt;/span&gt; &lt;span style=&#34;color: #9dd7ff;&#34;&gt;\InvalidArgumentException&lt;/span&gt;(&lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#39;You cannot pass empty array&#39;&lt;/span&gt;);
-    }
-}
-&lt;/pre&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div id=&#34;outline-container-sec-3-5-2&#34; class=&#34;outline-4&#34;&gt;
-&lt;h4 id=&#34;sec-3-5-2&#34;&gt;Calculating min value from given input array&lt;/h4&gt;
-&lt;div class=&#34;outline-text-4&#34; id=&#34;text-3-5-2&#34;&gt;
-&lt;div class=&#34;org-src-container&#34;&gt;
-
-&lt;pre class=&#34;src src-php&#34;&gt;&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;function&lt;/span&gt; &lt;span style=&#34;color: #a2d7fb;&#34;&gt;collect&lt;/span&gt;(&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;array&lt;/span&gt; &lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #e2b1f4;&#34;&gt;input&lt;/span&gt;)
-{
-    &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;if&lt;/span&gt; (&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;empty&lt;/span&gt;(&lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #e2b1f4;&#34;&gt;input&lt;/span&gt;)) {
-        &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;throw&lt;/span&gt; &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;new&lt;/span&gt; &lt;span style=&#34;color: #9dd7ff;&#34;&gt;\InvalidArgumentException&lt;/span&gt;(&lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#39;You cannot pass empty array&#39;&lt;/span&gt;);
-    }
-
-    &lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #e2b1f4;&#34;&gt;result&lt;/span&gt; = [
-        &lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#39;min&#39;&lt;/span&gt; =&amp;gt; &lt;span style=&#34;color: #cfcfcf; &#34;&gt;min&lt;/span&gt;(&lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #e2b1f4;&#34;&gt;input&lt;/span&gt;),
-    ];
-
-    &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #e2b1f4;&#34;&gt;result&lt;/span&gt;;
-}
-&lt;/pre&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-
-&lt;div id=&#34;outline-container-sec-3-5-3&#34; class=&#34;outline-4&#34;&gt;
-&lt;h4 id=&#34;sec-3-5-3&#34;&gt;Calculating max value from given input array&lt;/h4&gt;
-&lt;div class=&#34;outline-text-4&#34; id=&#34;text-3-5-3&#34;&gt;
-&lt;div class=&#34;org-src-container&#34;&gt;
-
-&lt;pre class=&#34;src src-php&#34;&gt;&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;function&lt;/span&gt; &lt;span style=&#34;color: #a2d7fb;&#34;&gt;collect&lt;/span&gt;(&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;array&lt;/span&gt; &lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #e2b1f4;&#34;&gt;input&lt;/span&gt;)
-{
-    &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;if&lt;/span&gt; (&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;empty&lt;/span&gt;(&lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #e2b1f4;&#34;&gt;input&lt;/span&gt;)) {
-        &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;throw&lt;/span&gt; &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;new&lt;/span&gt; &lt;span style=&#34;color: #9dd7ff;&#34;&gt;\InvalidArgumentException&lt;/span&gt;(&lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#39;You cannot pass empty array&#39;&lt;/span&gt;);
-    }
-
-    &lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #e2b1f4;&#34;&gt;result&lt;/span&gt; = [
-        &lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#39;min&#39;&lt;/span&gt; =&amp;gt; &lt;span style=&#34;color: #cfcfcf; &#34;&gt;min&lt;/span&gt;(&lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #e2b1f4;&#34;&gt;input&lt;/span&gt;),
-        &lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#39;max&#39;&lt;/span&gt; =&amp;gt; &lt;span style=&#34;color: #cfcfcf; &#34;&gt;max&lt;/span&gt;(&lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #e2b1f4;&#34;&gt;input&lt;/span&gt;),
-    ];
-
-    &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #e2b1f4;&#34;&gt;result&lt;/span&gt;;
-}
-&lt;/pre&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div id=&#34;outline-container-sec-3-5-4&#34; class=&#34;outline-4&#34;&gt;
-&lt;h4 id=&#34;sec-3-5-4&#34;&gt;Calculating count from given input array&lt;/h4&gt;
-&lt;div class=&#34;outline-text-4&#34; id=&#34;text-3-5-4&#34;&gt;
-&lt;div class=&#34;org-src-container&#34;&gt;
-
-&lt;pre class=&#34;src src-php&#34;&gt;&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;function&lt;/span&gt; &lt;span style=&#34;color: #a2d7fb;&#34;&gt;collect&lt;/span&gt;(&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;array&lt;/span&gt; &lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #e2b1f4;&#34;&gt;input&lt;/span&gt;)
-{
-    &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;if&lt;/span&gt; (&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;empty&lt;/span&gt;(&lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #e2b1f4;&#34;&gt;input&lt;/span&gt;)) {
-        &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;throw&lt;/span&gt; &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;new&lt;/span&gt; &lt;span style=&#34;color: #9dd7ff;&#34;&gt;\InvalidArgumentException&lt;/span&gt;(&lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#39;You cannot pass empty array&#39;&lt;/span&gt;);
-    }
-
-    &lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #e2b1f4;&#34;&gt;result&lt;/span&gt; = [
-        &lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#39;min&#39;&lt;/span&gt; =&amp;gt; &lt;span style=&#34;color: #cfcfcf; &#34;&gt;min&lt;/span&gt;(&lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #e2b1f4;&#34;&gt;input&lt;/span&gt;),
-        &lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#39;max&#39;&lt;/span&gt; =&amp;gt; &lt;span style=&#34;color: #cfcfcf; &#34;&gt;max&lt;/span&gt;(&lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #e2b1f4;&#34;&gt;input&lt;/span&gt;),
-        &lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#39;count&#39;&lt;/span&gt; =&amp;gt; &lt;span style=&#34;color: #cfcfcf; &#34;&gt;count&lt;/span&gt;(&lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #e2b1f4;&#34;&gt;input&lt;/span&gt;),
-    ];
-
-    &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #e2b1f4;&#34;&gt;result&lt;/span&gt;;
-}
-&lt;/pre&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div id=&#34;outline-container-sec-3-5-5&#34; class=&#34;outline-4&#34;&gt;
-&lt;h4 id=&#34;sec-3-5-5&#34;&gt;Calculating average from given input array&lt;/h4&gt;
-&lt;div class=&#34;outline-text-4&#34; id=&#34;text-3-5-5&#34;&gt;
-&lt;div class=&#34;org-src-container&#34;&gt;
-
-&lt;pre class=&#34;src src-php&#34;&gt;&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;function&lt;/span&gt; &lt;span style=&#34;color: #a2d7fb;&#34;&gt;collect&lt;/span&gt;(&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;array&lt;/span&gt; &lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #e2b1f4;&#34;&gt;input&lt;/span&gt;)
-{
-    &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;if&lt;/span&gt; (&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;empty&lt;/span&gt;(&lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #e2b1f4;&#34;&gt;input&lt;/span&gt;)) {
-        &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;throw&lt;/span&gt; &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;new&lt;/span&gt; &lt;span style=&#34;color: #9dd7ff;&#34;&gt;\InvalidArgumentException&lt;/span&gt;(&lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#39;You cannot pass empty array&#39;&lt;/span&gt;);
-    }
-
-    &lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #e2b1f4;&#34;&gt;result&lt;/span&gt; = [
-        &lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#39;min&#39;&lt;/span&gt; =&amp;gt; &lt;span style=&#34;color: #cfcfcf; &#34;&gt;min&lt;/span&gt;(&lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #e2b1f4;&#34;&gt;input&lt;/span&gt;),
-        &lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#39;max&#39;&lt;/span&gt; =&amp;gt; &lt;span style=&#34;color: #cfcfcf; &#34;&gt;max&lt;/span&gt;(&lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #e2b1f4;&#34;&gt;input&lt;/span&gt;),
-        &lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#39;count&#39;&lt;/span&gt; =&amp;gt; &lt;span style=&#34;color: #cfcfcf;&#34;&gt;count&lt;/span&gt;(&lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #e2b1f4;&#34;&gt;input&lt;/span&gt;),
-        &lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#39;avg&#39;&lt;/span&gt; =&amp;gt; &lt;span style=&#34;color: #cfcfcf;&#34;&gt;array_sum&lt;/span&gt;(&lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #e2b1f4;&#34;&gt;input&lt;/span&gt;) / (&lt;span style=&#34;color: #9dd7ff;&#34;&gt;float&lt;/span&gt;) &lt;span style=&#34;color: #cfcfcf; background-color: #1f1f1f;&#34;&gt;count&lt;/span&gt;(&lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #e2b1f4;&#34;&gt;input&lt;/span&gt;),
-    ];
-
-    &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #e2b1f4;&#34;&gt;result&lt;/span&gt;;
-}
-&lt;/pre&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div id=&#34;outline-container-sec-3-6&#34; class=&#34;outline-3&#34;&gt;
-&lt;h3 id=&#34;sec-3-6&#34;&gt;Conclusion&lt;/h3&gt;
-&lt;div class=&#34;outline-text-3&#34; id=&#34;text-3-6&#34;&gt;
-&lt;p&gt;
-Using PHPSpec is really simple and gives Us
-full control in case of future code refactors.
-&lt;/p&gt;
-
-&lt;p&gt;
-You can compare it to other BDD/Spec frameworks:
-&lt;/p&gt;
-&lt;ul class=&#34;org-ul&#34;&gt;
-&lt;li&gt;&lt;a href=&#34;http://wysocki.in/bdd-excercise-1-calc-bdd-in-javascript-with-mocha/&#34;&gt;Javascript with Mocha&lt;/a&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;http://wysocki.in/bdd-excercise-1-calc-bdd-in-golang-and-ginkgo&#34;&gt;Golang and Ginkgo&lt;/a&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>(Excercise 1 - PHP) Numbers statistics- PHP with PHPSpec</title>
-      <link>http://wysocki.in/programming/2014/03/21-excercise-1-calc-bdd-in-php-with-phpspec/</link>
-      <pubDate>Sun, 16 Mar 2014 00:00:00 +0000</pubDate>
-      
-      <guid>http://wysocki.in/programming/2014/03/21-excercise-1-calc-bdd-in-php-with-phpspec/</guid>
-      <description>&lt;img src=&#34;http://wysocki.in/img/php-bdd.png&#34; class=&#34;img-responsive&#34; alt=&#34;&#34;&gt;
-
-
-&lt;div id=&#34;outline-container-sec-1&#34; class=&#34;outline-2&#34;&gt;
-&lt;h2 id=&#34;sec-1&#34;&gt;Part 1 - Using PHP and PHPSpec&lt;/h2&gt;
-&lt;div class=&#34;outline-text-2&#34; id=&#34;text-1&#34;&gt;
-&lt;p&gt;
-Your task is to process a sequence of integer numbers
-to determine the following statistics:
-&lt;/p&gt;
-
-&lt;ul class=&#34;org-ul&#34;&gt;
-&lt;li&gt;minimum value
-&lt;/li&gt;
-&lt;li&gt;maximum value
-&lt;/li&gt;
-&lt;li&gt;number of elements in the sequence
-&lt;/li&gt;
-&lt;li&gt;average value
-&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;
-For example: &lt;code&gt;[6, 9, 15, -2, 92, 11]&lt;/code&gt;
-&lt;/p&gt;
-
-&lt;ul class=&#34;org-ul&#34;&gt;
-&lt;li&gt;minimum value = -2
-&lt;/li&gt;
-&lt;li&gt;maximum value = 92
-&lt;/li&gt;
-&lt;li&gt;number of elements in the sequence = 6
-&lt;/li&gt;
-&lt;li&gt;average value = 21.833333
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div id=&#34;outline-container-sec-2&#34; class=&#34;outline-2&#34;&gt;
-&lt;h2 id=&#34;sec-2&#34;&gt;&lt;span class=&#34;todo TODO&#34;&gt;TODO&lt;/span&gt; Start in PHPSpec&lt;/h2&gt;
-&lt;div class=&#34;outline-text-2&#34; id=&#34;text-2&#34;&gt;
-&lt;/div&gt;&lt;div id=&#34;outline-container-sec-2-1&#34; class=&#34;outline-3&#34;&gt;
-&lt;h3 id=&#34;sec-2-1&#34;&gt;Setup your tools&lt;/h3&gt;
-&lt;div class=&#34;outline-text-3&#34; id=&#34;text-2-1&#34;&gt;
-&lt;p&gt;
-In first excercise we&#39;ll do everything from scratch. First prepare your tools:
-&lt;/p&gt;
-&lt;/div&gt;
-
-&lt;div id=&#34;outline-container-sec-2-1-1&#34; class=&#34;outline-4&#34;&gt;
-&lt;h4 id=&#34;sec-2-1-1&#34;&gt;Project structure&lt;/h4&gt;
-&lt;div class=&#34;outline-text-4&#34; id=&#34;text-2-1-1&#34;&gt;
-&lt;p&gt;
-First create project directory and cwd to it
-&lt;/p&gt;
-
-&lt;div class=&#34;org-src-container&#34;&gt;
-
-&lt;pre class=&#34;src src-sh&#34;&gt;mkdir php-tdds
-&lt;span style=&#34;color: #93e0e3;&#34;&gt;cd&lt;/span&gt; php-tdds
-&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;
-PHPSpec will have following file and directories structure
-&lt;/p&gt;
-
-&lt;div class=&#34;org-src-container&#34;&gt;
-
-&lt;pre class=&#34;src src-txt&#34;&gt;.
-spec/ - your specifications
-src/  - your classes
-composer.json
-&lt;/pre&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-
-
-&lt;div id=&#34;outline-container-sec-2-1-2&#34; class=&#34;outline-4&#34;&gt;
-&lt;h4 id=&#34;sec-2-1-2&#34;&gt;Composer&lt;/h4&gt;
-&lt;div class=&#34;outline-text-4&#34; id=&#34;text-2-1-2&#34;&gt;
-&lt;p&gt;
-This project is based on composer so you will need it. To
-install composer. I prefer installing composer globally so
-everything what you should do is
-&lt;/p&gt;
-
-&lt;div class=&#34;org-src-container&#34;&gt;
-
-&lt;pre class=&#34;src src-sh&#34;&gt;curl -sS https://getcomposer.org/installer | php
-sudo mv composer.phar /usr/local/bin/composer
-&lt;/pre&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div id=&#34;outline-container-sec-2-1-3&#34; class=&#34;outline-4&#34;&gt;
-&lt;h4 id=&#34;sec-2-1-3&#34;&gt;PHPSpec&lt;/h4&gt;
-&lt;div class=&#34;outline-text-4&#34; id=&#34;text-2-1-3&#34;&gt;
-&lt;p&gt;
-Next You should add PHPSpec to your dev dependencies
-&lt;/p&gt;
-
-&lt;div class=&#34;org-src-container&#34;&gt;
-
-&lt;pre class=&#34;src src-php&#34;&gt;{
-    &lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#34;require-dev&#34;&lt;/span&gt;: {
-        &lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#34;phpspec&#34;&lt;/span&gt;: &lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#34;*&#34;&lt;/span&gt;
-    }
-}
-&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;
-Thats all!. Run &lt;code&gt;composer install&lt;/code&gt; and You are ready to start writing code.
-&lt;/p&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div id=&#34;outline-container-sec-2-2&#34; class=&#34;outline-3&#34;&gt;
-&lt;h3 id=&#34;sec-2-2&#34;&gt;Spec your classes&lt;/h3&gt;
-&lt;div class=&#34;outline-text-3&#34; id=&#34;text-2-2&#34;&gt;
-&lt;p&gt;
-We&#39;ll doing Test(Spec) First Developement so we should start from
-specify our Calculation statistics class.
-&lt;/p&gt;
-
-&lt;div class=&#34;org-src-container&#34;&gt;
-
-&lt;pre class=&#34;src src-sh&#34;&gt;phpspec desc Exc01/Calc
-&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;
-PHPSpec will generate main class for You, and add it&lt;sub&gt;is&lt;/sub&gt;&lt;sub&gt;instantiable&lt;/sub&gt; method in your specification.
-Next we should run phpspec suite.
-&lt;/p&gt;
-
-&lt;div class=&#34;org-src-container&#34;&gt;
-
-&lt;pre class=&#34;src src-sh&#34;&gt;phpspec run
-&lt;/pre&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-
-&lt;div id=&#34;outline-container-sec-3&#34; class=&#34;outline-2&#34;&gt;
-&lt;h2 id=&#34;sec-3&#34;&gt;Write your Spec&lt;/h2&gt;
-&lt;div class=&#34;outline-text-2&#34; id=&#34;text-3&#34;&gt;
-&lt;/div&gt;&lt;div id=&#34;outline-container-sec-3-1&#34; class=&#34;outline-3&#34;&gt;
-&lt;h3 id=&#34;sec-3-1&#34;&gt;Example input data&lt;/h3&gt;
-&lt;div class=&#34;outline-text-3&#34; id=&#34;text-3-1&#34;&gt;
-&lt;p&gt;
-Our example input data which will We be using in our spec methods:
-&lt;/p&gt;
-
-&lt;div class=&#34;org-src-container&#34;&gt;
-
-&lt;pre class=&#34;src src-php&#34;&gt;&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;protected&lt;/span&gt; &lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #e2b1f4;&#34;&gt;data&lt;/span&gt; = [&lt;span style=&#34;color: #ff5555;&#34;&gt;3&lt;/span&gt;,&lt;span style=&#34;color: #ff5555;&#34;&gt;3&lt;/span&gt;,&lt;span style=&#34;color: #ff5555;&#34;&gt;4&lt;/span&gt;,&lt;span style=&#34;color: #ff5555;&#34;&gt;5&lt;/span&gt;,&lt;span style=&#34;color: #ff5555;&#34;&gt;6&lt;/span&gt;,&lt;span style=&#34;color: #ff5555;&#34;&gt;99&lt;/span&gt;,-&lt;span style=&#34;color: #ff5555;&#34;&gt;99&lt;/span&gt;,&lt;span style=&#34;color: #ff5555;&#34;&gt;7&lt;/span&gt;,&lt;span style=&#34;color: #ff5555;&#34;&gt;8&lt;/span&gt;,&lt;span style=&#34;color: #ff5555;&#34;&gt;64&lt;/span&gt;];
-&lt;/pre&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-
-&lt;div id=&#34;outline-container-sec-3-2&#34; class=&#34;outline-3&#34;&gt;
-&lt;h3 id=&#34;sec-3-2&#34;&gt;We need to handle some exceptions:&lt;/h3&gt;
-&lt;div class=&#34;outline-text-3&#34; id=&#34;text-3-2&#34;&gt;
-&lt;p&gt;
-We should throw exception when input is empty array.
-&lt;/p&gt;
-
-&lt;div class=&#34;org-src-container&#34;&gt;
-
-&lt;pre class=&#34;src src-php&#34;&gt;&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;function&lt;/span&gt; &lt;span style=&#34;color: #a2d7fb;&#34;&gt;it_throws_exception_on_empty_array_input&lt;/span&gt;()
-{
-    &lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #b0deff;&#34;&gt;this&lt;/span&gt;-&amp;gt;&lt;span style=&#34;color: #cfcfcf; &#34;&gt;shouldThrow&lt;/span&gt;(&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;new&lt;/span&gt; &lt;span style=&#34;color: #9dd7ff;&#34;&gt;\InvalidArgumentException&lt;/span&gt;(&lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#39;You cannot pass empty array&#39;&lt;/span&gt;))
-        -&amp;gt;&lt;span style=&#34;color: #cfcfcf; &#34;&gt;duringCollect&lt;/span&gt;([]);
-}
-&lt;/pre&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-
-&lt;div id=&#34;outline-container-sec-3-3&#34; class=&#34;outline-3&#34;&gt;
-&lt;h3 id=&#34;sec-3-3&#34;&gt;Our class project:&lt;/h3&gt;
-&lt;div class=&#34;outline-text-3&#34; id=&#34;text-3-3&#34;&gt;
-&lt;p&gt;
-We create &lt;code&gt;collect&lt;/code&gt; method which will return
-associative array with &lt;code&gt;min&lt;/code&gt;, &lt;code&gt;max&lt;/code&gt;, &lt;code&gt;avg&lt;/code&gt;,
-&lt;code&gt;sum&lt;/code&gt;, &lt;code&gt;count&lt;/code&gt; keys.
-&lt;/p&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-
-&lt;div id=&#34;outline-container-sec-3-4&#34; class=&#34;outline-3&#34;&gt;
-&lt;h3 id=&#34;sec-3-4&#34;&gt;When We have plan, we can start writing specs&lt;/h3&gt;
-&lt;div class=&#34;outline-text-3&#34; id=&#34;text-3-4&#34;&gt;
-&lt;/div&gt;&lt;div id=&#34;outline-container-sec-3-4-1&#34; class=&#34;outline-4&#34;&gt;
-&lt;h4 id=&#34;sec-3-4-1&#34;&gt;Prerequisities (creating matcher)&lt;/h4&gt;
-&lt;div class=&#34;outline-text-4&#34; id=&#34;text-3-4-1&#34;&gt;
-&lt;p&gt;
-Our first task is to calculate minimum value from
-given input.
-&lt;/p&gt;
-
-
-&lt;p&gt;
-We&#39;ll need method which will check if array contains
-expected value in given associative array key. In spec/
-We can do this by defining new matcher. We do this
-be returning new matchers array in &lt;code&gt;getMatchers&lt;/code&gt;
-each matcher is closure function which returns boolean
-value. You can define as many matchers as You want.
-&lt;/p&gt;
-
-&lt;p&gt;
-When You define e.g. &lt;code&gt;haveElement&lt;/code&gt; matcher you can
-call it by &lt;code&gt;shouldHaveElement&lt;/code&gt; method inside your spec
-methods.
-&lt;/p&gt;
-
-&lt;div class=&#34;org-src-container&#34;&gt;
-
-&lt;pre class=&#34;src src-php&#34;&gt;&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;function&lt;/span&gt; &lt;span style=&#34;color: #a2d7fb;&#34;&gt;getMatchers&lt;/span&gt;()
-{
-    &lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #e2b1f4;&#34;&gt;matchers&lt;/span&gt; = [
-        &lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#39;haveElement&#39;&lt;/span&gt; =&amp;gt; &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;function&lt;/span&gt;(&lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #e2b1f4;&#34;&gt;result&lt;/span&gt;, &lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #e2b1f4;&#34;&gt;key&lt;/span&gt;, &lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #e2b1f4;&#34;&gt;value&lt;/span&gt;) {
-            &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;return&lt;/span&gt;  &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;isset&lt;/span&gt;(&lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #e2b1f4;&#34;&gt;result&lt;/span&gt;[&lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #e2b1f4;&#34;&gt;key&lt;/span&gt;]) &amp;amp;&amp;amp; &lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #e2b1f4;&#34;&gt;result&lt;/span&gt;[&lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #e2b1f4;&#34;&gt;key&lt;/span&gt;] === &lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #e2b1f4;&#34;&gt;value&lt;/span&gt;;
-        }
-    ];
-
-    &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #e2b1f4;&#34;&gt;matchers&lt;/span&gt;;
-}
-&lt;/pre&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div id=&#34;outline-container-sec-3-4-2&#34; class=&#34;outline-4&#34;&gt;
-&lt;h4 id=&#34;sec-3-4-2&#34;&gt;Min specification&lt;/h4&gt;
-&lt;div class=&#34;outline-text-4&#34; id=&#34;text-3-4-2&#34;&gt;
-&lt;p&gt;
-Now We&#39;re ready for specifing.
-&lt;/p&gt;
-
-&lt;div class=&#34;org-src-container&#34;&gt;
-
-&lt;pre class=&#34;src src-php&#34;&gt;&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;function&lt;/span&gt; &lt;span style=&#34;color: #a2d7fb;&#34;&gt;it_calculates_min_from_given_integers&lt;/span&gt;()
-{
-    &lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #b0deff;&#34;&gt;this&lt;/span&gt;-&amp;gt;&lt;span style=&#34;color: #cfcfcf; &#34;&gt;collect&lt;/span&gt;(&lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #b0deff;&#34;&gt;this&lt;/span&gt;-&amp;gt;&lt;span style=&#34;color: #e2b1f4;&#34;&gt;data&lt;/span&gt;)
-        -&amp;gt;&lt;span style=&#34;color: #cfcfcf; &#34;&gt;shouldHaveElement&lt;/span&gt;(&lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#39;min&#39;&lt;/span&gt;, -&lt;span style=&#34;color: #ff5555;&#34;&gt;99&lt;/span&gt;);
-}
-&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;div class=&#34;org-src-container&#34;&gt;
-
-&lt;pre class=&#34;src src-sh&#34;&gt;bin/phpspec run
-&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;
-We&#39;ll be asked to create new method. Press &lt;code&gt;ENTER&lt;/code&gt;
-and our class will have new &lt;code&gt;collect&lt;/code&gt; method which
-should be implemented.
-&lt;/p&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-
-&lt;div id=&#34;outline-container-sec-3-4-3&#34; class=&#34;outline-4&#34;&gt;
-&lt;h4 id=&#34;sec-3-4-3&#34;&gt;Other specifications&lt;/h4&gt;
-&lt;div class=&#34;outline-text-4&#34; id=&#34;text-3-4-3&#34;&gt;
-&lt;ol class=&#34;org-ol&#34;&gt;
-&lt;li&gt;With above technique We&#39;ll generate
-&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;div class=&#34;org-src-container&#34;&gt;
-
-&lt;pre class=&#34;src src-php&#34;&gt;&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;function&lt;/span&gt; &lt;span style=&#34;color: #a2d7fb;&#34;&gt;it_calculates_max_from_given_integers&lt;/span&gt;()
-{
-    &lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #b0deff;&#34;&gt;this&lt;/span&gt;-&amp;gt;&lt;span style=&#34;color: #cfcfcf; &#34;&gt;collect&lt;/span&gt;(&lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #b0deff;&#34;&gt;this&lt;/span&gt;-&amp;gt;&lt;span style=&#34;color: #e2b1f4;&#34;&gt;data&lt;/span&gt;)
-        -&amp;gt;&lt;span style=&#34;color: #cfcfcf; &#34;&gt;shouldHaveElement&lt;/span&gt;(&lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#39;max&#39;&lt;/span&gt;, &lt;span style=&#34;color: #ff5555;&#34;&gt;99&lt;/span&gt;);
-}
-
-&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;function&lt;/span&gt; &lt;span style=&#34;color: #a2d7fb;&#34;&gt;it_calculates_avg_from_given_integers&lt;/span&gt;()
-{
-    &lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #b0deff;&#34;&gt;this&lt;/span&gt;-&amp;gt;&lt;span style=&#34;color: #cfcfcf; &#34;&gt;collect&lt;/span&gt;(&lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #b0deff;&#34;&gt;this&lt;/span&gt;-&amp;gt;&lt;span style=&#34;color: #e2b1f4;&#34;&gt;data&lt;/span&gt;)
-        -&amp;gt;&lt;span style=&#34;color: #cfcfcf; &#34;&gt;shouldHaveElement&lt;/span&gt;(&lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#39;avg&#39;&lt;/span&gt;, &lt;span style=&#34;color: #ff5555;&#34;&gt;10&lt;/span&gt;.&lt;span style=&#34;color: #ff5555;&#34;&gt;0&lt;/span&gt;);
-}
-
-&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;function&lt;/span&gt; &lt;span style=&#34;color: #a2d7fb;&#34;&gt;it_calculates_count_from_given_integers&lt;/span&gt;()
-{
-    &lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #b0deff;&#34;&gt;this&lt;/span&gt;-&amp;gt;&lt;span style=&#34;color: #cfcfcf; &#34;&gt;collect&lt;/span&gt;(&lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #b0deff;&#34;&gt;this&lt;/span&gt;-&amp;gt;&lt;span style=&#34;color: #e2b1f4;&#34;&gt;data&lt;/span&gt;)
-        -&amp;gt;&lt;span style=&#34;color: #cfcfcf; &#34;&gt;shouldHaveElement&lt;/span&gt;(&lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#39;count&#39;&lt;/span&gt;, &lt;span style=&#34;color: #ff5555;&#34;&gt;10&lt;/span&gt;);
-}
-&lt;/pre&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div id=&#34;outline-container-sec-3-5&#34; class=&#34;outline-3&#34;&gt;
-&lt;h3 id=&#34;sec-3-5&#34;&gt;Writing code&lt;/h3&gt;
-&lt;div class=&#34;outline-text-3&#34; id=&#34;text-3-5&#34;&gt;
-&lt;p&gt;
-Now our spec is ready - it&#39;ll be our library documentation - we can
-start writing code.
-&lt;/p&gt;
-
-&lt;p&gt;
-Run &lt;code&gt;bin/phpspec run&lt;/code&gt; after each change.
-&lt;/p&gt;
-&lt;/div&gt;
-
-
-&lt;div id=&#34;outline-container-sec-3-5-1&#34; class=&#34;outline-4&#34;&gt;
-&lt;h4 id=&#34;sec-3-5-1&#34;&gt;Handling spec&#39;ed exception&lt;/h4&gt;
-&lt;div class=&#34;outline-text-4&#34; id=&#34;text-3-5-1&#34;&gt;
-&lt;div class=&#34;org-src-container&#34;&gt;
-
-&lt;pre class=&#34;src src-php&#34;&gt;&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;function&lt;/span&gt; &lt;span style=&#34;color: #a2d7fb;&#34;&gt;collect&lt;/span&gt;(&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;array&lt;/span&gt; &lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #e2b1f4;&#34;&gt;input&lt;/span&gt;)
-{
-    &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;if&lt;/span&gt; (&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;empty&lt;/span&gt;(&lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #e2b1f4;&#34;&gt;input&lt;/span&gt;)) {
-        &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;throw&lt;/span&gt; &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;new&lt;/span&gt; &lt;span style=&#34;color: #9dd7ff;&#34;&gt;\InvalidArgumentException&lt;/span&gt;(&lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#39;You cannot pass empty array&#39;&lt;/span&gt;);
-    }
-}
-&lt;/pre&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div id=&#34;outline-container-sec-3-5-2&#34; class=&#34;outline-4&#34;&gt;
-&lt;h4 id=&#34;sec-3-5-2&#34;&gt;Calculating min value from given input array&lt;/h4&gt;
-&lt;div class=&#34;outline-text-4&#34; id=&#34;text-3-5-2&#34;&gt;
-&lt;div class=&#34;org-src-container&#34;&gt;
-
-&lt;pre class=&#34;src src-php&#34;&gt;&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;function&lt;/span&gt; &lt;span style=&#34;color: #a2d7fb;&#34;&gt;collect&lt;/span&gt;(&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;array&lt;/span&gt; &lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #e2b1f4;&#34;&gt;input&lt;/span&gt;)
-{
-    &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;if&lt;/span&gt; (&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;empty&lt;/span&gt;(&lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #e2b1f4;&#34;&gt;input&lt;/span&gt;)) {
-        &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;throw&lt;/span&gt; &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;new&lt;/span&gt; &lt;span style=&#34;color: #9dd7ff;&#34;&gt;\InvalidArgumentException&lt;/span&gt;(&lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#39;You cannot pass empty array&#39;&lt;/span&gt;);
-    }
-
-    &lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #e2b1f4;&#34;&gt;result&lt;/span&gt; = [
-        &lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#39;min&#39;&lt;/span&gt; =&amp;gt; &lt;span style=&#34;color: #cfcfcf; &#34;&gt;min&lt;/span&gt;(&lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #e2b1f4;&#34;&gt;input&lt;/span&gt;),
-    ];
-
-    &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #e2b1f4;&#34;&gt;result&lt;/span&gt;;
-}
-&lt;/pre&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-
-&lt;div id=&#34;outline-container-sec-3-5-3&#34; class=&#34;outline-4&#34;&gt;
-&lt;h4 id=&#34;sec-3-5-3&#34;&gt;Calculating max value from given input array&lt;/h4&gt;
-&lt;div class=&#34;outline-text-4&#34; id=&#34;text-3-5-3&#34;&gt;
-&lt;div class=&#34;org-src-container&#34;&gt;
-
-&lt;pre class=&#34;src src-php&#34;&gt;&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;function&lt;/span&gt; &lt;span style=&#34;color: #a2d7fb;&#34;&gt;collect&lt;/span&gt;(&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;array&lt;/span&gt; &lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #e2b1f4;&#34;&gt;input&lt;/span&gt;)
-{
-    &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;if&lt;/span&gt; (&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;empty&lt;/span&gt;(&lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #e2b1f4;&#34;&gt;input&lt;/span&gt;)) {
-        &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;throw&lt;/span&gt; &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;new&lt;/span&gt; &lt;span style=&#34;color: #9dd7ff;&#34;&gt;\InvalidArgumentException&lt;/span&gt;(&lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#39;You cannot pass empty array&#39;&lt;/span&gt;);
-    }
-
-    &lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #e2b1f4;&#34;&gt;result&lt;/span&gt; = [
-        &lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#39;min&#39;&lt;/span&gt; =&amp;gt; &lt;span style=&#34;color: #cfcfcf; &#34;&gt;min&lt;/span&gt;(&lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #e2b1f4;&#34;&gt;input&lt;/span&gt;),
-        &lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#39;max&#39;&lt;/span&gt; =&amp;gt; &lt;span style=&#34;color: #cfcfcf; &#34;&gt;max&lt;/span&gt;(&lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #e2b1f4;&#34;&gt;input&lt;/span&gt;),
-    ];
-
-    &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #e2b1f4;&#34;&gt;result&lt;/span&gt;;
-}
-&lt;/pre&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div id=&#34;outline-container-sec-3-5-4&#34; class=&#34;outline-4&#34;&gt;
-&lt;h4 id=&#34;sec-3-5-4&#34;&gt;Calculating count from given input array&lt;/h4&gt;
-&lt;div class=&#34;outline-text-4&#34; id=&#34;text-3-5-4&#34;&gt;
-&lt;div class=&#34;org-src-container&#34;&gt;
-
-&lt;pre class=&#34;src src-php&#34;&gt;&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;function&lt;/span&gt; &lt;span style=&#34;color: #a2d7fb;&#34;&gt;collect&lt;/span&gt;(&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;array&lt;/span&gt; &lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #e2b1f4;&#34;&gt;input&lt;/span&gt;)
-{
-    &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;if&lt;/span&gt; (&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;empty&lt;/span&gt;(&lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #e2b1f4;&#34;&gt;input&lt;/span&gt;)) {
-        &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;throw&lt;/span&gt; &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;new&lt;/span&gt; &lt;span style=&#34;color: #9dd7ff;&#34;&gt;\InvalidArgumentException&lt;/span&gt;(&lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#39;You cannot pass empty array&#39;&lt;/span&gt;);
-    }
-
-    &lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #e2b1f4;&#34;&gt;result&lt;/span&gt; = [
-        &lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#39;min&#39;&lt;/span&gt; =&amp;gt; &lt;span style=&#34;color: #cfcfcf; &#34;&gt;min&lt;/span&gt;(&lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #e2b1f4;&#34;&gt;input&lt;/span&gt;),
-        &lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#39;max&#39;&lt;/span&gt; =&amp;gt; &lt;span style=&#34;color: #cfcfcf; &#34;&gt;max&lt;/span&gt;(&lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #e2b1f4;&#34;&gt;input&lt;/span&gt;),
-        &lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#39;count&#39;&lt;/span&gt; =&amp;gt; &lt;span style=&#34;color: #cfcfcf; &#34;&gt;count&lt;/span&gt;(&lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #e2b1f4;&#34;&gt;input&lt;/span&gt;),
-    ];
-
-    &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #e2b1f4;&#34;&gt;result&lt;/span&gt;;
-}
-&lt;/pre&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div id=&#34;outline-container-sec-3-5-5&#34; class=&#34;outline-4&#34;&gt;
-&lt;h4 id=&#34;sec-3-5-5&#34;&gt;Calculating average from given input array&lt;/h4&gt;
-&lt;div class=&#34;outline-text-4&#34; id=&#34;text-3-5-5&#34;&gt;
-&lt;div class=&#34;org-src-container&#34;&gt;
-
-&lt;pre class=&#34;src src-php&#34;&gt;&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;function&lt;/span&gt; &lt;span style=&#34;color: #a2d7fb;&#34;&gt;collect&lt;/span&gt;(&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;array&lt;/span&gt; &lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #e2b1f4;&#34;&gt;input&lt;/span&gt;)
-{
-    &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;if&lt;/span&gt; (&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;empty&lt;/span&gt;(&lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #e2b1f4;&#34;&gt;input&lt;/span&gt;)) {
-        &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;throw&lt;/span&gt; &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;new&lt;/span&gt; &lt;span style=&#34;color: #9dd7ff;&#34;&gt;\InvalidArgumentException&lt;/span&gt;(&lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#39;You cannot pass empty array&#39;&lt;/span&gt;);
-    }
-
-    &lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #e2b1f4;&#34;&gt;result&lt;/span&gt; = [
-        &lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#39;min&#39;&lt;/span&gt; =&amp;gt; &lt;span style=&#34;color: #cfcfcf; &#34;&gt;min&lt;/span&gt;(&lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #e2b1f4;&#34;&gt;input&lt;/span&gt;),
-        &lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#39;max&#39;&lt;/span&gt; =&amp;gt; &lt;span style=&#34;color: #cfcfcf; &#34;&gt;max&lt;/span&gt;(&lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #e2b1f4;&#34;&gt;input&lt;/span&gt;),
-        &lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#39;count&#39;&lt;/span&gt; =&amp;gt; &lt;span style=&#34;color: #cfcfcf;&#34;&gt;count&lt;/span&gt;(&lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #e2b1f4;&#34;&gt;input&lt;/span&gt;),
-        &lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#39;avg&#39;&lt;/span&gt; =&amp;gt; &lt;span style=&#34;color: #cfcfcf;&#34;&gt;array_sum&lt;/span&gt;(&lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #e2b1f4;&#34;&gt;input&lt;/span&gt;) / (&lt;span style=&#34;color: #9dd7ff;&#34;&gt;float&lt;/span&gt;) &lt;span style=&#34;color: #cfcfcf; background-color: #1f1f1f;&#34;&gt;count&lt;/span&gt;(&lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #e2b1f4;&#34;&gt;input&lt;/span&gt;),
-    ];
-
-    &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color: #ffffff;&#34;&gt;$&lt;/span&gt;&lt;span style=&#34;color: #e2b1f4;&#34;&gt;result&lt;/span&gt;;
-}
-&lt;/pre&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div id=&#34;outline-container-sec-3-6&#34; class=&#34;outline-3&#34;&gt;
-&lt;h3 id=&#34;sec-3-6&#34;&gt;Conclusion&lt;/h3&gt;
-&lt;div class=&#34;outline-text-3&#34; id=&#34;text-3-6&#34;&gt;
-&lt;p&gt;
-Using PHPSpec is really simple and gives Us
-full control in case of future code refactors.
-&lt;/p&gt;
-
-&lt;p&gt;
-You can compare it to other BDD/Spec frameworks:
-&lt;/p&gt;
-&lt;ul class=&#34;org-ul&#34;&gt;
-&lt;li&gt;&lt;a href=&#34;http://wysocki.in/bdd-excercise-1-calc-bdd-in-javascript-with-mocha/&#34;&gt;Javascript with Mocha&lt;/a&gt;
 &lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;http://wysocki.in/bdd-excercise-1-calc-bdd-in-golang-and-ginkgo&#34;&gt;Golang and Ginkgo&lt;/a&gt;
 &lt;/li&gt;

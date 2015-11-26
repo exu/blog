@@ -4,7 +4,7 @@
     <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
-    <title>Golang Channels - Basics &middot; Jacek Wysocki DevLog</title>
+    <title>Golang channels - quit channel &middot; Jacek Wysocki DevLog</title>
     <meta name="author" content="Jacek Wysocki">
     <meta name="description" content="LOL">
     <meta name="generator" content="Hugo 0.15-DEV" />
@@ -92,63 +92,62 @@
     <main class="content" role="main">
 	    <article class="post">
 	        <header>
-	        <h1 class="post-title">Golang Channels - Basics</h1>
+	        <h1 class="post-title">Golang channels - quit channel</h1>
             </header>
 	        <section class="post-content">
 	            
 
-<p>Channels was made for synchronizing data between concurrently working goroutines (golang
-light threads). By default operations on channel (reading and writing) are blocking.</p>
+<p>Sometimes you may want to break your program running inside goroutine from
+other goroutine or simply from main function. Below You can see My simple
+implementation of go quit channel.</p>
 
-<p>Let&rsquo;s look for simple example below:</p>
+<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span style="color: #f92672">package</span> <span style="color: #a6e22e">main</span>
 
-<div class="highlight" style="background: #272822"><pre style="line-height: 125%">    <span style="color: #f92672">package</span> <span style="color: #a6e22e">main</span>
+<span style="color: #f92672">import</span> <span style="color: #f8f8f2">(</span>
+	<span style="color: #e6db74">&quot;time&quot;</span>
+<span style="color: #f8f8f2">)</span>
 
-    <span style="color: #f92672">import</span> <span style="color: #e6db74">&quot;fmt&quot;</span>
-    <span style="color: #f92672">import</span> <span style="color: #e6db74">&quot;time&quot;</span>
+<span style="color: #66d9ef">func</span> <span style="color: #a6e22e">main</span><span style="color: #f8f8f2">()</span> <span style="color: #f8f8f2">{</span>
+	<span style="color: #a6e22e">quit</span> <span style="color: #f92672">:=</span> <span style="color: #f8f8f2">make(</span><span style="color: #66d9ef">chan</span> <span style="color: #66d9ef">bool</span><span style="color: #f8f8f2">)</span>
+	<span style="color: #66d9ef">go</span> <span style="color: #66d9ef">func</span><span style="color: #f8f8f2">()</span> <span style="color: #f8f8f2">{</span>
+		<span style="color: #66d9ef">for</span> <span style="color: #f8f8f2">{</span>
+			<span style="color: #66d9ef">select</span> <span style="color: #f8f8f2">{</span>
+			<span style="color: #66d9ef">case</span> <span style="color: #f92672">&lt;-</span><span style="color: #a6e22e">quit</span><span style="color: #f8f8f2">:</span>
+				<span style="color: #66d9ef">return</span>
+			<span style="color: #66d9ef">default</span><span style="color: #f8f8f2">:</span>
+				<span style="color: #f8f8f2">println(</span><span style="color: #e6db74">&quot;.&quot;</span><span style="color: #f8f8f2">)</span>
+				<span style="color: #a6e22e">time</span><span style="color: #f8f8f2">.</span><span style="color: #a6e22e">Sleep</span><span style="color: #f8f8f2">(</span><span style="color: #a6e22e">time</span><span style="color: #f8f8f2">.</span><span style="color: #a6e22e">Millisecond</span> <span style="color: #f92672">*</span> <span style="color: #ae81ff">100</span><span style="color: #f8f8f2">)</span>
+			<span style="color: #f8f8f2">}</span>
+		<span style="color: #f8f8f2">}</span>
+	<span style="color: #f8f8f2">}()</span>
 
-    <span style="color: #66d9ef">func</span> <span style="color: #a6e22e">doIt</span><span style="color: #f8f8f2">(</span><span style="color: #a6e22e">done</span> <span style="color: #66d9ef">chan</span> <span style="color: #66d9ef">bool</span><span style="color: #f8f8f2">)</span> <span style="color: #f8f8f2">{</span>
-    	<span style="color: #a6e22e">fmt</span><span style="color: #f8f8f2">.</span><span style="color: #a6e22e">Print</span><span style="color: #f8f8f2">(</span><span style="color: #e6db74">&quot;working...&quot;</span><span style="color: #f8f8f2">)</span>
-    	<span style="color: #a6e22e">time</span><span style="color: #f8f8f2">.</span><span style="color: #a6e22e">Sleep</span><span style="color: #f8f8f2">(</span><span style="color: #a6e22e">time</span><span style="color: #f8f8f2">.</span><span style="color: #a6e22e">Second</span><span style="color: #f8f8f2">)</span>
-    	<span style="color: #a6e22e">fmt</span><span style="color: #f8f8f2">.</span><span style="color: #a6e22e">Println</span><span style="color: #f8f8f2">(</span><span style="color: #e6db74">&quot;done&quot;</span><span style="color: #f8f8f2">)</span>
+	<span style="color: #75715e">// Do stuff</span>
+	<span style="color: #a6e22e">time</span><span style="color: #f8f8f2">.</span><span style="color: #a6e22e">Sleep</span><span style="color: #f8f8f2">(</span><span style="color: #a6e22e">time</span><span style="color: #f8f8f2">.</span><span style="color: #a6e22e">Second</span><span style="color: #f8f8f2">)</span>
 
-        <span style="color: #75715e">// send value to channel</span>
-    	<span style="color: #a6e22e">done</span> <span style="color: #f92672">&lt;-</span> <span style="color: #66d9ef">true</span>
-    <span style="color: #f8f8f2">}</span>
-
-    <span style="color: #66d9ef">func</span> <span style="color: #a6e22e">main</span><span style="color: #f8f8f2">()</span> <span style="color: #f8f8f2">{</span>
-        <span style="color: #75715e">// We&#39;re creating channel and</span>
-        <span style="color: #75715e">// starting doIt function as gorouine</span>
-    	<span style="color: #a6e22e">done</span> <span style="color: #f92672">:=</span> <span style="color: #f8f8f2">make(</span><span style="color: #66d9ef">chan</span> <span style="color: #66d9ef">bool</span><span style="color: #f8f8f2">)</span>
-    	<span style="color: #66d9ef">go</span> <span style="color: #a6e22e">doIt</span><span style="color: #f8f8f2">(</span><span style="color: #a6e22e">done</span><span style="color: #f8f8f2">)</span>
-
-        <span style="color: #75715e">// reading from channel with `&lt;-` blocks program until</span>
-        <span style="color: #75715e">// we receive value after one second in `doIt` function</span>
-    	<span style="color: #a6e22e">a</span> <span style="color: #f92672">:=</span> <span style="color: #f92672">&lt;-</span><span style="color: #a6e22e">done</span>
-    	<span style="color: #a6e22e">fmt</span><span style="color: #f8f8f2">.</span><span style="color: #a6e22e">Println</span><span style="color: #f8f8f2">(</span><span style="color: #a6e22e">a</span><span style="color: #f8f8f2">)</span>
-    <span style="color: #f8f8f2">}</span>
+	<span style="color: #75715e">// Quit goroutine</span>
+	<span style="color: #a6e22e">quit</span> <span style="color: #f92672">&lt;-</span> <span style="color: #66d9ef">true</span>
+<span style="color: #f8f8f2">}</span>
 </pre></div>
 
 
 <p class="play-go">
-    <a class="btn" href="http://play.golang.org/p/gh5ihivC4L" target="_new">
+    <a class="btn" href="http://play.golang.org/p/LCtaucaU65" target="_new">
         <i class="fa fa-play-circle-o"></i> Run it on play.golang.org
     </a>
 </p>
 
 
-<h3 id="code-summary:b7f1cb643094ee3dbf988083964d7342">Code Summary</h3>
+<h3 id="code-summary:56f482da4276e03cb54534c3a9fb674f">Code Summary</h3>
 
-<p>This simple example contains several important points about channels:</p>
+<p>In context of communicating from external goroutines:</p>
 
 <ul>
-<li>Go block on reading from channel</li>
-<li>There is no control of running goroutines, try to remove reading from channel (<code>a := &lt;-done</code>) You&rsquo;ll see that your program will not complete <code>doIt</code> function</li>
-<li>We&rsquo;re passing channels to functions as something similar to reference (channels are
-used on both sides - goroutine which write to channel, and goroutine which reads from it - main function in this example)</li>
+<li>Use <code>select</code> to read from multiple channels (in our example We only want
+to break infinite loop)</li>
+<li><code>default</code> is always run when there is no value from channel</li>
 </ul>
 
-<h3 id="want-more:b7f1cb643094ee3dbf988083964d7342">Want More?</h3>
+<h3 id="want-more:56f482da4276e03cb54534c3a9fb674f">Want More?</h3>
 
 <p>If you like My Go basics series feel free to read more at <a href="/series/go-basics/">Go Basics Series</a></p>
 
