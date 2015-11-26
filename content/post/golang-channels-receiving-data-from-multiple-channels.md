@@ -3,6 +3,7 @@ date = "2015-11-25T16:56:07+01:00"
 title = "Golang Channels - Receiving data"
 description = "Receiving data from multiple channels"
 tags = ["go", "channels", "concurrency"]
+slug = "golang-channels-receiving-data-from-multiple-channels"
 +++
 
 

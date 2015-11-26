@@ -73,10 +73,10 @@ used on both sides - goroutine which write to channel, and goroutine which reads
     
     <item>
       <title>Golang Channels - Receiving data</title>
-      <link>http://wysocki.in/golang-channels---receiving-data</link>
+      <link>http://wysocki.in/golang-channels-receiving-data-from-multiple-channels</link>
       <pubDate>Wed, 25 Nov 2015 16:56:07 +0100</pubDate>
       
-      <guid>http://wysocki.in/golang-channels---receiving-data</guid>
+      <guid>http://wysocki.in/golang-channels-receiving-data-from-multiple-channels</guid>
       <description>
 
 &lt;h2 id=&#34;channels-basic-example:efe161ef779bd2b7a6dadc547c487606&#34;&gt;Channels basic example:&lt;/h2&gt;
