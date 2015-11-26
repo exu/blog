@@ -33,7 +33,7 @@ pygmentsuseclasses = false
 	# feel free to add a few information about you and your website.
 	name = "Jacek Wysocki"
 	bio = "I'm on [Github](//github.com/exu) or [Twitter](https://twitter.com/ex00)"
-	description = "LOL"
+	description = "I'm developer recently focused on learning Go, Emacs and Archlinux user, father of two lovely children and amateur runner."
 	location = "" # optional
 	twitter = "ex00" # optional
 	github = "exu" # optional
