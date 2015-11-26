@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+    <title>Golang Channels - Receiving data &middot; Jacek Wysocki DevLog</title>
+    <meta name="author" content="Jacek Wysocki">
+    <meta name="description" content="LOL">
+    <meta name="generator" content="Hugo 0.15-DEV" />
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+
+    <link rel="shortcut icon" href="http://wysocki.in/img/favicon.ico">
+    <link rel="stylesheet" href="http://wysocki.in/css/normalize.min.css">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="http://wysocki.in/css/screen.css">
+    <link rel="stylesheet" href="http://wysocki.in/css/github.css">
+    <link rel="stylesheet" href="http://wysocki.in/css/default.min.css">
+    <link rel="stylesheet" href="http://wysocki.in/css/site.css">
+
+    <!-- Stylesheet for theme color -->
+    <style type="text/css">
+    a, a:visited {color: #33cc99;}
+    .pagination a {color: #33cc99;}
+    .gist .gist-file .gist-meta a:visited {color: #33cc99 !important;}
+    a:focus, a:hover {color: #178b6b;}
+    h1.post-title a:focus, h1.post-title a:hover, h1.blog-title a:focus, h1.blog-title a:hover {color: #178b6b;}
+    .older-posts:hover, .newer-posts:hover {color: #178b6b;}
+</style>
+</head>
+
+<body class="post-template">
+
+    <header id="site-head">
+	
+	<h1 class="blog-title">
+        <img src="/img/ja128.png" class="main-image">
+        <i class='fa fa-code'></i>
+        <a href="http://wysocki.in/">Jacek Wysocki DevLog</a>
+    </h1>
+	
+	
+	<h1 class="blog-subtitle">various stuff about programming</h1>
+	
+</header>
+
+    
+<nav class="menu" role="nav">
+    <ul>
+        
+        <li class="nav nav-current"><a href="/">
+            <i class='fa fa-heart-o'></i>&nbsp;Posts
+        </a></li>
+      	
+        <li class="nav nav-current"><a href="/tags/">
+            <i class='fa fa-star-o'></i>&nbsp;Tags
+        </a></li>
+      	
+        <li class="nav nav-current"><a href="/series/">
+            <i class='fa fa-folder-o'></i>&nbsp;Series
+        </a></li>
+      	
+        <li class="nav nav-current"><a href="/contact/">
+            <i class='fa fa-envelope-o'></i>&nbsp;Contact
+        </a></li>
+      	
+    </ul>
+</nav>
+
+
+
+    <div class="pull-right social-media">
+        <div>
+            <a href="https://twitter.com/share" class="twitter-share-button" data-via="ex00">Tweet</a>
+            <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+        </div>
+        <div>
+            <div class="g-plusone" data-size="small"></div>
+            <script type="text/javascript">
+             (function() {
+                 var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+                 po.src = 'https://apis.google.com/js/platform.js';
+                 var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+             })();
+            </script>
+        </div>
+    </div>
+
+    <main class="content" role="main">
+	    <article class="post">
+	        <header>
+	        <h1 class="post-title">Golang Channels - Receiving data</h1>
+            </header>
+	        <section class="post-content">
+	            
+
+<h2 id="channels-basic-example:efe161ef779bd2b7a6dadc547c487606">Channels basic example:</h2>
+
+<p>When we want to receive data from multiple channels (probably filled by
+multiple goroutines) we should use <code>select</code> statement. It simply choose
+channel which receive value as first (It&rsquo;s in context of time)</p>
+
+<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span style="color: #f92672">package</span> <span style="color: #a6e22e">main</span>
+
+<span style="color: #f92672">import</span> <span style="color: #e6db74">&quot;time&quot;</span>
+<span style="color: #f92672">import</span> <span style="color: #e6db74">&quot;fmt&quot;</span>
+
+<span style="color: #66d9ef">func</span> <span style="color: #a6e22e">main</span><span style="color: #f8f8f2">()</span> <span style="color: #f8f8f2">{</span>
+	<span style="color: #a6e22e">c1</span> <span style="color: #f92672">:=</span> <span style="color: #f8f8f2">make(</span><span style="color: #66d9ef">chan</span> <span style="color: #66d9ef">string</span><span style="color: #f8f8f2">)</span>
+	<span style="color: #a6e22e">c2</span> <span style="color: #f92672">:=</span> <span style="color: #f8f8f2">make(</span><span style="color: #66d9ef">chan</span> <span style="color: #66d9ef">string</span><span style="color: #f8f8f2">)</span>
+
+	<span style="color: #66d9ef">go</span> <span style="color: #66d9ef">func</span><span style="color: #f8f8f2">()</span> <span style="color: #f8f8f2">{</span>
+		<span style="color: #a6e22e">time</span><span style="color: #f8f8f2">.</span><span style="color: #a6e22e">Sleep</span><span style="color: #f8f8f2">(</span><span style="color: #a6e22e">time</span><span style="color: #f8f8f2">.</span><span style="color: #a6e22e">Second</span> <span style="color: #f92672">*</span> <span style="color: #ae81ff">3</span><span style="color: #f8f8f2">)</span>
+		<span style="color: #a6e22e">c1</span> <span style="color: #f92672">&lt;-</span> <span style="color: #e6db74">&quot;one&quot;</span>
+	<span style="color: #f8f8f2">}()</span>
+
+	<span style="color: #66d9ef">go</span> <span style="color: #66d9ef">func</span><span style="color: #f8f8f2">()</span> <span style="color: #f8f8f2">{</span>
+		<span style="color: #a6e22e">time</span><span style="color: #f8f8f2">.</span><span style="color: #a6e22e">Sleep</span><span style="color: #f8f8f2">(</span><span style="color: #a6e22e">time</span><span style="color: #f8f8f2">.</span><span style="color: #a6e22e">Second</span> <span style="color: #f92672">*</span> <span style="color: #ae81ff">2</span><span style="color: #f8f8f2">)</span>
+		<span style="color: #a6e22e">c2</span> <span style="color: #f92672">&lt;-</span> <span style="color: #e6db74">&quot;two&quot;</span>
+	<span style="color: #f8f8f2">}()</span>
+
+	<span style="color: #66d9ef">select</span> <span style="color: #f8f8f2">{</span>
+	<span style="color: #66d9ef">case</span> <span style="color: #a6e22e">msg1</span> <span style="color: #f92672">:=</span> <span style="color: #f92672">&lt;-</span><span style="color: #a6e22e">c1</span><span style="color: #f8f8f2">:</span>
+		<span style="color: #a6e22e">fmt</span><span style="color: #f8f8f2">.</span><span style="color: #a6e22e">Println</span><span style="color: #f8f8f2">(</span><span style="color: #e6db74">&quot;received&quot;</span><span style="color: #f8f8f2">,</span> <span style="color: #a6e22e">msg1</span><span style="color: #f8f8f2">)</span>
+	<span style="color: #66d9ef">case</span> <span style="color: #a6e22e">msg2</span> <span style="color: #f92672">:=</span> <span style="color: #f92672">&lt;-</span><span style="color: #a6e22e">c2</span><span style="color: #f8f8f2">:</span>
+		<span style="color: #a6e22e">fmt</span><span style="color: #f8f8f2">.</span><span style="color: #a6e22e">Println</span><span style="color: #f8f8f2">(</span><span style="color: #e6db74">&quot;received&quot;</span><span style="color: #f8f8f2">,</span> <span style="color: #a6e22e">msg2</span><span style="color: #f8f8f2">)</span>
+	<span style="color: #f8f8f2">}</span>
+<span style="color: #f8f8f2">}</span>
+</pre></div>
+
+
+<p><a href="http://play.golang.org/p/wnusjAPW1g" target="_new">Run it on play.golang.org</a></p>
+
+<h3 id="code-summary:efe161ef779bd2b7a6dadc547c487606">Code Summary</h3>
+
+<p>This simple example contains several important points about receiving data from
+multiple channels:</p>
+
+<ul>
+<li>Select blocks until value will be sent through channel (whatever channel in case statement).</li>
+<li>In example above we read data from first channel which receive value (<code>msg2</code>)</li>
+<li>If we want receive from all channels, we should loop through select statement
+as many times as many values we want to read.</li>
+</ul>
+
+<h3 id="want-more:efe161ef779bd2b7a6dadc547c487606">Want More?</h3>
+
+<p>If you like My Go basics series feel free to read more at <a href="/series/go-basics/">Go Basics Series</a></p>
+
+	        </section>
+	    </article>
+	</main>
+
+    <footer class="site-footer">
+	<div class="inner">
+		<section class="footer-social">
+			
+		    <a href="//twitter.com/ex00" target="_blank" title="Twitter"><i class="fa fa-2x fa-fw fa-twitter"></i> <span class="hidden">Twitter</span></a>&nbsp;
+		    
+		    
+		    <a href="//github.com/exu" target="_blank" title="GitHub"><i class="fa fa-2x fa-fw fa-github"></i> <span class="hidden">GitHub</span></a>&nbsp;
+		    
+		    <a href="" target="_blank" title="RSS"><i class="fa fa-2x fa-fw fa-rss"></i> <span class="hidden">RSS</span></a>
+		</section>
+
+		<section class="copyright">&copy; 2015 <a href="http://wysocki.in/">Jacek Wysocki</a>. Released under the MIT license.</section>
+	</div>
+</footer>
+    <script src="http://wysocki.in/js/jquery.min.js"></script>
+<script src="http://wysocki.in/js/index.js"></script>
+<script src="http://wysocki.in/js/smooth-scroll.min.js"></script>
+<script src="http://wysocki.in/js/highlight.min.js"></script>
+
+<script>
+    smoothScroll.init({
+        speed: 800,
+        easing: 'easeInOutCubic',
+        updateURL: false,
+        offset: 125,
+    });
+</script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+<!-- Google Analytics -->
+<script>
+  var _gaq=[['_setAccount','UA-1883783-4'],['_trackPageview']];
+  (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+  g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+  s.parentNode.insertBefore(g,s)}(document,'script'));
+</script>
+
+
+
+</body>
+</html>
