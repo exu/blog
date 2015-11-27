@@ -17,6 +17,13 @@ data structure, they want to do it often in the same period of time which causes
 only one write will happen, or data will be read with invalid value which was not
 updated properly.
 
+## Preconditions
+
+To make sure everything will work for you You will need to run examples below
+on machine with more than 1 core and with GOMAXPROCS set to greater value than
+1 (without that there will be no two or more concurrently working goroutines
+on the same time) - Go > 1.5 sets GOMAXPROCS to number of cores automatically.
+
 ## Exmaple 1 - data race
 
 In below examples We'll implement simple counter struct which will be incrementing
