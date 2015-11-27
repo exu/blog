@@ -29,8 +29,14 @@
 	        <section class="post-content">
 	            {{ .Content }}
 	        </section>
+
+            <section>
+                {{ template "_internal/disqus.html" . }}
+            </section>
 	    </article>
 	</main>
+
+
 
     {{ partial "footer" . }}
     {{ partial "js" . }}
