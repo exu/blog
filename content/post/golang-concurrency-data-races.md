@@ -7,7 +7,9 @@ series = ["Go basics"]
 tags = ["go", "golang", "concurrency", "data-race"]
 +++
 
+<img class="main" src="">
 
+{{< mimg "golang-data-race-1.png">}}
 
 Concurrent programming can be tricky, when you are not carefull enough. When you have
 several concurrent threads (goroutines), and all of them reads or writes data to some
