@@ -17,6 +17,11 @@
       <guid>http://wysocki.in/golang-concurrency-data-races</guid>
       <description>
 
+&lt;p&gt;&lt;img class=&#34;main&#34; src=&#34;&#34;&gt;&lt;/p&gt;
+
+&lt;img class=&#34;main&#34; src=&#34;http://wysocki.in/img/golang-data-race-1.png&#34;&gt;
+
+
 &lt;p&gt;Concurrent programming can be tricky, when you are not carefull enough. When you have
 several concurrent threads (goroutines), and all of them reads or writes data to some
 data structure, they want to do it often in the same period of time which causes that
