@@ -3,8 +3,18 @@
   
   <url>
     <loc>http://wysocki.in/</loc>
-    <lastmod>2015-11-26T15:49:43+01:00</lastmod>
+    <lastmod>2015-11-27T14:00:00+01:00</lastmod>
     <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://wysocki.in/golang-concurrency-data-races</loc>
+    <lastmod>2015-11-27T14:00:00+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://wysocki.in/golang-channels-reading-one-channel-with-multiple-goroutines</loc>
+    <lastmod>2015-11-27T10:49:43+01:00</lastmod>
   </url>
   
   <url>

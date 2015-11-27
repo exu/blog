@@ -6,8 +6,336 @@
     <description>Recent content on Jacek Wysocki DevLog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 26 Nov 2015 15:49:43 +0100</lastBuildDate>
+    <lastBuildDate>Fri, 27 Nov 2015 14:00:00 +0100</lastBuildDate>
     <atom:link href="http://wysocki.in/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Golang concurrency - data races</title>
+      <link>http://wysocki.in/golang-concurrency-data-races</link>
+      <pubDate>Fri, 27 Nov 2015 14:00:00 +0100</pubDate>
+      
+      <guid>http://wysocki.in/golang-concurrency-data-races</guid>
+      <description>
+
+&lt;p&gt;Concurrent programming can be tricky, when you are not carefull enough. When you have
+several concurrent threads (goroutines), and all of them reads or writes data to some
+data structure, they want to do it often in the same period of time which causes that
+only one write will happen, or data will be read with invalid value which was not
+updated properly.&lt;/p&gt;
+
+&lt;h2 id=&#34;exmaple-1-data-race:59379cce1c625dd15951f4c54912cbba&#34;&gt;Exmaple 1 - data race&lt;/h2&gt;
+
+&lt;p&gt;In below examples We&amp;rsquo;ll implement simple counter struct which will be incrementing
+simple integer.&lt;/p&gt;
+
+&lt;p&gt;We&amp;rsquo;ll run &lt;code&gt;100&lt;/code&gt; goroutines, each of them will increment our counter &lt;code&gt;10 000&lt;/code&gt; times
+which gives us &lt;code&gt;1 000 000&lt;/code&gt;, simple enough.&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #f92672&#34;&gt;package&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;main&lt;/span&gt;
+
+&lt;span style=&#34;color: #f92672&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;
+	&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;fmt&amp;quot;&lt;/span&gt;
+	&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;time&amp;quot;&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
+
+&lt;span style=&#34;color: #66d9ef&#34;&gt;type&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;intCounter&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;int64&lt;/span&gt;
+
+&lt;span style=&#34;color: #66d9ef&#34;&gt;func&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;c&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;*&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;intCounter&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;Add&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;x&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;int64&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+	&lt;span style=&#34;color: #f92672&#34;&gt;*&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;c&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;++&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+
+&lt;span style=&#34;color: #66d9ef&#34;&gt;func&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;c&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;*&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;intCounter&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;Value&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;x&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;int64&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+	&lt;span style=&#34;color: #66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;int64(&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;*&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;c&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+
+&lt;span style=&#34;color: #66d9ef&#34;&gt;func&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;main&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+	&lt;span style=&#34;color: #a6e22e&#34;&gt;counter&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;intCounter&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #ae81ff&#34;&gt;0&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
+
+	&lt;span style=&#34;color: #66d9ef&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;i&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;0&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;;&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;i&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;100&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;;&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;i&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;++&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+		&lt;span style=&#34;color: #66d9ef&#34;&gt;go&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;func&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;no&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;int&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+			&lt;span style=&#34;color: #66d9ef&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;i&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;0&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;;&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;i&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;10000&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;;&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;i&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;++&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+				&lt;span style=&#34;color: #a6e22e&#34;&gt;counter&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;Add&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #ae81ff&#34;&gt;1&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
+			&lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+		&lt;span style=&#34;color: #f8f8f2&#34;&gt;}(&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;i&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+
+	&lt;span style=&#34;color: #a6e22e&#34;&gt;time&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;Sleep&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;time&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;Second&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
+	&lt;span style=&#34;color: #a6e22e&#34;&gt;fmt&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;Println&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;counter&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;Value&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;())&lt;/span&gt;
+
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p class=&#34;play-go&#34;&gt;
+    &lt;a class=&#34;btn&#34; href=&#34;http://play.golang.org/p/_iZzudgmc5&#34; target=&#34;_new&#34;&gt;
+        &lt;i class=&#34;fa fa-play-circle-o&#34;&gt;&lt;/i&gt; Run it on play.golang.org
+    &lt;/a&gt;
+&lt;/p&gt;
+
+
+&lt;p&gt;Let&amp;rsquo;s run our example (run it on your &lt;em&gt;local machine&lt;/em&gt;, it looks play.golang.org returns good value):&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;❯ go run counter.go
+248863
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;What&amp;rsquo;s happen? we should have result equals to &lt;code&gt;1 000 000&lt;/code&gt;.
+Whoaaaa! You have your first &lt;strong&gt;data race&lt;/strong&gt;!&lt;/p&gt;
+
+&lt;p&gt;To detect it before running your program simply run it with &lt;code&gt;-race&lt;/code&gt; flag:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;go run -race app.go
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;which gives you result:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;❯ go run -race app.go &amp;gt;&amp;gt; out.txt
+&lt;span style=&#34;color: #f92672&#34;&gt;==================&lt;/span&gt;
+WARNING: DATA RACE
+Read by goroutine 7:
+  main.main.func1&lt;span style=&#34;color: #f92672&#34;&gt;()&lt;/span&gt;
+      /home/exu/src/github.com/exu/go-workshops/101-concurrency-other/app.go:24 +0x42
+
+Previous write by goroutine 6:
+  main.main.func1&lt;span style=&#34;color: #f92672&#34;&gt;()&lt;/span&gt;
+      /home/exu/src/github.com/exu/go-workshops/101-concurrency-other/app.go:24 +0x58
+
+Goroutine &lt;span style=&#34;color: #ae81ff&#34;&gt;7&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;(&lt;/span&gt;running&lt;span style=&#34;color: #f92672&#34;&gt;)&lt;/span&gt; created at:
+  main.main&lt;span style=&#34;color: #f92672&#34;&gt;()&lt;/span&gt;
+      /home/exu/src/github.com/exu/go-workshops/101-concurrency-other/app.go:26 +0x92
+
+Goroutine &lt;span style=&#34;color: #ae81ff&#34;&gt;6&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;(&lt;/span&gt;running&lt;span style=&#34;color: #f92672&#34;&gt;)&lt;/span&gt; created at:
+  main.main&lt;span style=&#34;color: #f92672&#34;&gt;()&lt;/span&gt;
+      /home/exu/src/github.com/exu/go-workshops/101-concurrency-other/app.go:26 +0x92
+&lt;span style=&#34;color: #f92672&#34;&gt;==================&lt;/span&gt;
+Found &lt;span style=&#34;color: #ae81ff&#34;&gt;1&lt;/span&gt; data race&lt;span style=&#34;color: #f92672&#34;&gt;(&lt;/span&gt;s&lt;span style=&#34;color: #f92672&#34;&gt;)&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;exit &lt;/span&gt;status 66
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Yeah! Go can detect your data races automatically, run it when you dealing with go routines. These errors can be really tricky on production, I thinks it could be good idea to attach such tests to your building pipeline.&lt;/p&gt;
+
+&lt;p&gt;Ok, We have data race, what&amp;rsquo;s next? We&amp;rsquo;ll correct it. There is several techniques in Go
+to do it, rule is very simple - synchronize your data!&lt;/p&gt;
+
+&lt;h2 id=&#34;example-2-atomic-counters:59379cce1c625dd15951f4c54912cbba&#34;&gt;Example 2 - Atomic counters&lt;/h2&gt;
+
+&lt;p&gt;First We&amp;rsquo;ll try to correct Our counter with atomic counters, it&amp;rsquo;s included in go core &lt;code&gt;sync/atomic&lt;/code&gt; standard library.&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #f92672&#34;&gt;package&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;main&lt;/span&gt;
+
+&lt;span style=&#34;color: #f92672&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;
+	&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;fmt&amp;quot;&lt;/span&gt;
+	&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;runtime&amp;quot;&lt;/span&gt;
+	&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;sync/atomic&amp;quot;&lt;/span&gt;
+	&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;time&amp;quot;&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
+
+&lt;span style=&#34;color: #66d9ef&#34;&gt;type&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;atomicCounter&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;struct&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+	&lt;span style=&#34;color: #a6e22e&#34;&gt;val&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;int64&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+
+&lt;span style=&#34;color: #66d9ef&#34;&gt;func&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;c&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;*&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;atomicCounter&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;Add&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;x&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;int64&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+	&lt;span style=&#34;color: #a6e22e&#34;&gt;atomic&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;AddInt64&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;&amp;amp;&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;c&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;val&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;x&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
+	&lt;span style=&#34;color: #a6e22e&#34;&gt;runtime&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;Gosched&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;()&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+
+&lt;span style=&#34;color: #66d9ef&#34;&gt;func&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;c&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;*&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;atomicCounter&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;Value&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;int64&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+	&lt;span style=&#34;color: #66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;atomic&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;LoadInt64&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;&amp;amp;&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;c&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;val&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+
+&lt;span style=&#34;color: #66d9ef&#34;&gt;func&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;main&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+	&lt;span style=&#34;color: #a6e22e&#34;&gt;counter&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;atomicCounter&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;{}&lt;/span&gt;
+
+	&lt;span style=&#34;color: #66d9ef&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;i&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;0&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;;&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;i&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;100&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;;&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;i&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;++&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+		&lt;span style=&#34;color: #66d9ef&#34;&gt;go&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;func&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;no&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;int&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+			&lt;span style=&#34;color: #66d9ef&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;i&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;0&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;;&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;i&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;10000&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;;&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;i&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;++&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+				&lt;span style=&#34;color: #a6e22e&#34;&gt;counter&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;Add&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #ae81ff&#34;&gt;1&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
+			&lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+		&lt;span style=&#34;color: #f8f8f2&#34;&gt;}(&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;i&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+
+	&lt;span style=&#34;color: #a6e22e&#34;&gt;time&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;Sleep&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;time&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;Second&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
+	&lt;span style=&#34;color: #a6e22e&#34;&gt;fmt&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;Println&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;counter&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;Value&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;())&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p class=&#34;play-go&#34;&gt;
+    &lt;a class=&#34;btn&#34; href=&#34;http://play.golang.org/p/6Qrd3j-zvs&#34; target=&#34;_new&#34;&gt;
+        &lt;i class=&#34;fa fa-play-circle-o&#34;&gt;&lt;/i&gt; Run it on play.golang.org
+    &lt;/a&gt;
+&lt;/p&gt;
+
+
+&lt;p&gt;In order to ensure that this goroutine doesn’t starve the scheduler, we
+explicitly yield after each operation with &lt;code&gt;runtime.Gosched()&lt;/code&gt;. This
+yielding is handled automatically with e.g. every &lt;code&gt;channel&lt;/code&gt; operation and
+for blocking calls like &lt;code&gt;time.Sleep&lt;/code&gt;, but in this case we need to do it
+manually.&lt;/p&gt;
+
+&lt;p&gt;Now our counter is thread-safe. You can check if data races still exists:
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;$ &lt;/span&gt;go run -race atomic.go
+1000000
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;Whoa!! no data races!!&lt;/p&gt;
+
+&lt;h2 id=&#34;example-3-mutexes:59379cce1c625dd15951f4c54912cbba&#34;&gt;Example 3 - Mutexes&lt;/h2&gt;
+
+&lt;p&gt;Now We&amp;rsquo;ll try to correct Our counter with mutexes, it&amp;rsquo;s included in go core &lt;code&gt;sync&lt;/code&gt; standard library. Using atomic counters and need to run &lt;code&gt;runtime.Gosched&lt;/code&gt; doesn&amp;rsquo;t look nice. For
+Me &lt;code&gt;mutex&lt;/code&gt; looks and feels a lot better.&lt;/p&gt;
+
+&lt;p&gt;Take a look at code written below:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #f92672&#34;&gt;package&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;main&lt;/span&gt;
+
+&lt;span style=&#34;color: #f92672&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;
+	&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;fmt&amp;quot;&lt;/span&gt;
+	&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;sync&amp;quot;&lt;/span&gt;
+	&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;time&amp;quot;&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
+
+&lt;span style=&#34;color: #66d9ef&#34;&gt;type&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;mutexCounter&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;struct&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+	&lt;span style=&#34;color: #a6e22e&#34;&gt;mu&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;sync&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;Mutex&lt;/span&gt;
+	&lt;span style=&#34;color: #a6e22e&#34;&gt;x&lt;/span&gt;  &lt;span style=&#34;color: #66d9ef&#34;&gt;int64&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+
+&lt;span style=&#34;color: #66d9ef&#34;&gt;func&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;c&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;*&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;mutexCounter&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;Add&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;x&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;int64&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+	&lt;span style=&#34;color: #a6e22e&#34;&gt;c&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;mu&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;Lock&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;()&lt;/span&gt;
+	&lt;span style=&#34;color: #a6e22e&#34;&gt;c&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;x&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;+=&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;x&lt;/span&gt;
+	&lt;span style=&#34;color: #a6e22e&#34;&gt;c&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;mu&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;Unlock&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;()&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+
+&lt;span style=&#34;color: #66d9ef&#34;&gt;func&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;c&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;*&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;mutexCounter&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;Value&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;x&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;int64&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+	&lt;span style=&#34;color: #a6e22e&#34;&gt;c&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;mu&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;Lock&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;()&lt;/span&gt;
+	&lt;span style=&#34;color: #a6e22e&#34;&gt;x&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;c&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;x&lt;/span&gt;
+	&lt;span style=&#34;color: #a6e22e&#34;&gt;c&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;mu&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;Unlock&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;()&lt;/span&gt;
+	&lt;span style=&#34;color: #66d9ef&#34;&gt;return&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+
+&lt;span style=&#34;color: #66d9ef&#34;&gt;func&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;main&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+	&lt;span style=&#34;color: #a6e22e&#34;&gt;counter&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;mutexCounter&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;{}&lt;/span&gt;
+
+	&lt;span style=&#34;color: #66d9ef&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;i&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;0&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;;&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;i&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;100&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;;&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;i&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;++&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+		&lt;span style=&#34;color: #66d9ef&#34;&gt;go&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;func&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;no&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;int&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+			&lt;span style=&#34;color: #66d9ef&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;i&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;0&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;;&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;i&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;10000&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;;&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;i&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;++&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+				&lt;span style=&#34;color: #a6e22e&#34;&gt;counter&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;Add&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #ae81ff&#34;&gt;1&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
+			&lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+		&lt;span style=&#34;color: #f8f8f2&#34;&gt;}(&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;i&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+
+	&lt;span style=&#34;color: #a6e22e&#34;&gt;time&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;Sleep&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;time&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;Second&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
+	&lt;span style=&#34;color: #a6e22e&#34;&gt;fmt&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;Println&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;counter&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;Value&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;())&lt;/span&gt;
+
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p class=&#34;play-go&#34;&gt;
+    &lt;a class=&#34;btn&#34; href=&#34;http://play.golang.org/p/zzGE5yByPo&#34; target=&#34;_new&#34;&gt;
+        &lt;i class=&#34;fa fa-play-circle-o&#34;&gt;&lt;/i&gt; Run it on play.golang.org
+    &lt;/a&gt;
+&lt;/p&gt;
+
+
+&lt;p&gt;Again try to check if data race exists:
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;$ &lt;/span&gt;go run -race mutex.go
+1000000
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;Yeah! No data races again!&lt;/p&gt;
+
+&lt;h2 id=&#34;conclusion:59379cce1c625dd15951f4c54912cbba&#34;&gt;Conclusion&lt;/h2&gt;
+
+&lt;p&gt;When doing concurrent programming:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Your program don&amp;rsquo;t work sequentially&lt;/li&gt;
+&lt;li&gt;Be really careful when doing data synchronization between goroutines&lt;/li&gt;
+&lt;li&gt;Use channels, mutexes, atomic counters&lt;/li&gt;
+&lt;li&gt;Use included tools in your language, &lt;code&gt;-race&lt;/code&gt; is your friend&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Good exercise can be to try to implement previous counter solutions using &lt;code&gt;channels&lt;/code&gt;.&lt;/p&gt;
+
+&lt;h3 id=&#34;want-more:59379cce1c625dd15951f4c54912cbba&#34;&gt;Want More?&lt;/h3&gt;
+
+&lt;p&gt;If you like My Go basics series feel free to read more at &lt;a href=&#34;http://wysocki.in/series/go-basics/&#34;&gt;Go Basics Series&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Golang channels - Reading one channels with multiple goroutines</title>
+      <link>http://wysocki.in/golang-channels-reading-one-channel-with-multiple-goroutines</link>
+      <pubDate>Fri, 27 Nov 2015 10:49:43 +0100</pubDate>
+      
+      <guid>http://wysocki.in/golang-channels-reading-one-channel-with-multiple-goroutines</guid>
+      <description>
+
+&lt;p&gt;Reading from ticker by multiple goroutines is quite simple. We need iterate
+through it values using &lt;code&gt;range&lt;/code&gt;.&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #f92672&#34;&gt;package&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;main&lt;/span&gt;
+
+&lt;span style=&#34;color: #f92672&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;time&amp;quot;&lt;/span&gt;
+&lt;span style=&#34;color: #f92672&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;fmt&amp;quot;&lt;/span&gt;
+
+&lt;span style=&#34;color: #66d9ef&#34;&gt;func&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;main&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+	&lt;span style=&#34;color: #a6e22e&#34;&gt;ticker&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;time&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;NewTicker&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;time&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;Millisecond&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;500&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
+
+	&lt;span style=&#34;color: #66d9ef&#34;&gt;go&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;func&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+		&lt;span style=&#34;color: #66d9ef&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;t&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;range&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;ticker&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;C&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+			&lt;span style=&#34;color: #a6e22e&#34;&gt;fmt&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;Println&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;Ene&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;t&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
+		&lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;}()&lt;/span&gt;
+
+	&lt;span style=&#34;color: #66d9ef&#34;&gt;go&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;func&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+		&lt;span style=&#34;color: #66d9ef&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;t&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;range&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;ticker&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;C&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+			&lt;span style=&#34;color: #a6e22e&#34;&gt;fmt&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;Println&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;Due&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;t&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
+		&lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;}()&lt;/span&gt;
+
+	&lt;span style=&#34;color: #66d9ef&#34;&gt;go&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;func&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+		&lt;span style=&#34;color: #66d9ef&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;t&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;range&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;ticker&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;C&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+			&lt;span style=&#34;color: #a6e22e&#34;&gt;fmt&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;Println&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;Fake&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;t&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
+		&lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;}()&lt;/span&gt;
+
+	&lt;span style=&#34;color: #a6e22e&#34;&gt;time&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;Sleep&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;time&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;Second&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;4&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
+	&lt;span style=&#34;color: #a6e22e&#34;&gt;ticker&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;Stop&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;()&lt;/span&gt;
+	&lt;span style=&#34;color: #a6e22e&#34;&gt;fmt&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;Println&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;Ticker stopped&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p class=&#34;play-go&#34;&gt;
+    &lt;a class=&#34;btn&#34; href=&#34;http://play.golang.org/p/LQ9eQBOBMs&#34; target=&#34;_new&#34;&gt;
+        &lt;i class=&#34;fa fa-play-circle-o&#34;&gt;&lt;/i&gt; Run it on play.golang.org
+    &lt;/a&gt;
+&lt;/p&gt;
+
+
+&lt;h3 id=&#34;code-summary:59e47daa5e33fcd13297e048bea8411e&#34;&gt;Code Summary&lt;/h3&gt;
+
+&lt;p&gt;There are several important things in this example:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;until we sleep we&amp;rsquo;ve had 3 goroutines, each of them try to read
+from our ticker channel, but only one in given period of time
+can do this,&lt;/li&gt;
+&lt;li&gt;it looks like there is something like queue (this should be confirmed! it&amp;rsquo;s only observation)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;want-more:59e47daa5e33fcd13297e048bea8411e&#34;&gt;Want More?&lt;/h3&gt;
+
+&lt;p&gt;If you like My Go basics series feel free to read more at &lt;a href=&#34;http://wysocki.in/series/go-basics/&#34;&gt;Go Basics Series&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>Golang channels - buffered semaphor</title>
@@ -1807,739 +2135,6 @@ with other in the same excercise
 &lt;li&gt;&lt;a href=&#34;http://wysocki.in/bdd-excercise-1-calc-bdd-in-php-with-phpspec&#34;&gt;PHP and PHPSpec&lt;/a&gt;
 &lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;http://wysocki.in/bdd-excercise-1-calc-bdd-in-javascript-with-mocha/&#34;&gt;Javascript with Mocha&lt;/a&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>(Excercise 1 - Golang) Numbers statistics- Golang and Ginkgo</title>
-      <link>http://wysocki.in/programming/2014/03/21-excercise-1-calc-bdd-in-golang-and-ginkgo/</link>
-      <pubDate>Sun, 16 Mar 2014 00:00:00 +0000</pubDate>
-      
-      <guid>http://wysocki.in/programming/2014/03/21-excercise-1-calc-bdd-in-golang-and-ginkgo/</guid>
-      <description>&lt;img src=&#34;http://wysocki.in/img/go-bdd.png&#34; class=&#34;img-responsive&#34; alt=&#34;&#34;&gt;
-
-&lt;div id=&#34;outline-container-sec-1&#34; class=&#34;outline-2&#34;&gt;
-&lt;h2 id=&#34;sec-1&#34;&gt;Part 1 - Using Golang and Ginkgo&lt;/h2&gt;
-&lt;div class=&#34;outline-text-2&#34; id=&#34;text-1&#34;&gt;
-&lt;p&gt;
-Your task is to process a sequence of integer numbers
-to determine the following statistics:
-&lt;/p&gt;
-
-&lt;ul class=&#34;org-ul&#34;&gt;
-&lt;li&gt;minimum value
-&lt;/li&gt;
-&lt;li&gt;maximum value
-&lt;/li&gt;
-&lt;li&gt;number of elements in the sequence
-&lt;/li&gt;
-&lt;li&gt;average value
-&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;
-For example: &lt;code&gt;[6, 9, 15, -2, 92, 11]&lt;/code&gt;
-&lt;/p&gt;
-
-&lt;ul class=&#34;org-ul&#34;&gt;
-&lt;li&gt;minimum value = -2
-&lt;/li&gt;
-&lt;li&gt;maximum value = 92
-&lt;/li&gt;
-&lt;li&gt;number of elements in the sequence = 6
-&lt;/li&gt;
-&lt;li&gt;average value = 21.833333
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div id=&#34;outline-container-sec-2&#34; class=&#34;outline-2&#34;&gt;
-&lt;h2 id=&#34;sec-2&#34;&gt;Start in Ginkgo&lt;/h2&gt;
-&lt;div class=&#34;outline-text-2&#34; id=&#34;text-2&#34;&gt;
-&lt;/div&gt;&lt;div id=&#34;outline-container-sec-2-1&#34; class=&#34;outline-3&#34;&gt;
-&lt;h3 id=&#34;sec-2-1&#34;&gt;Setup your tools&lt;/h3&gt;
-&lt;div class=&#34;outline-text-3&#34; id=&#34;text-2-1&#34;&gt;
-&lt;p&gt;
-In first excercise we&#39;ll do everything from scratch. First prepare your tools:
-&lt;/p&gt;
-&lt;/div&gt;
-
-&lt;div id=&#34;outline-container-sec-2-1-1&#34; class=&#34;outline-4&#34;&gt;
-&lt;h4 id=&#34;sec-2-1-1&#34;&gt;Project structure&lt;/h4&gt;
-&lt;div class=&#34;outline-text-4&#34; id=&#34;text-2-1-1&#34;&gt;
-&lt;p&gt;
-First create project directory and cwd to it
-and install testing framework.
-&lt;/p&gt;
-
-&lt;div class=&#34;org-src-container&#34;&gt;
-
-&lt;pre class=&#34;src src-sh&#34;&gt;mkdir gobdds
-&lt;span style=&#34;color: #93e0e3;&#34;&gt;cd&lt;/span&gt; gobdds
-
-go get github.com/onsi/ginkgo/ginkgo
-go get github.com/onsi/gomega
-&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;
-I&#39;m using Ginkgo as BDD framework and Gomega as matcher (assert) library
-If You are familiar with Mocha or RSpec then tests written
-in Ginkgo will be similiar.
-&lt;/p&gt;
-
-&lt;p&gt;
-To simplify tests all files will be in the same folder
-(I didin&#39;t check yet how to organize code with this technique).
-&lt;/p&gt;
-
-&lt;div class=&#34;org-src-container&#34;&gt;
-
-&lt;pre class=&#34;src src-txt&#34;&gt;. - your sources
-gobdds_suite_test.go
-stats.go
-stats_test.go
-&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;
-If you check &lt;a href=&#34;http://wysocki.in/bdd-excercise-1-calc-bdd-in-php-with-phpspec&#34;&gt;PHP&lt;/a&gt; or &lt;a href=&#34;http://wysocki.in/bdd-excercise-1-calc-bdd-in-javascript-with-mocha&#34;&gt;JS&lt;/a&gt; sources with the same excercise you can
-realize that naming (calc &lt;code&gt;=&lt;/code&gt; stats etc) is little odd it&#39;s because I don&#39;t have
-enough time to polish these things up, sorry.
-&lt;/p&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div id=&#34;outline-container-sec-2-2&#34; class=&#34;outline-3&#34;&gt;
-&lt;h3 id=&#34;sec-2-2&#34;&gt;Spec your code&lt;/h3&gt;
-&lt;div class=&#34;outline-text-3&#34; id=&#34;text-2-2&#34;&gt;
-&lt;p&gt;
-Now we can write some tests. First we create bootstrap like
-in documentation import bddgo, and bdd framework and matcher
-next we are doing simple describe for each expectation we
-should collect new result.
-&lt;/p&gt;
-
-&lt;p&gt;
-In &lt;code&gt;It&lt;/code&gt; function we&#39;ll define our first &lt;code&gt;min&lt;/code&gt; calculation
-expectations.
-&lt;/p&gt;
-
-&lt;div class=&#34;org-src-container&#34;&gt;
-
-&lt;pre class=&#34;src src-javascript&#34;&gt;&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;package&lt;/span&gt; bddgo_test
-
-&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;import&lt;/span&gt; (
-    . &lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#34;github.com/exu/bddgo&#34;&lt;/span&gt;
-    . &lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#34;github.com/onsi/ginkgo&#34;&lt;/span&gt;
-    . &lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#34;github.com/onsi/gomega&#34;&lt;/span&gt;
-)
-
-&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;var&lt;/span&gt; &lt;span style=&#34;color: #e2b1f4;&#34;&gt;_&lt;/span&gt; = Describe(&lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#34;Stats generator&#34;&lt;/span&gt;, func() {
-
-})
-&lt;/pre&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div id=&#34;outline-container-sec-2-3&#34; class=&#34;outline-3&#34;&gt;
-&lt;h3 id=&#34;sec-2-3&#34;&gt;Our function result:&lt;/h3&gt;
-&lt;div class=&#34;outline-text-3&#34; id=&#34;text-2-3&#34;&gt;
-&lt;p&gt;
-We create &lt;code&gt;collect&lt;/code&gt; method which will return
-object with &lt;code&gt;min&lt;/code&gt;, &lt;code&gt;max&lt;/code&gt;, &lt;code&gt;avg&lt;/code&gt;,
-&lt;code&gt;sum&lt;/code&gt;, &lt;code&gt;count&lt;/code&gt; keys.
-&lt;/p&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-
-&lt;div id=&#34;outline-container-sec-2-4&#34; class=&#34;outline-3&#34;&gt;
-&lt;h3 id=&#34;sec-2-4&#34;&gt;When We have plan, we can start writing specs&lt;/h3&gt;
-&lt;div class=&#34;outline-text-3&#34; id=&#34;text-2-4&#34;&gt;
-&lt;/div&gt;&lt;div id=&#34;outline-container-sec-2-4-1&#34; class=&#34;outline-4&#34;&gt;
-&lt;h4 id=&#34;sec-2-4-1&#34;&gt;Prerequisities (creating matcher)&lt;/h4&gt;
-&lt;div class=&#34;outline-text-4&#34; id=&#34;text-2-4-1&#34;&gt;
-&lt;p&gt;
-Our first task is to calculate minimum value from
-given input.
-&lt;/p&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-
-&lt;div id=&#34;outline-container-sec-2-4-2&#34; class=&#34;outline-4&#34;&gt;
-&lt;h4 id=&#34;sec-2-4-2&#34;&gt;Min specification&lt;/h4&gt;
-&lt;div class=&#34;outline-text-4&#34; id=&#34;text-2-4-2&#34;&gt;
-&lt;p&gt;
-Now We&#39;re ready for specifing. Inside &lt;code&gt;Describe&lt;/code&gt; function
-block insert following code:
-&lt;/p&gt;
-
-&lt;div class=&#34;org-src-container&#34;&gt;
-
-&lt;pre class=&#34;src src-javascript&#34;&gt;&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;var&lt;/span&gt; &lt;span style=&#34;color: #e2b1f4;&#34;&gt;result&lt;/span&gt; map[string]&lt;span style=&#34;color: #9dd7ff;&#34;&gt;int&lt;/span&gt;
-BeforeEach(func() {
-    input := []&lt;span style=&#34;color: #9dd7ff;&#34;&gt;int&lt;/span&gt;{3, 3, 4, 5, 6, 99, -99, 7, 8, 64}
-    result = Collect(input)
-})
-
-It(&lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#34;collects min information&#34;&lt;/span&gt;, func() {
-    Expect(result[&lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#34;min&#34;&lt;/span&gt;]).To(Equal(-99))
-})
-&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;div class=&#34;org-src-container&#34;&gt;
-
-&lt;pre class=&#34;src src-sh&#34;&gt;ginkgo
-&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;
-you can run it with standard &lt;code&gt;go test&lt;/code&gt; command
-&lt;/p&gt;
-
-&lt;p&gt;
-Ginkgo should fail with message:
-&lt;/p&gt;
-&lt;div class=&#34;org-src-container&#34;&gt;
-
-&lt;pre class=&#34;src src-sh&#34;&gt;./stats_test.go:30: undefined: Collect
-&lt;/pre&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-
-&lt;div id=&#34;outline-container-sec-2-4-3&#34; class=&#34;outline-4&#34;&gt;
-&lt;h4 id=&#34;sec-2-4-3&#34;&gt;Other specifications&lt;/h4&gt;
-&lt;div class=&#34;outline-text-4&#34; id=&#34;text-2-4-3&#34;&gt;
-&lt;ol class=&#34;org-ol&#34;&gt;
-&lt;li&gt;With above technique We&#39;ll generate:
-&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;div class=&#34;org-src-container&#34;&gt;
-
-&lt;pre class=&#34;src src-golang&#34;&gt;It(&#34;collects max information&#34;, func() {
-    Expect(result[&#34;max&#34;]).To(Equal(99))
-})
-It(&#34;collects avg information&#34;, func() {
-    Expect(result[&#34;avg&#34;]).To(Equal(10))
-})
-It(&#34;collects len information&#34;, func() {
-    Expect(result[&#34;len&#34;]).To(Equal(10))
-})
-It(&#34;collects sum information&#34;, func() {
-    Expect(result[&#34;sum&#34;]).To(Equal(100))
-})
-&lt;/pre&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div id=&#34;outline-container-sec-2-5&#34; class=&#34;outline-3&#34;&gt;
-&lt;h3 id=&#34;sec-2-5&#34;&gt;Writing code&lt;/h3&gt;
-&lt;div class=&#34;outline-text-3&#34; id=&#34;text-2-5&#34;&gt;
-&lt;p&gt;
-Now our spec is ready - it&#39;ll be our library documentation - we can
-start writing code.
-&lt;/p&gt;
-
-&lt;p&gt;
-&lt;b&gt;Remember&lt;/b&gt; to run &lt;code&gt;ginkgo&lt;/code&gt; after each change.
-&lt;/p&gt;
-&lt;/div&gt;
-
-
-&lt;div id=&#34;outline-container-sec-2-5-1&#34; class=&#34;outline-4&#34;&gt;
-&lt;h4 id=&#34;sec-2-5-1&#34;&gt;Now it&#39;s time to implement minimum calculation from given input&lt;/h4&gt;
-&lt;div class=&#34;outline-text-4&#34; id=&#34;text-2-5-1&#34;&gt;
-&lt;div class=&#34;org-src-container&#34;&gt;
-
-&lt;pre class=&#34;src src-golang&#34;&gt;package bddgo
-
-func Collect(arr []int) map[string]int {
-    out := make(map[string]int)
-    min := arr[0]
-
-    for _, v := range arr {
-        if v &amp;lt; min {
-            min = v
-        }
-    }
-
-    out[&#34;min&#34;] = min
-
-    return out
-}
-&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;
-Run ginkgo, you&#39;ll receive error messages about
-expected and current result.
-&lt;/p&gt;
-
-&lt;div class=&#34;org-src-container&#34;&gt;
-
-&lt;pre class=&#34;src src-sh&#34;&gt;$ ginkgo
-
- collects max information [It]
-  (/home/exu/go/src/github.com/exu/bddgo/stats_test.go:38)
-
-  Expected
-    &amp;lt;int&amp;gt;: 0
-  to equal
-    &amp;lt;int&amp;gt;: 99
-&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;
-It looks like first test passed. Now it&#39;s time to implement rest
-You can do it in little steps one by one, after each
-run &lt;code&gt;ginkgo&lt;/code&gt; to check if you don&#39;t brake something
-in other tests. (You can run it with &lt;code&gt;-watch&lt;/code&gt; - Ginkgo will watch
-your suite and run tests automatically on code change)
-&lt;/p&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div id=&#34;outline-container-sec-2-5-2&#34; class=&#34;outline-4&#34;&gt;
-&lt;h4 id=&#34;sec-2-5-2&#34;&gt;Now it&#39;s time to implement rest of library:&lt;/h4&gt;
-&lt;div class=&#34;outline-text-4&#34; id=&#34;text-2-5-2&#34;&gt;
-&lt;p&gt;
-Whole library looks like this one below:
-&lt;/p&gt;
-
-&lt;div class=&#34;org-src-container&#34;&gt;
-
-&lt;pre class=&#34;src src-golang&#34;&gt;package bddgo
-
-func Collect(arr []int) map[string]int {
-    out := make(map[string]int)
-    min, max, sum, count := arr[0], arr[0], 0, len(arr)
-
-    for _, v := range arr {
-        if v &amp;lt; min {
-            min = v
-        }
-        if v &amp;gt; max {
-            max = v
-        }
-
-        sum += v
-    }
-
-    out[&#34;min&#34;] = min
-    out[&#34;len&#34;] = count
-    out[&#34;avg&#34;] = sum / count
-    out[&#34;max&#34;] = max
-    out[&#34;sum&#34;] = max
-
-    return out
-}
-&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;
-Run
-&lt;/p&gt;
-
-&lt;div class=&#34;org-src-container&#34;&gt;
-
-&lt;pre class=&#34;src src-sh&#34;&gt;&amp;#10095; ginkgo
-
-Running Suite: Bddgo Suite
-==========================
-Random Seed: 1394745662
-Will run 5 of 5 specs
-
-&amp;#8226;&amp;#8226;&amp;#8226;&amp;#8226;&amp;#8226;&amp;#8226;&amp;#8226;&amp;#8226;&amp;#8226;&amp;#8226;&amp;#8226;&amp;#8226;&amp;#8226;&amp;#8226;&amp;#8226;&amp;#8226;&amp;#8226;&amp;#8226;
-Ran 5 of 5 Specs&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt; in&lt;/span&gt; 0.004 seconds
-SUCCESS! -- 5 Passed | 0 Failed | 0 Pending | 0 Skipped PASS
-
-Ginkgo ran&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt; in&lt;/span&gt; 4.06565762s
-Test Suite Passed
-&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;
-Now all tests should go green :D
-&lt;/p&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-
-&lt;div id=&#34;outline-container-sec-2-6&#34; class=&#34;outline-3&#34;&gt;
-&lt;h3 id=&#34;sec-2-6&#34;&gt;Conslusions&lt;/h3&gt;
-&lt;div class=&#34;outline-text-3&#34; id=&#34;text-2-6&#34;&gt;
-&lt;p&gt;
-You can compare Golang and Ginkgo BDD technique
-with other in the same excercise
-&lt;/p&gt;
-
-&lt;ul class=&#34;org-ul&#34;&gt;
-&lt;li&gt;&lt;a href=&#34;http://wysocki.in/bdd-excercise-1-calc-bdd-in-php-with-phpspec&#34;&gt;PHP and PHPSpec&lt;/a&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;http://wysocki.in/bdd-excercise-1-calc-bdd-in-javascript-with-mocha/&#34;&gt;Javascript with Mocha&lt;/a&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>(Excercise 1 - Javascript) Numbers statistics- Javascript with Mocha</title>
-      <link>http://wysocki.in/bdd-excercise-1-calc-bdd-in-javascript-with-mocha</link>
-      <pubDate>Sun, 16 Mar 2014 00:00:00 +0000</pubDate>
-      
-      <guid>http://wysocki.in/bdd-excercise-1-calc-bdd-in-javascript-with-mocha</guid>
-      <description>&lt;img src=&#34;http://wysocki.in/img/js-bdd.png&#34; class=&#34;img-responsive&#34; alt=&#34;&#34;&gt;
-
-&lt;div id=&#34;outline-container-sec-1&#34; class=&#34;outline-2&#34;&gt;
-&lt;h2 id=&#34;sec-1&#34;&gt;Part 1 - Using Javascript with Mocha&lt;/h2&gt;
-&lt;div class=&#34;outline-text-2&#34; id=&#34;text-1&#34;&gt;
-&lt;p&gt;
-Your task is to process a sequence of integer numbers
-to determine the following statistics:
-&lt;/p&gt;
-
-&lt;ul class=&#34;org-ul&#34;&gt;
-&lt;li&gt;minimum value
-&lt;/li&gt;
-&lt;li&gt;maximum value
-&lt;/li&gt;
-&lt;li&gt;number of elements in the sequence
-&lt;/li&gt;
-&lt;li&gt;average value
-&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;
-For example: &lt;code&gt;[6, 9, 15, -2, 92, 11]&lt;/code&gt;
-&lt;/p&gt;
-
-&lt;ul class=&#34;org-ul&#34;&gt;
-&lt;li&gt;minimum value = -2
-&lt;/li&gt;
-&lt;li&gt;maximum value = 92
-&lt;/li&gt;
-&lt;li&gt;number of elements in the sequence = 6
-&lt;/li&gt;
-&lt;li&gt;average value = 21.833333
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div id=&#34;outline-container-sec-2&#34; class=&#34;outline-2&#34;&gt;
-&lt;h2 id=&#34;sec-2&#34;&gt;&lt;span class=&#34;todo TODO&#34;&gt;TODO&lt;/span&gt; Start in Mocha&lt;/h2&gt;
-&lt;div class=&#34;outline-text-2&#34; id=&#34;text-2&#34;&gt;
-&lt;/div&gt;&lt;div id=&#34;outline-container-sec-2-1&#34; class=&#34;outline-3&#34;&gt;
-&lt;h3 id=&#34;sec-2-1&#34;&gt;Setup your tools&lt;/h3&gt;
-&lt;div class=&#34;outline-text-3&#34; id=&#34;text-2-1&#34;&gt;
-&lt;p&gt;
-In first excercise we&#39;ll do everything from scratch. First prepare your tools:
-&lt;/p&gt;
-&lt;/div&gt;
-
-&lt;div id=&#34;outline-container-sec-2-1-1&#34; class=&#34;outline-4&#34;&gt;
-&lt;h4 id=&#34;sec-2-1-1&#34;&gt;Project structure&lt;/h4&gt;
-&lt;div class=&#34;outline-text-4&#34; id=&#34;text-2-1-1&#34;&gt;
-&lt;p&gt;
-First create project directory and cwd to it
-&lt;/p&gt;
-
-&lt;div class=&#34;org-src-container&#34;&gt;
-
-&lt;pre class=&#34;src src-sh&#34;&gt;mkdir jsbdds
-&lt;span style=&#34;color: #93e0e3;&#34;&gt;cd&lt;/span&gt; jsbdds
-
-npm install mocha --save-dev
-npm install should --save-dev
-&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;
-I&#39;m using Should.js as assert library so last
-line above will install it.
-&lt;/p&gt;
-
-
-&lt;p&gt;
-NPM will add Mocha to &lt;code&gt;devDependencies&lt;/code&gt; and install all related packages into node&lt;sub&gt;modules&lt;/sub&gt; directory
-&lt;/p&gt;
-
-&lt;p&gt;
-In examples to simplify project structure we&#39;ll make tests in tests directory
-and code in root directory.
-&lt;/p&gt;
-&lt;div class=&#34;org-src-container&#34;&gt;
-
-&lt;pre class=&#34;src src-txt&#34;&gt;. - your sources
-test/  - your specs
-package.json - your npm package management
-&lt;/pre&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-
-&lt;div id=&#34;outline-container-sec-2-2&#34; class=&#34;outline-3&#34;&gt;
-&lt;h3 id=&#34;sec-2-2&#34;&gt;Spec your code&lt;/h3&gt;
-&lt;div class=&#34;outline-text-3&#34; id=&#34;text-2-2&#34;&gt;
-&lt;p&gt;
-put &lt;code&gt;calc.js&lt;/code&gt; into your project &lt;code&gt;tests/&lt;/code&gt; directory
-&lt;/p&gt;
-
-&lt;p&gt;
-and write some tests
-&lt;/p&gt;
-
-&lt;div class=&#34;org-src-container&#34;&gt;
-
-&lt;pre class=&#34;src src-javascript&#34;&gt;&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;var&lt;/span&gt; &lt;span style=&#34;color: #e2b1f4;&#34;&gt;stat&lt;/span&gt; = require(&lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#39;calc&#39;&lt;/span&gt;);
-&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;var&lt;/span&gt; &lt;span style=&#34;color: #e2b1f4;&#34;&gt;should&lt;/span&gt; = require(&lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#39;should&#39;&lt;/span&gt;);
-
-describe(&lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#39;Stat&#39;&lt;/span&gt;, &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;function&lt;/span&gt; () {
-    &lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#39;use strict&#39;&lt;/span&gt;;
-
-    describe(&lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#39;#collect()&#39;&lt;/span&gt;, &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;function&lt;/span&gt; () {
-        &lt;span style=&#34;color: #5f7f5f;&#34;&gt;// &lt;/span&gt;&lt;span style=&#34;color: #5f7f5f;&#34;&gt;here will be our spec&lt;/span&gt;
-    });
-})
-&lt;/pre&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-
-&lt;div id=&#34;outline-container-sec-3&#34; class=&#34;outline-2&#34;&gt;
-&lt;h2 id=&#34;sec-3&#34;&gt;Write your Spec&lt;/h2&gt;
-&lt;div class=&#34;outline-text-2&#34; id=&#34;text-3&#34;&gt;
-&lt;/div&gt;&lt;div id=&#34;outline-container-sec-3-1&#34; class=&#34;outline-3&#34;&gt;
-&lt;h3 id=&#34;sec-3-1&#34;&gt;Example input data&lt;/h3&gt;
-&lt;div class=&#34;outline-text-3&#34; id=&#34;text-3-1&#34;&gt;
-&lt;p&gt;
-Our example input data which We will be using in our spec methods:
-&lt;/p&gt;
-
-&lt;div class=&#34;org-src-container&#34;&gt;
-
-&lt;pre class=&#34;src src-javascript&#34;&gt;&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;var&lt;/span&gt; &lt;span style=&#34;color: #e2b1f4;&#34;&gt;data&lt;/span&gt; = [3, 3, 4, 5, 6, 99, -99, 7, 8, 64];
-&lt;/pre&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-
-&lt;div id=&#34;outline-container-sec-3-2&#34; class=&#34;outline-3&#34;&gt;
-&lt;h3 id=&#34;sec-3-2&#34;&gt;Our object project:&lt;/h3&gt;
-&lt;div class=&#34;outline-text-3&#34; id=&#34;text-3-2&#34;&gt;
-&lt;p&gt;
-We create &lt;code&gt;collect&lt;/code&gt; method which will return
-object with &lt;code&gt;min&lt;/code&gt;, &lt;code&gt;max&lt;/code&gt;, &lt;code&gt;avg&lt;/code&gt;,
-&lt;code&gt;sum&lt;/code&gt;, &lt;code&gt;count&lt;/code&gt; keys.
-&lt;/p&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-
-&lt;div id=&#34;outline-container-sec-3-3&#34; class=&#34;outline-3&#34;&gt;
-&lt;h3 id=&#34;sec-3-3&#34;&gt;When We have plan, we can start writing specs&lt;/h3&gt;
-&lt;div class=&#34;outline-text-3&#34; id=&#34;text-3-3&#34;&gt;
-&lt;/div&gt;&lt;div id=&#34;outline-container-sec-3-3-1&#34; class=&#34;outline-4&#34;&gt;
-&lt;h4 id=&#34;sec-3-3-1&#34;&gt;Prerequisities (creating matcher)&lt;/h4&gt;
-&lt;div class=&#34;outline-text-4&#34; id=&#34;text-3-3-1&#34;&gt;
-&lt;p&gt;
-Our first task is to calculate minimum value from
-given input.
-&lt;/p&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-
-&lt;div id=&#34;outline-container-sec-3-3-2&#34; class=&#34;outline-4&#34;&gt;
-&lt;h4 id=&#34;sec-3-3-2&#34;&gt;Min specification&lt;/h4&gt;
-&lt;div class=&#34;outline-text-4&#34; id=&#34;text-3-3-2&#34;&gt;
-&lt;p&gt;
-Now We&#39;re ready for specifing.
-&lt;/p&gt;
-
-&lt;div class=&#34;org-src-container&#34;&gt;
-
-&lt;pre class=&#34;src src-javascript&#34;&gt;it(&lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#39;calculates min from given integers&#39;&lt;/span&gt;, &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;function&lt;/span&gt; () {
-    stat.collect(data).min.should.equal(-99);
-});
-&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;div class=&#34;org-src-container&#34;&gt;
-
-&lt;pre class=&#34;src src-sh&#34;&gt;mocha
-&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;
-Mocha should fail with message:
-&lt;/p&gt;
-&lt;div class=&#34;org-src-container&#34;&gt;
-
-&lt;pre class=&#34;src src-sh&#34;&gt;Stat &lt;span style=&#34;color: #5f7f5f;&#34;&gt;#&lt;/span&gt;&lt;span style=&#34;color: #5f7f5f;&#34;&gt;collect() calculates min from given integers:&lt;/span&gt;
-    TypeError: Cannot read property &lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#39;should&#39;&lt;/span&gt; of undefined
-&lt;/pre&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-
-&lt;div id=&#34;outline-container-sec-3-3-3&#34; class=&#34;outline-4&#34;&gt;
-&lt;h4 id=&#34;sec-3-3-3&#34;&gt;Other specifications&lt;/h4&gt;
-&lt;div class=&#34;outline-text-4&#34; id=&#34;text-3-3-3&#34;&gt;
-&lt;ol class=&#34;org-ol&#34;&gt;
-&lt;li&gt;With above technique We&#39;ll generate:
-&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;div class=&#34;org-src-container&#34;&gt;
-
-&lt;pre class=&#34;src src-php&#34;&gt;&lt;span style=&#34;color: #cfcfcf; &#34;&gt;it&lt;/span&gt;(&lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#39;calculates max from given integers&#39;&lt;/span&gt;, &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;function&lt;/span&gt; () {
-    &lt;span style=&#34;color: #d0bf8f; font-weight: bold;&#34;&gt;stat&lt;/span&gt;.&lt;span style=&#34;color: #cfcfcf; &#34;&gt;collect&lt;/span&gt;(&lt;span style=&#34;color: #d0bf8f; font-weight: bold;&#34;&gt;data&lt;/span&gt;).&lt;span style=&#34;color: #d0bf8f; font-weight: bold;&#34;&gt;max&lt;/span&gt;.&lt;span style=&#34;color: #d0bf8f; font-weight: bold;&#34;&gt;should&lt;/span&gt;.&lt;span style=&#34;color: #cfcfcf; background-color: #1f1f1f;&#34;&gt;equal&lt;/span&gt;(&lt;span style=&#34;color: #ff5555;&#34;&gt;99&lt;/span&gt;);
-});
-
-&lt;span style=&#34;color: #cfcfcf; &#34;&gt;it&lt;/span&gt;(&lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#39;calculates avg from given integers&#39;&lt;/span&gt;, &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;function&lt;/span&gt; () {
-    &lt;span style=&#34;color: #d0bf8f; font-weight: bold;&#34;&gt;stat&lt;/span&gt;.&lt;span style=&#34;color: #cfcfcf; &#34;&gt;collect&lt;/span&gt;(&lt;span style=&#34;color: #d0bf8f; font-weight: bold;&#34;&gt;data&lt;/span&gt;).&lt;span style=&#34;color: #d0bf8f; font-weight: bold;&#34;&gt;avg&lt;/span&gt;.&lt;span style=&#34;color: #d0bf8f; font-weight: bold;&#34;&gt;should&lt;/span&gt;.&lt;span style=&#34;color: #cfcfcf; background-color: #1f1f1f;&#34;&gt;equal&lt;/span&gt;(&lt;span style=&#34;color: #ff5555;&#34;&gt;10&lt;/span&gt;);
-});
-
-&lt;span style=&#34;color: #cfcfcf; &#34;&gt;it&lt;/span&gt;(&lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#39;calculates count from given integers&#39;&lt;/span&gt;, &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;function&lt;/span&gt; () {
-    &lt;span style=&#34;color: #d0bf8f; font-weight: bold;&#34;&gt;stat&lt;/span&gt;.&lt;span style=&#34;color: #cfcfcf; &#34;&gt;collect&lt;/span&gt;(&lt;span style=&#34;color: #d0bf8f; font-weight: bold;&#34;&gt;data&lt;/span&gt;).&lt;span style=&#34;color: #d0bf8f; font-weight: bold;&#34;&gt;count&lt;/span&gt;.&lt;span style=&#34;color: #d0bf8f; font-weight: bold;&#34;&gt;should&lt;/span&gt;.&lt;span style=&#34;color: #cfcfcf; background-color: #1f1f1f;&#34;&gt;equal&lt;/span&gt;(&lt;span style=&#34;color: #ff5555;&#34;&gt;10&lt;/span&gt;);
-});
-
-&lt;span style=&#34;color: #cfcfcf; &#34;&gt;it&lt;/span&gt;(&lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#39;calculates sum from given integers&#39;&lt;/span&gt;, &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;function&lt;/span&gt; () {
-    &lt;span style=&#34;color: #d0bf8f; font-weight: bold;&#34;&gt;stat&lt;/span&gt;.&lt;span style=&#34;color: #cfcfcf; &#34;&gt;collect&lt;/span&gt;(&lt;span style=&#34;color: #d0bf8f; font-weight: bold;&#34;&gt;data&lt;/span&gt;).&lt;span style=&#34;color: #d0bf8f; font-weight: bold;&#34;&gt;sum&lt;/span&gt;.&lt;span style=&#34;color: #d0bf8f; font-weight: bold;&#34;&gt;should&lt;/span&gt;.&lt;span style=&#34;color: #cfcfcf; background-color: #1f1f1f;&#34;&gt;equal&lt;/span&gt;(&lt;span style=&#34;color: #ff5555;&#34;&gt;100&lt;/span&gt;);
-});
-&lt;/pre&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div id=&#34;outline-container-sec-3-4&#34; class=&#34;outline-3&#34;&gt;
-&lt;h3 id=&#34;sec-3-4&#34;&gt;Writing code&lt;/h3&gt;
-&lt;div class=&#34;outline-text-3&#34; id=&#34;text-3-4&#34;&gt;
-&lt;p&gt;
-Now our spec is ready - it&#39;ll be our library documentation - we can
-start writing code.
-&lt;/p&gt;
-
-&lt;p&gt;
-&lt;b&gt;Remember&lt;/b&gt; to run &lt;code&gt;mocha&lt;/code&gt; after each change.
-&lt;/p&gt;
-&lt;/div&gt;
-
-
-&lt;div id=&#34;outline-container-sec-3-4-1&#34; class=&#34;outline-4&#34;&gt;
-&lt;h4 id=&#34;sec-3-4-1&#34;&gt;Now it&#39;s time to implement minimum calculation from given input&lt;/h4&gt;
-&lt;div class=&#34;outline-text-4&#34; id=&#34;text-3-4-1&#34;&gt;
-&lt;div class=&#34;org-src-container&#34;&gt;
-
-&lt;pre class=&#34;src src-php&#34;&gt;&lt;span style=&#34;color: #d0bf8f; font-weight: bold;&#34;&gt;module&lt;/span&gt;.&lt;span style=&#34;color: #d0bf8f; font-weight: bold;&#34;&gt;exports&lt;/span&gt; = {
-    &lt;span style=&#34;color: #d0bf8f; font-weight: bold;&#34;&gt;collect&lt;/span&gt; : &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;function&lt;/span&gt; (&lt;span style=&#34;color: #d0bf8f; font-weight: bold;&#34;&gt;arr&lt;/span&gt;) {
-        &lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#39;use strict&#39;&lt;/span&gt;;
-
-        &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;return&lt;/span&gt; {
-            &lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#39;min&#39;&lt;/span&gt; : &lt;span style=&#34;color: #d0bf8f; font-weight: bold;&#34;&gt;Math&lt;/span&gt;.&lt;span style=&#34;color: #d0bf8f; font-weight: bold;&#34;&gt;min&lt;/span&gt;.&lt;span style=&#34;color: #cfcfcf; &#34;&gt;apply&lt;/span&gt;(&lt;span style=&#34;color: #b0deff;&#34;&gt;null&lt;/span&gt;, &lt;span style=&#34;color: #d0bf8f; font-weight: bold;&#34;&gt;arr&lt;/span&gt;),
-        };
-    }
-};
-&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;
-Run mocha
-&lt;/p&gt;
-
-&lt;div class=&#34;org-src-container&#34;&gt;
-
-&lt;pre class=&#34;src src-sh&#34;&gt;$ mocha
-
-  &amp;#8228;&amp;#8228;&amp;#8228;&amp;#8228;&amp;#8228;
-
-  1 passing (26ms)
-  4 failing
-
-... undefined messages ...
-&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;
-Wow horray! First test passed. Now it&#39;s time to implement rest
-You can do it in little steps one by one, after each
-run &lt;code&gt;mocha&lt;/code&gt; to check if you don&#39;t brake something
-in other tests.
-&lt;/p&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-
-
-&lt;div id=&#34;outline-container-sec-3-4-2&#34; class=&#34;outline-4&#34;&gt;
-&lt;h4 id=&#34;sec-3-4-2&#34;&gt;Whole library looks like this one below:&lt;/h4&gt;
-&lt;div class=&#34;outline-text-4&#34; id=&#34;text-3-4-2&#34;&gt;
-&lt;div class=&#34;org-src-container&#34;&gt;
-
-&lt;pre class=&#34;src src-javascript&#34;&gt;module.exports = {
-    &lt;span style=&#34;color: #a2d7fb;&#34;&gt;collect&lt;/span&gt; : &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;function&lt;/span&gt; (&lt;span style=&#34;color: #e2b1f4;&#34;&gt;arr&lt;/span&gt;) {
-        &lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#39;use strict&#39;&lt;/span&gt;;
-
-        &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;var&lt;/span&gt; &lt;span style=&#34;color: #e2b1f4;&#34;&gt;sum&lt;/span&gt; = arr.reduce(&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;function&lt;/span&gt; (&lt;span style=&#34;color: #e2b1f4;&#34;&gt;pv&lt;/span&gt;, &lt;span style=&#34;color: #e2b1f4;&#34;&gt;cv&lt;/span&gt;) { &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;return&lt;/span&gt; pv + cv; }, 0);
-        &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;var&lt;/span&gt; &lt;span style=&#34;color: #e2b1f4;&#34;&gt;length&lt;/span&gt; = arr.length;
-
-        &lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;return&lt;/span&gt; {
-            &lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#39;min&#39;&lt;/span&gt; : Math.min.apply(&lt;span style=&#34;color: #b0deff;&#34;&gt;null&lt;/span&gt;, arr),
-            &lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#39;max&#39;&lt;/span&gt;: Math.max.apply(&lt;span style=&#34;color: #b0deff;&#34;&gt;null&lt;/span&gt;, arr),
-            &lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#39;avg&#39;&lt;/span&gt;: sum / length,
-            &lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#39;count&#39;&lt;/span&gt;: length,
-            &lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#39;sum&#39;&lt;/span&gt;: sum
-        };
-    }
-};
-&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;
-Run
-&lt;/p&gt;
-
-&lt;div class=&#34;org-src-container&#34;&gt;
-
-&lt;pre class=&#34;src src-sh&#34;&gt;&amp;#10095; mocha test/calc.js
-
-  &amp;#8228;&amp;#8228;&amp;#8228;&amp;#8228;&amp;#8228;
-
-  5 passing (29ms)
-&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;
-Now all tests should go green :D
-&lt;/p&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-
-&lt;div id=&#34;outline-container-sec-3-5&#34; class=&#34;outline-3&#34;&gt;
-&lt;h3 id=&#34;sec-3-5&#34;&gt;Conslusions&lt;/h3&gt;
-&lt;div class=&#34;outline-text-3&#34; id=&#34;text-3-5&#34;&gt;
-&lt;p&gt;
-You can compare Javascript with Mocha technique
-with other in the same excercise
-&lt;/p&gt;
-
-&lt;ul class=&#34;org-ul&#34;&gt;
-&lt;li&gt;&lt;a href=&#34;http://wysocki.in/bdd-excercise-1-calc-bdd-in-php-with-phpspec&#34;&gt;PHP and PHPSpec&lt;/a&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;http://wysocki.in/bdd-excercise-1-calc-bdd-in-golang-and-ginkgo&#34;&gt;Golang and Ginkgo&lt;/a&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;/div&gt;
