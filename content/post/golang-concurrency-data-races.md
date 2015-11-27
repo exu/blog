@@ -20,9 +20,9 @@ updated properly.
 ## Preconditions
 
 To make sure everything will work for you You will need to run examples below
-on machine with more than 1 core and with GOMAXPROCS set to greater value than
+on machine with more than 1 core and with `GOMAXPROCS` set to greater value than
 1 (without that there will be no two or more concurrently working goroutines
-on the same time) - Go > 1.5 sets GOMAXPROCS to number of cores automatically.
+on the same time) - Go > 1.5 sets `GOMAXPROCS` to number of cores automatically.
 
 ## Exmaple 1 - data race
 
@@ -70,7 +70,7 @@ func main() {
 
 {{< play "_iZzudgmc5" >}}
 
-Let's run our example (run it on your *local machine*, it looks play.golang.org returns good value):
+Let's run our example (run it on your *local machine*, play.golang.org returns good value because it has set `GOMAXPROCS` to `1`):
 
 {{< highlight sh >}}
 ❯ go run counter.go
