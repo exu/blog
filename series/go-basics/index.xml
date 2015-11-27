@@ -31,9 +31,9 @@ updated properly.&lt;/p&gt;
 &lt;h2 id=&#34;preconditions:59379cce1c625dd15951f4c54912cbba&#34;&gt;Preconditions&lt;/h2&gt;
 
 &lt;p&gt;To make sure everything will work for you You will need to run examples below
-on machine with more than 1 core and with GOMAXPROCS set to greater value than
+on machine with more than 1 core and with &lt;code&gt;GOMAXPROCS&lt;/code&gt; set to greater value than
 1 (without that there will be no two or more concurrently working goroutines
-on the same time) - Go &amp;gt; 1.5 sets GOMAXPROCS to number of cores automatically.&lt;/p&gt;
+on the same time) - Go &amp;gt; 1.5 sets &lt;code&gt;GOMAXPROCS&lt;/code&gt; to number of cores automatically.&lt;/p&gt;
 
 &lt;h2 id=&#34;exmaple-1-data-race:59379cce1c625dd15951f4c54912cbba&#34;&gt;Exmaple 1 - data race&lt;/h2&gt;
 
@@ -85,7 +85,7 @@ which gives us &lt;code&gt;1 000 000&lt;/code&gt;, simple enough.&lt;/p&gt;
 &lt;/p&gt;
 
 
-&lt;p&gt;Let&amp;rsquo;s run our example (run it on your &lt;em&gt;local machine&lt;/em&gt;, it looks play.golang.org returns good value):&lt;/p&gt;
+&lt;p&gt;Let&amp;rsquo;s run our example (run it on your &lt;em&gt;local machine&lt;/em&gt;, play.golang.org returns good value because it has set &lt;code&gt;GOMAXPROCS&lt;/code&gt; to &lt;code&gt;1&lt;/code&gt;):&lt;/p&gt;
 
 &lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;❯ go run counter.go
 248863

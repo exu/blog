@@ -111,9 +111,9 @@ updated properly.</p>
 <h2 id="preconditions:59379cce1c625dd15951f4c54912cbba">Preconditions</h2>
 
 <p>To make sure everything will work for you You will need to run examples below
-on machine with more than 1 core and with GOMAXPROCS set to greater value than
+on machine with more than 1 core and with <code>GOMAXPROCS</code> set to greater value than
 1 (without that there will be no two or more concurrently working goroutines
-on the same time) - Go &gt; 1.5 sets GOMAXPROCS to number of cores automatically.</p>
+on the same time) - Go &gt; 1.5 sets <code>GOMAXPROCS</code> to number of cores automatically.</p>
 
 <h2 id="exmaple-1-data-race:59379cce1c625dd15951f4c54912cbba">Exmaple 1 - data race</h2>
 
@@ -165,7 +165,7 @@ which gives us <code>1 000 000</code>, simple enough.</p>
 </p>
 
 
-<p>Let&rsquo;s run our example (run it on your <em>local machine</em>, it looks play.golang.org returns good value):</p>
+<p>Let&rsquo;s run our example (run it on your <em>local machine</em>, play.golang.org returns good value because it has set <code>GOMAXPROCS</code> to <code>1</code>):</p>
 
 <div class="highlight" style="background: #272822"><pre style="line-height: 125%">❯ go run counter.go
 248863
