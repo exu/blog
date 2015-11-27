@@ -28,6 +28,13 @@ data structure, they want to do it often in the same period of time which causes
 only one write will happen, or data will be read with invalid value which was not
 updated properly.&lt;/p&gt;
 
+&lt;h2 id=&#34;preconditions:59379cce1c625dd15951f4c54912cbba&#34;&gt;Preconditions&lt;/h2&gt;
+
+&lt;p&gt;To make sure everything will work for you You will need to run examples below
+on machine with more than 1 core and with GOMAXPROCS set to greater value than
+1 (without that there will be no two or more concurrently working goroutines
+on the same time) - Go &amp;gt; 1.5 sets GOMAXPROCS to number of cores automatically.&lt;/p&gt;
+
 &lt;h2 id=&#34;exmaple-1-data-race:59379cce1c625dd15951f4c54912cbba&#34;&gt;Exmaple 1 - data race&lt;/h2&gt;
 
 &lt;p&gt;In below examples We&amp;rsquo;ll implement simple counter struct which will be incrementing
