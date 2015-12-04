@@ -9,11 +9,9 @@ category: database
 
 ## by Email
 
-- mailto:
-
 <script>
 var a = ('jacek.wysocki' + '+blog@' + 'gmail.com')
-document.write('<a href="mailto:' + a + '">' + a + '</a>')
+document.write('<li>mailto: <a href="mailto:' + a + '">' + a + '</a></li>')
 </script>
 
 <NOSCRIPT>
