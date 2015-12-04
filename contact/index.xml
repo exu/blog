@@ -19,13 +19,9 @@
 
 &lt;h2 id=&#34;by-email:d680e8a854a7cbad6d490c445cba2eba&#34;&gt;by Email&lt;/h2&gt;
 
-&lt;ul&gt;
-&lt;li&gt;mailto:&lt;/li&gt;
-&lt;/ul&gt;
-
 &lt;script&gt;
 var a = (&#39;jacek.wysocki&#39; + &#39;+blog@&#39; + &#39;gmail.com&#39;)
-document.write(&#39;&lt;a href=&#34;mailto:&#39; + a + &#39;&#34;&gt;&#39; + a + &#39;&lt;/a&gt;&#39;)
+document.write(&#39;&lt;li&gt;mailto: &lt;a href=&#34;mailto:&#39; + a + &#39;&#34;&gt;&#39; + a + &#39;&lt;/a&gt;&lt;/li&gt;&#39;)
 &lt;/script&gt;
 
 &lt;p&gt;&lt;NOSCRIPT&gt;
