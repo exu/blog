@@ -6,8 +6,51 @@
     <description>Recent content in Go Basics on Jacek Wysocki DevLog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 27 Nov 2015 14:00:00 +0100</lastBuildDate>
+    <lastBuildDate>Mon, 07 Dec 2015 16:38:41 +0100</lastBuildDate>
     <atom:link href="http://wysocki.in/series/go-basics/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Zen of go - Go pro-verbs</title>
+      <link>http://wysocki.in/golang</link>
+      <pubDate>Mon, 07 Dec 2015 16:38:41 +0100</pubDate>
+      
+      <guid>http://wysocki.in/golang</guid>
+      <description>
+
+&lt;p&gt;&lt;img src=&#34;http://wysocki.in/img/gopher-with-sword.png&#34;&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;simple-poetic-pithy:5f912d2dcb2d0ac5e9422d2b9a2522e3&#34;&gt;Simple, Poetic, Pithy&lt;/h2&gt;
+
+&lt;p&gt;Python has his PEP20 - Zen Of Python which are very nice IMO. Now Go community have similar Go Proverbs
+thanks to &lt;a href=&#34;https://twitter.com/rob_pike&#34;&gt;Rob Pike&lt;/a&gt;!!&lt;/p&gt;
+
+&lt;p&gt;They are several key points in context of Go programming:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Don&amp;rsquo;t communicate by sharing memory, share memory by communicating.&lt;/li&gt;
+&lt;li&gt;Concurrency is not parallelism.&lt;/li&gt;
+&lt;li&gt;Channels orchestrate; mutexes serialize.&lt;/li&gt;
+&lt;li&gt;The bigger the interface, the weaker the abstraction.&lt;/li&gt;
+&lt;li&gt;Make the zero value useful.&lt;/li&gt;
+&lt;li&gt;interface{} says nothing.&lt;/li&gt;
+&lt;li&gt;Gofmt&amp;rsquo;s style is no one&amp;rsquo;s favorite, yet gofmt is everyone&amp;rsquo;s favorite.&lt;/li&gt;
+&lt;li&gt;A little copying is better than a little dependency.&lt;/li&gt;
+&lt;li&gt;Syscall must always be guarded with build tags.&lt;/li&gt;
+&lt;li&gt;Cgo must always be guarded with build tags.&lt;/li&gt;
+&lt;li&gt;Cgo is not Go.&lt;/li&gt;
+&lt;li&gt;With the unsafe package there are no guarantees.&lt;/li&gt;
+&lt;li&gt;Clear is better than clever.&lt;/li&gt;
+&lt;li&gt;Reflection is never clear.&lt;/li&gt;
+&lt;li&gt;Errors are values.&lt;/li&gt;
+&lt;li&gt;Don&amp;rsquo;t just check errors, handle them gracefully.&lt;/li&gt;
+&lt;li&gt;Design the architecture, name the components, document the details.&lt;/li&gt;
+&lt;li&gt;Documentation is for users.&lt;/li&gt;
+&lt;li&gt;Don&amp;rsquo;t panic.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;There could be more in future. Original page: &lt;a href=&#34;http://go-proverbs.github.io/&#34;&gt;http://go-proverbs.github.io/&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>Golang concurrency - data races</title>

@@ -6,8 +6,51 @@
     <description>Recent content on Jacek Wysocki DevLog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 27 Nov 2015 14:00:00 +0100</lastBuildDate>
+    <lastBuildDate>Mon, 07 Dec 2015 16:38:41 +0100</lastBuildDate>
     <atom:link href="http://wysocki.in/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Zen of go - Go pro-verbs</title>
+      <link>http://wysocki.in/golang</link>
+      <pubDate>Mon, 07 Dec 2015 16:38:41 +0100</pubDate>
+      
+      <guid>http://wysocki.in/golang</guid>
+      <description>
+
+&lt;p&gt;&lt;img src=&#34;http://wysocki.in/img/gopher-with-sword.png&#34;&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;simple-poetic-pithy:5f912d2dcb2d0ac5e9422d2b9a2522e3&#34;&gt;Simple, Poetic, Pithy&lt;/h2&gt;
+
+&lt;p&gt;Python has his PEP20 - Zen Of Python which are very nice IMO. Now Go community have similar Go Proverbs
+thanks to &lt;a href=&#34;https://twitter.com/rob_pike&#34;&gt;Rob Pike&lt;/a&gt;!!&lt;/p&gt;
+
+&lt;p&gt;They are several key points in context of Go programming:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Don&amp;rsquo;t communicate by sharing memory, share memory by communicating.&lt;/li&gt;
+&lt;li&gt;Concurrency is not parallelism.&lt;/li&gt;
+&lt;li&gt;Channels orchestrate; mutexes serialize.&lt;/li&gt;
+&lt;li&gt;The bigger the interface, the weaker the abstraction.&lt;/li&gt;
+&lt;li&gt;Make the zero value useful.&lt;/li&gt;
+&lt;li&gt;interface{} says nothing.&lt;/li&gt;
+&lt;li&gt;Gofmt&amp;rsquo;s style is no one&amp;rsquo;s favorite, yet gofmt is everyone&amp;rsquo;s favorite.&lt;/li&gt;
+&lt;li&gt;A little copying is better than a little dependency.&lt;/li&gt;
+&lt;li&gt;Syscall must always be guarded with build tags.&lt;/li&gt;
+&lt;li&gt;Cgo must always be guarded with build tags.&lt;/li&gt;
+&lt;li&gt;Cgo is not Go.&lt;/li&gt;
+&lt;li&gt;With the unsafe package there are no guarantees.&lt;/li&gt;
+&lt;li&gt;Clear is better than clever.&lt;/li&gt;
+&lt;li&gt;Reflection is never clear.&lt;/li&gt;
+&lt;li&gt;Errors are values.&lt;/li&gt;
+&lt;li&gt;Don&amp;rsquo;t just check errors, handle them gracefully.&lt;/li&gt;
+&lt;li&gt;Design the architecture, name the components, document the details.&lt;/li&gt;
+&lt;li&gt;Documentation is for users.&lt;/li&gt;
+&lt;li&gt;Don&amp;rsquo;t panic.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;There could be more in future. Original page: &lt;a href=&#34;http://go-proverbs.github.io/&#34;&gt;http://go-proverbs.github.io/&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>Golang concurrency - data races</title>
@@ -1767,385 +1810,6 @@ I want to add that it&#39;s included in emacs core (no plugins required)
 &lt;/p&gt;
 
 &lt;img src=&#34;http://wysocki.in/img/m-x-butterfly-emacs.gif&#34; class=&#34;img-responsive&#34; alt=&#34;M-x butterfly Emacs command animation&#34;&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>(Excercise 1 - Golang) Numbers statistics- Golang and Ginkgo</title>
-      <link>http://wysocki.in/bdd-excercise-1-calc-bdd-in-golang-and-ginkgo</link>
-      <pubDate>Sun, 16 Mar 2014 00:00:00 +0000</pubDate>
-      
-      <guid>http://wysocki.in/bdd-excercise-1-calc-bdd-in-golang-and-ginkgo</guid>
-      <description>&lt;img src=&#34;http://wysocki.in/img/go-bdd.png&#34; class=&#34;img-responsive&#34; alt=&#34;&#34;&gt;
-
-&lt;div id=&#34;outline-container-sec-1&#34; class=&#34;outline-2&#34;&gt;
-&lt;h2 id=&#34;sec-1&#34;&gt;Part 1 - Using Golang and Ginkgo&lt;/h2&gt;
-&lt;div class=&#34;outline-text-2&#34; id=&#34;text-1&#34;&gt;
-&lt;p&gt;
-Your task is to process a sequence of integer numbers
-to determine the following statistics:
-&lt;/p&gt;
-
-&lt;ul class=&#34;org-ul&#34;&gt;
-&lt;li&gt;minimum value
-&lt;/li&gt;
-&lt;li&gt;maximum value
-&lt;/li&gt;
-&lt;li&gt;number of elements in the sequence
-&lt;/li&gt;
-&lt;li&gt;average value
-&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;
-For example: &lt;code&gt;[6, 9, 15, -2, 92, 11]&lt;/code&gt;
-&lt;/p&gt;
-
-&lt;ul class=&#34;org-ul&#34;&gt;
-&lt;li&gt;minimum value = -2
-&lt;/li&gt;
-&lt;li&gt;maximum value = 92
-&lt;/li&gt;
-&lt;li&gt;number of elements in the sequence = 6
-&lt;/li&gt;
-&lt;li&gt;average value = 21.833333
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div id=&#34;outline-container-sec-2&#34; class=&#34;outline-2&#34;&gt;
-&lt;h2 id=&#34;sec-2&#34;&gt;Start in Ginkgo&lt;/h2&gt;
-&lt;div class=&#34;outline-text-2&#34; id=&#34;text-2&#34;&gt;
-&lt;/div&gt;&lt;div id=&#34;outline-container-sec-2-1&#34; class=&#34;outline-3&#34;&gt;
-&lt;h3 id=&#34;sec-2-1&#34;&gt;Setup your tools&lt;/h3&gt;
-&lt;div class=&#34;outline-text-3&#34; id=&#34;text-2-1&#34;&gt;
-&lt;p&gt;
-In first excercise we&#39;ll do everything from scratch. First prepare your tools:
-&lt;/p&gt;
-&lt;/div&gt;
-
-&lt;div id=&#34;outline-container-sec-2-1-1&#34; class=&#34;outline-4&#34;&gt;
-&lt;h4 id=&#34;sec-2-1-1&#34;&gt;Project structure&lt;/h4&gt;
-&lt;div class=&#34;outline-text-4&#34; id=&#34;text-2-1-1&#34;&gt;
-&lt;p&gt;
-First create project directory and cwd to it
-and install testing framework.
-&lt;/p&gt;
-
-&lt;div class=&#34;org-src-container&#34;&gt;
-
-&lt;pre class=&#34;src src-sh&#34;&gt;mkdir gobdds
-&lt;span style=&#34;color: #93e0e3;&#34;&gt;cd&lt;/span&gt; gobdds
-
-go get github.com/onsi/ginkgo/ginkgo
-go get github.com/onsi/gomega
-&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;
-I&#39;m using Ginkgo as BDD framework and Gomega as matcher (assert) library
-If You are familiar with Mocha or RSpec then tests written
-in Ginkgo will be similiar.
-&lt;/p&gt;
-
-&lt;p&gt;
-To simplify tests all files will be in the same folder
-(I didin&#39;t check yet how to organize code with this technique).
-&lt;/p&gt;
-
-&lt;div class=&#34;org-src-container&#34;&gt;
-
-&lt;pre class=&#34;src src-txt&#34;&gt;. - your sources
-gobdds_suite_test.go
-stats.go
-stats_test.go
-&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;
-If you check &lt;a href=&#34;http://wysocki.in/bdd-excercise-1-calc-bdd-in-php-with-phpspec&#34;&gt;PHP&lt;/a&gt; or &lt;a href=&#34;http://wysocki.in/bdd-excercise-1-calc-bdd-in-javascript-with-mocha&#34;&gt;JS&lt;/a&gt; sources with the same excercise you can
-realize that naming (calc &lt;code&gt;=&lt;/code&gt; stats etc) is little odd it&#39;s because I don&#39;t have
-enough time to polish these things up, sorry.
-&lt;/p&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div id=&#34;outline-container-sec-2-2&#34; class=&#34;outline-3&#34;&gt;
-&lt;h3 id=&#34;sec-2-2&#34;&gt;Spec your code&lt;/h3&gt;
-&lt;div class=&#34;outline-text-3&#34; id=&#34;text-2-2&#34;&gt;
-&lt;p&gt;
-Now we can write some tests. First we create bootstrap like
-in documentation import bddgo, and bdd framework and matcher
-next we are doing simple describe for each expectation we
-should collect new result.
-&lt;/p&gt;
-
-&lt;p&gt;
-In &lt;code&gt;It&lt;/code&gt; function we&#39;ll define our first &lt;code&gt;min&lt;/code&gt; calculation
-expectations.
-&lt;/p&gt;
-
-&lt;div class=&#34;org-src-container&#34;&gt;
-
-&lt;pre class=&#34;src src-javascript&#34;&gt;&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;package&lt;/span&gt; bddgo_test
-
-&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;import&lt;/span&gt; (
-    . &lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#34;github.com/exu/bddgo&#34;&lt;/span&gt;
-    . &lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#34;github.com/onsi/ginkgo&#34;&lt;/span&gt;
-    . &lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#34;github.com/onsi/gomega&#34;&lt;/span&gt;
-)
-
-&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;var&lt;/span&gt; &lt;span style=&#34;color: #e2b1f4;&#34;&gt;_&lt;/span&gt; = Describe(&lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#34;Stats generator&#34;&lt;/span&gt;, func() {
-
-})
-&lt;/pre&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div id=&#34;outline-container-sec-2-3&#34; class=&#34;outline-3&#34;&gt;
-&lt;h3 id=&#34;sec-2-3&#34;&gt;Our function result:&lt;/h3&gt;
-&lt;div class=&#34;outline-text-3&#34; id=&#34;text-2-3&#34;&gt;
-&lt;p&gt;
-We create &lt;code&gt;collect&lt;/code&gt; method which will return
-object with &lt;code&gt;min&lt;/code&gt;, &lt;code&gt;max&lt;/code&gt;, &lt;code&gt;avg&lt;/code&gt;,
-&lt;code&gt;sum&lt;/code&gt;, &lt;code&gt;count&lt;/code&gt; keys.
-&lt;/p&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-
-&lt;div id=&#34;outline-container-sec-2-4&#34; class=&#34;outline-3&#34;&gt;
-&lt;h3 id=&#34;sec-2-4&#34;&gt;When We have plan, we can start writing specs&lt;/h3&gt;
-&lt;div class=&#34;outline-text-3&#34; id=&#34;text-2-4&#34;&gt;
-&lt;/div&gt;&lt;div id=&#34;outline-container-sec-2-4-1&#34; class=&#34;outline-4&#34;&gt;
-&lt;h4 id=&#34;sec-2-4-1&#34;&gt;Prerequisities (creating matcher)&lt;/h4&gt;
-&lt;div class=&#34;outline-text-4&#34; id=&#34;text-2-4-1&#34;&gt;
-&lt;p&gt;
-Our first task is to calculate minimum value from
-given input.
-&lt;/p&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-
-&lt;div id=&#34;outline-container-sec-2-4-2&#34; class=&#34;outline-4&#34;&gt;
-&lt;h4 id=&#34;sec-2-4-2&#34;&gt;Min specification&lt;/h4&gt;
-&lt;div class=&#34;outline-text-4&#34; id=&#34;text-2-4-2&#34;&gt;
-&lt;p&gt;
-Now We&#39;re ready for specifing. Inside &lt;code&gt;Describe&lt;/code&gt; function
-block insert following code:
-&lt;/p&gt;
-
-&lt;div class=&#34;org-src-container&#34;&gt;
-
-&lt;pre class=&#34;src src-javascript&#34;&gt;&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt;var&lt;/span&gt; &lt;span style=&#34;color: #e2b1f4;&#34;&gt;result&lt;/span&gt; map[string]&lt;span style=&#34;color: #9dd7ff;&#34;&gt;int&lt;/span&gt;
-BeforeEach(func() {
-    input := []&lt;span style=&#34;color: #9dd7ff;&#34;&gt;int&lt;/span&gt;{3, 3, 4, 5, 6, 99, -99, 7, 8, 64}
-    result = Collect(input)
-})
-
-It(&lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#34;collects min information&#34;&lt;/span&gt;, func() {
-    Expect(result[&lt;span style=&#34;color: #a5a5a5;&#34;&gt;&#34;min&#34;&lt;/span&gt;]).To(Equal(-99))
-})
-&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;div class=&#34;org-src-container&#34;&gt;
-
-&lt;pre class=&#34;src src-sh&#34;&gt;ginkgo
-&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;
-you can run it with standard &lt;code&gt;go test&lt;/code&gt; command
-&lt;/p&gt;
-
-&lt;p&gt;
-Ginkgo should fail with message:
-&lt;/p&gt;
-&lt;div class=&#34;org-src-container&#34;&gt;
-
-&lt;pre class=&#34;src src-sh&#34;&gt;./stats_test.go:30: undefined: Collect
-&lt;/pre&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-
-&lt;div id=&#34;outline-container-sec-2-4-3&#34; class=&#34;outline-4&#34;&gt;
-&lt;h4 id=&#34;sec-2-4-3&#34;&gt;Other specifications&lt;/h4&gt;
-&lt;div class=&#34;outline-text-4&#34; id=&#34;text-2-4-3&#34;&gt;
-&lt;ol class=&#34;org-ol&#34;&gt;
-&lt;li&gt;With above technique We&#39;ll generate:
-&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;div class=&#34;org-src-container&#34;&gt;
-
-&lt;pre class=&#34;src src-golang&#34;&gt;It(&#34;collects max information&#34;, func() {
-    Expect(result[&#34;max&#34;]).To(Equal(99))
-})
-It(&#34;collects avg information&#34;, func() {
-    Expect(result[&#34;avg&#34;]).To(Equal(10))
-})
-It(&#34;collects len information&#34;, func() {
-    Expect(result[&#34;len&#34;]).To(Equal(10))
-})
-It(&#34;collects sum information&#34;, func() {
-    Expect(result[&#34;sum&#34;]).To(Equal(100))
-})
-&lt;/pre&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div id=&#34;outline-container-sec-2-5&#34; class=&#34;outline-3&#34;&gt;
-&lt;h3 id=&#34;sec-2-5&#34;&gt;Writing code&lt;/h3&gt;
-&lt;div class=&#34;outline-text-3&#34; id=&#34;text-2-5&#34;&gt;
-&lt;p&gt;
-Now our spec is ready - it&#39;ll be our library documentation - we can
-start writing code.
-&lt;/p&gt;
-
-&lt;p&gt;
-&lt;b&gt;Remember&lt;/b&gt; to run &lt;code&gt;ginkgo&lt;/code&gt; after each change.
-&lt;/p&gt;
-&lt;/div&gt;
-
-
-&lt;div id=&#34;outline-container-sec-2-5-1&#34; class=&#34;outline-4&#34;&gt;
-&lt;h4 id=&#34;sec-2-5-1&#34;&gt;Now it&#39;s time to implement minimum calculation from given input&lt;/h4&gt;
-&lt;div class=&#34;outline-text-4&#34; id=&#34;text-2-5-1&#34;&gt;
-&lt;div class=&#34;org-src-container&#34;&gt;
-
-&lt;pre class=&#34;src src-golang&#34;&gt;package bddgo
-
-func Collect(arr []int) map[string]int {
-    out := make(map[string]int)
-    min := arr[0]
-
-    for _, v := range arr {
-        if v &amp;lt; min {
-            min = v
-        }
-    }
-
-    out[&#34;min&#34;] = min
-
-    return out
-}
-&lt;/pre&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;
-Run ginkgo, you&#39;ll receive error messages about
-expected and current result.
-&lt;/p&gt;
-
-&lt;div class=&#34;org-src-container&#34;&gt;
-
-&lt;pre class=&#34;src src-sh&#34;&gt;$ ginkgo
-
- collects max information [It]
-  (/home/exu/go/src/github.com/exu/bddgo/stats_test.go:38)
-
-  Expected
-    &amp;lt;int&amp;gt;: 0
-  to equal
-    &amp;lt;int&amp;gt;: 99
-&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;
-It looks like first test passed. Now it&#39;s time to implement rest
-You can do it in little steps one by one, after each
-run &lt;code&gt;ginkgo&lt;/code&gt; to check if you don&#39;t brake something
-in other tests. (You can run it with &lt;code&gt;-watch&lt;/code&gt; - Ginkgo will watch
-your suite and run tests automatically on code change)
-&lt;/p&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div id=&#34;outline-container-sec-2-5-2&#34; class=&#34;outline-4&#34;&gt;
-&lt;h4 id=&#34;sec-2-5-2&#34;&gt;Now it&#39;s time to implement rest of library:&lt;/h4&gt;
-&lt;div class=&#34;outline-text-4&#34; id=&#34;text-2-5-2&#34;&gt;
-&lt;p&gt;
-Whole library looks like this one below:
-&lt;/p&gt;
-
-&lt;div class=&#34;org-src-container&#34;&gt;
-
-&lt;pre class=&#34;src src-golang&#34;&gt;package bddgo
-
-func Collect(arr []int) map[string]int {
-    out := make(map[string]int)
-    min, max, sum, count := arr[0], arr[0], 0, len(arr)
-
-    for _, v := range arr {
-        if v &amp;lt; min {
-            min = v
-        }
-        if v &amp;gt; max {
-            max = v
-        }
-
-        sum += v
-    }
-
-    out[&#34;min&#34;] = min
-    out[&#34;len&#34;] = count
-    out[&#34;avg&#34;] = sum / count
-    out[&#34;max&#34;] = max
-    out[&#34;sum&#34;] = max
-
-    return out
-}
-&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;
-Run
-&lt;/p&gt;
-
-&lt;div class=&#34;org-src-container&#34;&gt;
-
-&lt;pre class=&#34;src src-sh&#34;&gt;&amp;#10095; ginkgo
-
-Running Suite: Bddgo Suite
-==========================
-Random Seed: 1394745662
-Will run 5 of 5 specs
-
-&amp;#8226;&amp;#8226;&amp;#8226;&amp;#8226;&amp;#8226;&amp;#8226;&amp;#8226;&amp;#8226;&amp;#8226;&amp;#8226;&amp;#8226;&amp;#8226;&amp;#8226;&amp;#8226;&amp;#8226;&amp;#8226;&amp;#8226;&amp;#8226;
-Ran 5 of 5 Specs&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt; in&lt;/span&gt; 0.004 seconds
-SUCCESS! -- 5 Passed | 0 Failed | 0 Pending | 0 Skipped PASS
-
-Ginkgo ran&lt;span style=&#34;color: #f0dfaf; font-weight: bold;&#34;&gt; in&lt;/span&gt; 4.06565762s
-Test Suite Passed
-&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;
-Now all tests should go green :D
-&lt;/p&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-
-&lt;div id=&#34;outline-container-sec-2-6&#34; class=&#34;outline-3&#34;&gt;
-&lt;h3 id=&#34;sec-2-6&#34;&gt;Conslusions&lt;/h3&gt;
-&lt;div class=&#34;outline-text-3&#34; id=&#34;text-2-6&#34;&gt;
-&lt;p&gt;
-You can compare Golang and Ginkgo BDD technique
-with other in the same excercise
-&lt;/p&gt;
-
-&lt;ul class=&#34;org-ul&#34;&gt;
-&lt;li&gt;&lt;a href=&#34;http://wysocki.in/bdd-excercise-1-calc-bdd-in-php-with-phpspec&#34;&gt;PHP and PHPSpec&lt;/a&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;http://wysocki.in/bdd-excercise-1-calc-bdd-in-javascript-with-mocha/&#34;&gt;Javascript with Mocha&lt;/a&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
 </description>
