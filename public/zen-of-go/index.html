@@ -4,7 +4,7 @@
     <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
-    <title>Series &middot; Jacek Wysocki DevLog</title>
+    <title>Zen of go - Go pro-verbs &middot; Jacek Wysocki DevLog</title>
     <meta name="author" content="Jacek Wysocki">
     <meta name="description" content="I&#39;m developer recently focused on learning Go, Emacs and Archlinux user, father of two lovely children and amateur runner.">
     <meta name="generator" content="Hugo 0.15-DEV" />
@@ -32,7 +32,7 @@
 </style>
 </head>
 
-<body class="home-template">
+<body class="post-template">
 
     <header id="site-head">
 	
@@ -74,20 +74,87 @@
 
 
 
-    
-    <article class="content" role="main">
-        <section class="taxonomy-tags">
-            <h1>Series</h1>
-            <ul>
-                
-                
-                <li><a href="http://wysocki.in//series/12-tdds-for-christmass">12-tdds-for-christmass</a> 4</li>
-                
-                <li><a href="http://wysocki.in//series/go-basics">go-basics</a> 7</li>
-                
-            </ul>
-        </section>
-	</article>
+    <div class="pull-right social-media">
+        <div>
+            <a href="https://twitter.com/share" class="twitter-share-button" data-via="ex00">Tweet</a>
+            <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+        </div>
+        <div>
+            <div class="g-plusone" data-size="small"></div>
+            <script type="text/javascript">
+             (function() {
+                 var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+                 po.src = 'https://apis.google.com/js/platform.js';
+                 var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+             })();
+            </script>
+        </div>
+    </div>
+
+    <main class="content" role="main">
+	    <article class="post">
+	        <header>
+	        <h1 class="post-title">Zen of go - Go pro-verbs</h1>
+            </header>
+	        <section class="post-content">
+	            
+
+<p><img src="/img/gopher-with-sword.png"></p>
+
+<h2 id="simple-poetic-pithy:5f912d2dcb2d0ac5e9422d2b9a2522e3">Simple, Poetic, Pithy</h2>
+
+<p>Python has his PEP20 - Zen Of Python which are very nice IMO. Now Go community have similar Go Proverbs
+thanks to <a href="https://twitter.com/rob_pike">Rob Pike</a>!!</p>
+
+<p>They are several key points in context of Go programming:</p>
+
+<ul>
+<li>Don&rsquo;t communicate by sharing memory, share memory by communicating.</li>
+<li>Concurrency is not parallelism.</li>
+<li>Channels orchestrate; mutexes serialize.</li>
+<li>The bigger the interface, the weaker the abstraction.</li>
+<li>Make the zero value useful.</li>
+<li>interface{} says nothing.</li>
+<li>Gofmt&rsquo;s style is no one&rsquo;s favorite, yet gofmt is everyone&rsquo;s favorite.</li>
+<li>A little copying is better than a little dependency.</li>
+<li>Syscall must always be guarded with build tags.</li>
+<li>Cgo must always be guarded with build tags.</li>
+<li>Cgo is not Go.</li>
+<li>With the unsafe package there are no guarantees.</li>
+<li>Clear is better than clever.</li>
+<li>Reflection is never clear.</li>
+<li>Errors are values.</li>
+<li>Don&rsquo;t just check errors, handle them gracefully.</li>
+<li>Design the architecture, name the components, document the details.</li>
+<li>Documentation is for users.</li>
+<li>Don&rsquo;t panic.</li>
+</ul>
+
+<p>There could be more in future. Original page: <a href="http://go-proverbs.github.io/">http://go-proverbs.github.io/</a></p>
+
+	        </section>
+
+            <section>
+                <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'wysocki';
+    var disqus_identifier = 'http:\/\/wysocki.in\/zen-of-go';
+    var disqus_title = 'Zen of go - Go pro-verbs';
+    var disqus_url = 'http:\/\/wysocki.in\/zen-of-go';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+            </section>
+	    </article>
+	</main>
+
+
 
     <footer class="site-footer">
 	<div class="inner">
@@ -98,7 +165,7 @@
 		    
 		    <a href="//github.com/exu" target="_blank" title="GitHub"><i class="fa fa-2x fa-fw fa-github"></i> <span class="hidden">GitHub</span></a>&nbsp;
 		    
-		    <a href="http://wysocki.in/series/index.xml" target="_blank" title="RSS"><i class="fa fa-2x fa-fw fa-rss"></i> <span class="hidden">RSS</span></a>
+		    <a href="" target="_blank" title="RSS"><i class="fa fa-2x fa-fw fa-rss"></i> <span class="hidden">RSS</span></a>
 		</section>
 
 		<section class="copyright">&copy; 2015 <a href="http://wysocki.in/">Jacek Wysocki</a>. Released under the MIT license.</section>

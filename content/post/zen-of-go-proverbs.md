@@ -1,11 +1,9 @@
 +++
 date = "2015-12-07T16:38:41+01:00"
-description = ""
-series = ["Go basics"]
-slug = "golang-"
+description = "Python has his PEP20 - Zen Of Python which are very nice IMO. Now Go community have similar Go Proverbs"
+slug = "zen-of-go"
 tags = ["go", "golang"]
 title = "Zen of go - Go pro-verbs"
-
 +++
 
 <img src="/img/gopher-with-sword.png">
