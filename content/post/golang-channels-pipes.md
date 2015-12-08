@@ -1,6 +1,6 @@
 +++
 date = "2015-12-08T06:42:47+01:00"
-description = "Sometimes you want to filter your data through several concurent functionsx"
+description = "Sometimes you want to filter your data through several concurent function"
 series = ["Go basics"]
 slug = "golang-channels-pipes"
 tags = ["go", "golang", "channels", "pipe", "patterns"]
