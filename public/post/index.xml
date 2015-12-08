@@ -6,8 +6,109 @@
     <description>Recent content in Posts on Jacek Wysocki DevLog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 07 Dec 2015 16:38:41 +0100</lastBuildDate>
+    <lastBuildDate>Tue, 08 Dec 2015 06:42:47 +0100</lastBuildDate>
     <atom:link href="http://wysocki.in/post/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Golang Channels Patterns - pipes</title>
+      <link>http://wysocki.in/golang-channels-pipes</link>
+      <pubDate>Tue, 08 Dec 2015 06:42:47 +0100</pubDate>
+      
+      <guid>http://wysocki.in/golang-channels-pipes</guid>
+      <description>
+
+&lt;p&gt;Sometimes we want to push our data through several functions (filters), when
+these functions are Processor itensive it&amp;rsquo;ll be good idea to run
+them as go routines.&lt;/p&gt;
+
+&lt;p&gt;We&amp;rsquo;ll define our functions as ones which receive and returns channel of the
+same type. (&lt;code&gt;square&lt;/code&gt;, &lt;code&gt;double&lt;/code&gt;), &lt;code&gt;gen&lt;/code&gt; function will push values to first channel.&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #f92672&#34;&gt;package&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;main&lt;/span&gt;
+
+&lt;span style=&#34;color: #f92672&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;
+	&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;fmt&amp;quot;&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
+
+&lt;span style=&#34;color: #66d9ef&#34;&gt;func&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;gen&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;nums&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;...&lt;/span&gt;&lt;span style=&#34;color: #66d9ef&#34;&gt;int&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;-&lt;/span&gt;&lt;span style=&#34;color: #66d9ef&#34;&gt;chan&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+	&lt;span style=&#34;color: #a6e22e&#34;&gt;out&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;make(&lt;/span&gt;&lt;span style=&#34;color: #66d9ef&#34;&gt;chan&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;int&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
+	&lt;span style=&#34;color: #66d9ef&#34;&gt;go&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;func&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+		&lt;span style=&#34;color: #66d9ef&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;_&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;n&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;range&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;nums&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+			&lt;span style=&#34;color: #a6e22e&#34;&gt;out&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;n&lt;/span&gt;
+		&lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+		&lt;span style=&#34;color: #f8f8f2&#34;&gt;close(&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;out&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;}()&lt;/span&gt;
+	&lt;span style=&#34;color: #66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;out&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+
+&lt;span style=&#34;color: #66d9ef&#34;&gt;func&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;square&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;-&lt;/span&gt;&lt;span style=&#34;color: #66d9ef&#34;&gt;chan&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;int&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;-&lt;/span&gt;&lt;span style=&#34;color: #66d9ef&#34;&gt;chan&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+	&lt;span style=&#34;color: #a6e22e&#34;&gt;out&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;make(&lt;/span&gt;&lt;span style=&#34;color: #66d9ef&#34;&gt;chan&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;int&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
+	&lt;span style=&#34;color: #66d9ef&#34;&gt;go&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;func&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+		&lt;span style=&#34;color: #66d9ef&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;n&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;range&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+			&lt;span style=&#34;color: #a6e22e&#34;&gt;out&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;n&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;n&lt;/span&gt;
+		&lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+		&lt;span style=&#34;color: #f8f8f2&#34;&gt;close(&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;out&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;}()&lt;/span&gt;
+	&lt;span style=&#34;color: #66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;out&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+
+&lt;span style=&#34;color: #66d9ef&#34;&gt;func&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;double&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;-&lt;/span&gt;&lt;span style=&#34;color: #66d9ef&#34;&gt;chan&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;int&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;-&lt;/span&gt;&lt;span style=&#34;color: #66d9ef&#34;&gt;chan&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+	&lt;span style=&#34;color: #a6e22e&#34;&gt;out&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;make(&lt;/span&gt;&lt;span style=&#34;color: #66d9ef&#34;&gt;chan&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;int&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
+	&lt;span style=&#34;color: #66d9ef&#34;&gt;go&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;func&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+		&lt;span style=&#34;color: #66d9ef&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;n&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;range&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+			&lt;span style=&#34;color: #a6e22e&#34;&gt;out&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;n&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;n&lt;/span&gt;
+		&lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+		&lt;span style=&#34;color: #f8f8f2&#34;&gt;close(&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;out&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;}()&lt;/span&gt;
+	&lt;span style=&#34;color: #66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;out&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+
+&lt;span style=&#34;color: #66d9ef&#34;&gt;func&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;main&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+	&lt;span style=&#34;color: #a6e22e&#34;&gt;c&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;gen&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #ae81ff&#34;&gt;10&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;20&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
+	&lt;span style=&#34;color: #a6e22e&#34;&gt;out&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;double&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;double&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;c&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;))&lt;/span&gt;
+
+	&lt;span style=&#34;color: #a6e22e&#34;&gt;fmt&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;Println&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;-&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;out&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
+	&lt;span style=&#34;color: #a6e22e&#34;&gt;fmt&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;Println&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;-&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;out&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
+
+	&lt;span style=&#34;color: #a6e22e&#34;&gt;fmt&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;Println&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;Second generator&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
+	&lt;span style=&#34;color: #66d9ef&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;n&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;range&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;double&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;square&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;square&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;gen&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #ae81ff&#34;&gt;2&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;3&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;4&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;5&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;))))&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+		&lt;span style=&#34;color: #a6e22e&#34;&gt;fmt&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;Println&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;n&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p class=&#34;play-go&#34;&gt;
+    &lt;a class=&#34;btn&#34; href=&#34;http://play.golang.org/p/XSxs_5nckC&#34; target=&#34;_new&#34;&gt;
+        &lt;i class=&#34;fa fa-play-circle-o&#34;&gt;&lt;/i&gt; Run it on play.golang.org
+    &lt;/a&gt;
+&lt;/p&gt;
+
+
+&lt;p&gt;When we run this program we&amp;rsquo;ll receive output:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;❯ go run 90-patterns-pipeline.go
+40
+80
+Second generator
+32
+162
+512
+1250
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h3 id=&#34;code-summary:cbd7b7dd410cfee31e8fe216c849f6c5&#34;&gt;Code Summary&lt;/h3&gt;
+
+&lt;p&gt;As we can observe, it&amp;rsquo;s really simple to push data through several
+functions with use of channels. With go routines it&amp;rsquo;ll be very easy
+to split your work in concurrent environment.&lt;/p&gt;
+
+&lt;h3 id=&#34;want-more:cbd7b7dd410cfee31e8fe216c849f6c5&#34;&gt;Want More?&lt;/h3&gt;
+
+&lt;p&gt;If you like My Go basics series feel free to read more at &lt;a href=&#34;http://wysocki.in/series/go-basics/&#34;&gt;Go Basics Series&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>Zen of go - Go pro-verbs</title>
@@ -2431,451 +2532,6 @@ You can compare it to other BDD/Spec frameworks:
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>BDD with 3 languages - PHP with PHPSpec, Golang with Ginkgo and Javascript with Mocha</title>
-      <link>http://wysocki.in/bdd-in-php-golang-javascript-comparizon</link>
-      <pubDate>Sat, 15 Mar 2014 00:00:00 +0000</pubDate>
-      
-      <guid>http://wysocki.in/bdd-in-php-golang-javascript-comparizon</guid>
-      <description>&lt;img src=&#34;http://wysocki.in/img/php-js-go-bdd.png&#34; class=&#34;img-responsive&#34; alt=&#34;&#34;&gt;
-
-
-&lt;div id=&#34;outline-container-sec-1&#34; class=&#34;outline-2&#34;&gt;
-&lt;h2 id=&#34;sec-1&#34;&gt;Sharpening Your SpecBDD skills&lt;/h2&gt;
-&lt;div class=&#34;outline-text-2&#34; id=&#34;text-1&#34;&gt;
-&lt;p&gt;
-In these series I want to show differences (or similarities) between PHP,
-Google&#39;s Golang, and Javascript when you want to develop your code
-with BDD techniques. Why? One of reason is that You can easily port your specs to
-other language, spec is your project and your documentation and if you want learn
-some new language and You have already written what should be done then half of
-your work is done already. I was really suprised how easily I ported specs from
-Go to javascript.
-&lt;/p&gt;
-&lt;/div&gt;
-
-&lt;div id=&#34;outline-container-sec-1-1&#34; class=&#34;outline-3&#34;&gt;
-&lt;h3 id=&#34;sec-1-1&#34;&gt;TLDR; goto blog entries for first excercise directly&lt;/h3&gt;
-&lt;div class=&#34;outline-text-3&#34; id=&#34;text-1-1&#34;&gt;
-&lt;a class=&#34;btn btn-primary&#34; href=&#34;http://wysocki.in/bdd-excercise-1-calc-bdd-in-php-with-phpspec&#34;&gt;PHP and PHPSpec&lt;/a&gt;
-&lt;a class=&#34;btn btn-primary&#34; href=&#34;http://wysocki.in/bdd-excercise-1-calc-bdd-in-golang-and-ginkgo&#34;&gt;Golang and Ginkgo&lt;/a&gt;
-&lt;a class=&#34;btn btn-primary&#34; href=&#34;http://wysocki.in/bdd-excercise-1-calc-bdd-in-javascript-with-mocha&#34;&gt;Javascript and Mocha&lt;/a&gt;
-&lt;br&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-
-
-&lt;div id=&#34;outline-container-sec-1-2&#34; class=&#34;outline-3&#34;&gt;
-&lt;h3 id=&#34;sec-1-2&#34;&gt;WiredToTheMoon Blog&lt;/h3&gt;
-&lt;div class=&#34;outline-text-3&#34; id=&#34;text-1-2&#34;&gt;
-&lt;p&gt;
-Idea to do some simple BDD excercises came from &lt;a href=&#34;http://www.wiredtothemoon.com/2012/12/12-tdds-of-christmas/&#34;&gt;http://www.wiredtothemoon.com/2012/12/12-tdds-of-christmas/&lt;/a&gt;.
-First I &#39;ve done that in PHP, after that I want to try the same in Golang which I was playing with,
-and because I&#39;m doing some javascript research recently so I&#39;ve wrote first excercises in Javascript too.
-&lt;/p&gt;
-
-&lt;p&gt;
-I have my solutions in 3 separate repositories one per language (+ bdd framework)
-&lt;/p&gt;
-&lt;ul class=&#34;org-ul&#34;&gt;
-&lt;li&gt;PHP - &lt;a href=&#34;https://github.com/exu/php-12bdds&#34;&gt;https://github.com/exu/php-12bdds&lt;/a&gt;
-&lt;/li&gt;
-&lt;li&gt;Golang - &lt;a href=&#34;https://github.com/exu/bddgo&#34;&gt;https://github.com/exu/bddgo&lt;/a&gt;
-&lt;/li&gt;
-&lt;li&gt;Javascript - &lt;a href=&#34;https://github.com/exu/jsbdds&#34;&gt;https://github.com/exu/jsbdds&lt;/a&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;
-If You start your adventure with SpecBDD It&#39;ll be great boost for You to do whis &lt;b&gt;wiredtothemoon&lt;/b&gt;
-excercises. If You have some ideas how to improve some of this excercises I&#39;ll be happy to hear
-about it.
-&lt;/p&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div id=&#34;outline-container-sec-2&#34; class=&#34;outline-2&#34;&gt;
-&lt;h2 id=&#34;sec-2&#34;&gt;Completed excercises&lt;/h2&gt;
-&lt;div class=&#34;outline-text-2&#34; id=&#34;text-2&#34;&gt;
-&lt;/div&gt;&lt;div id=&#34;outline-container-sec-2-1&#34; class=&#34;outline-3&#34;&gt;
-&lt;h3 id=&#34;sec-2-1&#34;&gt;My Excercise status for languages of 12 tdds from wiredtothemoon blog&lt;/h3&gt;
-&lt;div class=&#34;outline-text-3&#34; id=&#34;text-2-1&#34;&gt;
-&lt;p&gt;
-Here will be updates about my completed excercises.
-&lt;/p&gt;
-
-&lt;table class=&#34;table table-stripped&#34; border=&#34;2&#34; cellspacing=&#34;0&#34; cellpadding=&#34;6&#34; rules=&#34;groups&#34; frame=&#34;hsides&#34;&gt;
-
-
-&lt;colgroup&gt;
-&lt;col  class=&#34;right&#34; /&gt;
-
-&lt;col  class=&#34;left&#34; /&gt;
-
-&lt;col  class=&#34;left&#34; /&gt;
-
-&lt;col  class=&#34;left&#34; /&gt;
-
-&lt;col  class=&#34;left&#34; /&gt;
-&lt;/colgroup&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th scope=&#34;col&#34; class=&#34;right&#34;&gt;No&lt;/th&gt;
-&lt;th scope=&#34;col&#34; class=&#34;left&#34;&gt;Excercise&lt;/th&gt;
-&lt;th scope=&#34;col&#34; class=&#34;left&#34;&gt;PHP&lt;/th&gt;
-&lt;th scope=&#34;col&#34; class=&#34;left&#34;&gt;Golang&lt;/th&gt;
-&lt;th scope=&#34;col&#34; class=&#34;left&#34;&gt;Javascript&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td class=&#34;right&#34;&gt;1&lt;/td&gt;
-&lt;td class=&#34;left&#34;&gt;Calculations&lt;/td&gt;
-&lt;td class=&#34;left&#34;&gt;&lt;a href=&#34;https://github.com/exu/php-12bdds/blob/master/spec/Exc01/CalcStatsSpec.php&#34;&gt;spec&lt;/a&gt; &lt;a href=&#34;https://github.com/exu/php-12bdds/blob/master/src/Exc01/CalcStats.php&#34;&gt;src&lt;/a&gt; &lt;a href=&#34;http://wysocki.in/bdd-excercise-1-calc-bdd-in-php-with-phpspec&#34;&gt;blog&lt;/a&gt;&lt;/td&gt;
-&lt;td class=&#34;left&#34;&gt;&lt;a href=&#34;https://github.com/exu/bddgo/blob/master/stats_test.go&#34;&gt;spec&lt;/a&gt; &lt;a href=&#34;https://github.com/exu/bddgo/blob/master/stats.go&#34;&gt;src&lt;/a&gt; &lt;a href=&#34;http://wysocki.in/bdd-excercise-1-calc-bdd-in-golang-and-ginkgo&#34;&gt;blog&lt;/a&gt;&lt;/td&gt;
-&lt;td class=&#34;left&#34;&gt;&lt;a href=&#34;https://github.com/exu/jsbdds/blob/master/test/numnames.js&#34;&gt;spec&lt;/a&gt; &lt;a href=&#34;https://github.com/exu/jsbdds/blob/master/lib/numnames.js&#34;&gt;src&lt;/a&gt; &lt;a href=&#34;http://wysocki.in/bdd-excercise-1-calc-bdd-in-javascript-with-mocha&#34;&gt;blog&lt;/a&gt;&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td class=&#34;right&#34;&gt;2&lt;/td&gt;
-&lt;td class=&#34;left&#34;&gt;Numbers spelling&lt;/td&gt;
-&lt;td class=&#34;left&#34;&gt;&lt;a href=&#34;https://github.com/exu/php-12bdds/blob/master/spec/Exc02/NumberNamesSpec.php&#34;&gt;spec&lt;/a&gt; &lt;a href=&#34;https://github.com/exu/php-12bdds/blob/master/src/Exc02/NumberNames.php&#34;&gt;src&lt;/a&gt;&lt;/td&gt;
-&lt;td class=&#34;left&#34;&gt;&lt;a href=&#34;https://github.com/exu/bddgo/blob/master/numnames_test.go&#34;&gt;spec&lt;/a&gt; &lt;a href=&#34;https://github.com/exu/bddgo/blob/master/numnames.go&#34;&gt;src&lt;/a&gt;&lt;/td&gt;
-&lt;td class=&#34;left&#34;&gt;&lt;a href=&#34;https://github.com/exu/jsbdds/blob/master/test/numnames.js&#34;&gt;spec&lt;/a&gt; &lt;a href=&#34;https://github.com/exu/jsbdds/blob/master/lib/numnames.js&#34;&gt;src&lt;/a&gt;&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td class=&#34;right&#34;&gt;3&lt;/td&gt;
-&lt;td class=&#34;left&#34;&gt;Bomberman game&lt;/td&gt;
-&lt;td class=&#34;left&#34;&gt;&lt;a href=&#34;https://github.com/exu/php-12bdds/blob/master/spec/Exc03/MinerSpec.php&#34;&gt;spec&lt;/a&gt; &lt;a href=&#34;https://github.com/exu/php-12bdds/blob/master/src/Exc03/Miner.php&#34;&gt;src&lt;/a&gt;&lt;/td&gt;
-&lt;td class=&#34;left&#34;&gt;&lt;a href=&#34;https://github.com/exu/bddgo/blob/master/miner_test.go&#34;&gt;spec&lt;/a&gt; &lt;a href=&#34;https://github.com/exu/bddgo/blob/master/miner.go&#34;&gt;src&lt;/a&gt;&lt;/td&gt;
-&lt;td class=&#34;left&#34;&gt;&lt;a href=&#34;https://github.com/exu/jsbdds/blob/master/test/bomberman.js&#34;&gt;spec&lt;/a&gt; &lt;a href=&#34;https://github.com/exu/jsbdds/blob/master/lib/bomberman.js&#34;&gt;src&lt;/a&gt;&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td class=&#34;right&#34;&gt;4&lt;/td&gt;
-&lt;td class=&#34;left&#34;&gt;Monty Hall game&lt;/td&gt;
-&lt;td class=&#34;left&#34;&gt;&lt;a href=&#34;https://github.com/exu/php-12bdds/blob/master/spec/Exc04/ZonkSpec.php&#34;&gt;spec&lt;/a&gt; &lt;a href=&#34;https://github.com/exu/php-12bdds/blob/master/src/Exc04/Zonk.php&#34;&gt;src&lt;/a&gt;&lt;/td&gt;
-&lt;td class=&#34;left&#34;&gt;&lt;a href=&#34;https://github.com/exu/bddgo/blob/master/zonk_test.go&#34;&gt;spec&lt;/a&gt; &lt;a href=&#34;https://github.com/exu/bddgo/blob/master/zonk.go&#34;&gt;src&lt;/a&gt;&lt;/td&gt;
-&lt;td class=&#34;left&#34;&gt;&lt;a href=&#34;https://github.com/exu/jsbdds/blob/master/test/zonk.js&#34;&gt;spec&lt;/a&gt; &lt;a href=&#34;https://github.com/exu/jsbdds/blob/master/lib/zonk.js&#34;&gt;src&lt;/a&gt;&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td class=&#34;right&#34;&gt;5&lt;/td&gt;
-&lt;td class=&#34;left&#34;&gt;FizzBuzz&lt;/td&gt;
-&lt;td class=&#34;left&#34;&gt;&lt;a href=&#34;https://github.com/exu/php-12bdds/blob/master/spec/Exc05/FizzBuzzSpec.php&#34;&gt;spec&lt;/a&gt; &lt;a href=&#34;https://github.com/exu/php-12bdds/blob/master/src/Exc05/FizzBuzz.php&#34;&gt;src&lt;/a&gt;&lt;/td&gt;
-&lt;td class=&#34;left&#34;&gt;&amp;#xa0;&lt;/td&gt;
-&lt;td class=&#34;left&#34;&gt;&lt;a href=&#34;https://github.com/exu/jsbdds/blob/master/test/fizzbuzz.js&#34;&gt;spec&lt;/a&gt; &lt;a href=&#34;https://github.com/exu/jsbdds/blob/master/lib/fizzbuzz.js&#34;&gt;src&lt;/a&gt;&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td class=&#34;right&#34;&gt;6&lt;/td&gt;
-&lt;td class=&#34;left&#34;&gt;Recently used list&lt;/td&gt;
-&lt;td class=&#34;left&#34;&gt;&lt;a href=&#34;https://github.com/exu/php-12bdds/blob/master/spec/Exc06/RecentlyUsedSpec.php&#34;&gt;spec&lt;/a&gt; &lt;a href=&#34;https://github.com/exu/php-12bdds/blob/master/src/Exc06/RecentlyUsed.php&#34;&gt;src&lt;/a&gt;&lt;/td&gt;
-&lt;td class=&#34;left&#34;&gt;&amp;#xa0;&lt;/td&gt;
-&lt;td class=&#34;left&#34;&gt;&lt;a href=&#34;https://github.com/exu/jsbdds/blob/master/test/list.js&#34;&gt;spec&lt;/a&gt; &lt;a href=&#34;https://github.com/exu/jsbdds/blob/master/lib/list.js&#34;&gt;src&lt;/a&gt;&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td class=&#34;right&#34;&gt;7&lt;/td&gt;
-&lt;td class=&#34;left&#34;&gt;Template engine&lt;/td&gt;
-&lt;td class=&#34;left&#34;&gt;&lt;a href=&#34;https://github.com/exu/php-12bdds/blob/master/spec/Exc07/TplrSpec.php&#34;&gt;spec&lt;/a&gt; &lt;a href=&#34;https://github.com/exu/php-12bdds/blob/master/src/Exc07/Tplr.php&#34;&gt;src&lt;/a&gt;&lt;/td&gt;
-&lt;td class=&#34;left&#34;&gt;&amp;#xa0;&lt;/td&gt;
-&lt;td class=&#34;left&#34;&gt;&lt;a href=&#34;https://github.com/exu/jsbdds/blob/master/test/tplr.js&#34;&gt;spec&lt;/a&gt; &lt;a href=&#34;https://github.com/exu/jsbdds/blob/master/lib/tplr.js&#34;&gt;src&lt;/a&gt;&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td class=&#34;right&#34;&gt;8&lt;/td&gt;
-&lt;td class=&#34;left&#34;&gt;Range class&lt;/td&gt;
-&lt;td class=&#34;left&#34;&gt;&lt;a href=&#34;https://github.com/exu/php-12bdds/blob/master/spec/Exc08/IntRangeSpec.php&#34;&gt;spec1&lt;/a&gt; &lt;a href=&#34;https://github.com/exu/php-12bdds/blob/master/src/Exc08/IntRange.php&#34;&gt;src1&lt;/a&gt; &lt;a href=&#34;https://github.com/exu/php-12bdds/blob/master/spec/Exc08/FloatRangeSpec.php&#34;&gt;spec2&lt;/a&gt; &lt;a href=&#34;https://github.com/exu/php-12bdds/blob/master/src/Exc08/FloatRange.php&#34;&gt;src2&lt;/a&gt;&lt;/td&gt;
-&lt;td class=&#34;left&#34;&gt;&amp;#xa0;&lt;/td&gt;
-&lt;td class=&#34;left&#34;&gt;&amp;#xa0;&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td class=&#34;right&#34;&gt;9&lt;/td&gt;
-&lt;td class=&#34;left&#34;&gt;&amp;#xa0;&lt;/td&gt;
-&lt;td class=&#34;left&#34;&gt;&amp;#xa0;&lt;/td&gt;
-&lt;td class=&#34;left&#34;&gt;&amp;#xa0;&lt;/td&gt;
-&lt;td class=&#34;left&#34;&gt;&amp;#xa0;&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td class=&#34;right&#34;&gt;10&lt;/td&gt;
-&lt;td class=&#34;left&#34;&gt;&amp;#xa0;&lt;/td&gt;
-&lt;td class=&#34;left&#34;&gt;&amp;#xa0;&lt;/td&gt;
-&lt;td class=&#34;left&#34;&gt;&amp;#xa0;&lt;/td&gt;
-&lt;td class=&#34;left&#34;&gt;&amp;#xa0;&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td class=&#34;right&#34;&gt;11&lt;/td&gt;
-&lt;td class=&#34;left&#34;&gt;&amp;#xa0;&lt;/td&gt;
-&lt;td class=&#34;left&#34;&gt;&amp;#xa0;&lt;/td&gt;
-&lt;td class=&#34;left&#34;&gt;&amp;#xa0;&lt;/td&gt;
-&lt;td class=&#34;left&#34;&gt;&amp;#xa0;&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td class=&#34;right&#34;&gt;12&lt;/td&gt;
-&lt;td class=&#34;left&#34;&gt;&amp;#xa0;&lt;/td&gt;
-&lt;td class=&#34;left&#34;&gt;&amp;#xa0;&lt;/td&gt;
-&lt;td class=&#34;left&#34;&gt;&amp;#xa0;&lt;/td&gt;
-&lt;td class=&#34;left&#34;&gt;&amp;#xa0;&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td class=&#34;right&#34;&gt;&amp;#xa0;&lt;/td&gt;
-&lt;td class=&#34;left&#34;&gt;&amp;#xa0;&lt;/td&gt;
-&lt;td class=&#34;left&#34;&gt;&amp;#xa0;&lt;/td&gt;
-&lt;td class=&#34;left&#34;&gt;&amp;#xa0;&lt;/td&gt;
-&lt;td class=&#34;left&#34;&gt;&amp;#xa0;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-
-&lt;p&gt;
-I&#39;ll try to complete some more in near future
-&lt;/p&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div id=&#34;outline-container-sec-2-2&#34; class=&#34;outline-3&#34;&gt;
-&lt;h3 id=&#34;sec-2-2&#34;&gt;Excercise 2 -  Number speller&lt;/h3&gt;
-&lt;div class=&#34;outline-text-3&#34; id=&#34;text-2-2&#34;&gt;
-&lt;p&gt;
-Second excercise is little harder. Your task is to write number speller.
-You give a number and your function will spell it. Simple isn&#39;t it?
-&lt;/p&gt;
-&lt;/div&gt;
-
-&lt;div id=&#34;outline-container-sec-2-2-1&#34; class=&#34;outline-4&#34;&gt;
-&lt;h4 id=&#34;sec-2-2-1&#34;&gt;PHPSpec and PHP&lt;/h4&gt;
-&lt;div class=&#34;outline-text-4&#34; id=&#34;text-2-2-1&#34;&gt;
-&lt;ul class=&#34;org-ul&#34;&gt;
-&lt;li&gt;Sources on github
-&lt;ul class=&#34;org-ul&#34;&gt;
-&lt;li&gt;spec: &lt;a href=&#34;https://github.com/exu/php-12bdds/blob/master/spec/Exc02/NumberNamesSpec.php&#34;&gt;https://github.com/exu/php-12bdds/blob/master/spec/Exc02/NumberNamesSpec.php&lt;/a&gt;
-&lt;/li&gt;
-&lt;li&gt;source: &lt;a href=&#34;https://github.com/exu/php-12bdds/blob/master/src/Exc02/NumberNames.php&#34;&gt;https://github.com/exu/php-12bdds/blob/master/src/Exc02/NumberNames.php&lt;/a&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div id=&#34;outline-container-sec-2-2-2&#34; class=&#34;outline-4&#34;&gt;
-&lt;h4 id=&#34;sec-2-2-2&#34;&gt;Golang and Ginkgo&lt;/h4&gt;
-&lt;div class=&#34;outline-text-4&#34; id=&#34;text-2-2-2&#34;&gt;
-&lt;ul class=&#34;org-ul&#34;&gt;
-&lt;li&gt;Sources on github
-&lt;ul class=&#34;org-ul&#34;&gt;
-&lt;li&gt;spec: &lt;a href=&#34;https://github.com/exu/bddgo/blob/master/numnames_test.go&#34;&gt;https://github.com/exu/bddgo/blob/master/numnames_test.go&lt;/a&gt;
-&lt;/li&gt;
-&lt;li&gt;source: &lt;a href=&#34;https://github.com/exu/bddgo/blob/master/numnames.go&#34;&gt;https://github.com/exu/bddgo/blob/master/numnames.go&lt;/a&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div id=&#34;outline-container-sec-2-2-3&#34; class=&#34;outline-4&#34;&gt;
-&lt;h4 id=&#34;sec-2-2-3&#34;&gt;Javascript and Mocha&lt;/h4&gt;
-&lt;div class=&#34;outline-text-4&#34; id=&#34;text-2-2-3&#34;&gt;
-&lt;ul class=&#34;org-ul&#34;&gt;
-&lt;li&gt;Sources on github
-&lt;ul class=&#34;org-ul&#34;&gt;
-&lt;li&gt;spec: &lt;a href=&#34;https://github.com/exu/jsbdds/blob/master/test/numnames.js&#34;&gt;https://github.com/exu/jsbdds/blob/master/test/numnames.js&lt;/a&gt;
-&lt;/li&gt;
-&lt;li&gt;source: &lt;a href=&#34;https://github.com/exu/jsbdds/blob/master/lib/numnames.js&#34;&gt;https://github.com/exu/jsbdds/blob/master/lib/numnames.js&lt;/a&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-
-&lt;div id=&#34;outline-container-sec-2-3&#34; class=&#34;outline-3&#34;&gt;
-&lt;h3 id=&#34;sec-2-3&#34;&gt;Excercise 1 -  Numbers statistics&lt;/h3&gt;
-&lt;div class=&#34;outline-text-3&#34; id=&#34;text-2-3&#34;&gt;
-&lt;p&gt;
-First excercise is really warm-up, it&#39;s really simple task to calculate
-some data (sum, avg, min, max, count) from given list of integers.
-You&#39;ll find My solutions below. (all exercises are commited to repository from
-given language and test framework)
-&lt;/p&gt;
-&lt;/div&gt;
-
-&lt;div id=&#34;outline-container-sec-2-3-1&#34; class=&#34;outline-4&#34;&gt;
-&lt;h4 id=&#34;sec-2-3-1&#34;&gt;PHPSpec and PHP&lt;/h4&gt;
-&lt;div class=&#34;outline-text-4&#34; id=&#34;text-2-3-1&#34;&gt;
-&lt;p&gt;
-You can find details about &lt;a href=&#34;http://wysocki.in/bdd-excercise-1-calc-bdd-in-php-with-phpspec&#34;&gt;my PHP solution in separate post&lt;/a&gt;
-&lt;/p&gt;
-
-&lt;ul class=&#34;org-ul&#34;&gt;
-&lt;li&gt;Sources on github
-&lt;ul class=&#34;org-ul&#34;&gt;
-&lt;li&gt;spec: &lt;a href=&#34;https://github.com/exu/php-12bdds/blob/master/spec/Exc01/CalcStatsSpec.php&#34;&gt;https://github.com/exu/php-12bdds/blob/master/spec/Exc01/CalcStatsSpec.php&lt;/a&gt;
-&lt;/li&gt;
-&lt;li&gt;source: &lt;a href=&#34;https://github.com/exu/php-12bdds/blob/master/src/Exc01/CalcStats.php&#34;&gt;https://github.com/exu/php-12bdds/blob/master/src/Exc01/CalcStats.php&lt;/a&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div id=&#34;outline-container-sec-2-3-2&#34; class=&#34;outline-4&#34;&gt;
-&lt;h4 id=&#34;sec-2-3-2&#34;&gt;Golang and Ginkgo&lt;/h4&gt;
-&lt;div class=&#34;outline-text-4&#34; id=&#34;text-2-3-2&#34;&gt;
-&lt;p&gt;
-You can find details about &lt;a href=&#34;http://wysocki.in/bdd-excercise-1-calc-bdd-in-golang-and-ginkgo&#34;&gt;my Golang solution in separate post&lt;/a&gt;
-&lt;/p&gt;
-
-&lt;ul class=&#34;org-ul&#34;&gt;
-&lt;li&gt;Sources on github
-&lt;ul class=&#34;org-ul&#34;&gt;
-&lt;li&gt;spec: &lt;a href=&#34;https://github.com/exu/bddgo/blob/master/stats_test.go&#34;&gt;https://github.com/exu/bddgo/blob/master/stats_test.go&lt;/a&gt;
-&lt;/li&gt;
-&lt;li&gt;source: &lt;a href=&#34;https://github.com/exu/bddgo/blob/master/stats.go&#34;&gt;https://github.com/exu/bddgo/blob/master/stats.go&lt;/a&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div id=&#34;outline-container-sec-2-3-3&#34; class=&#34;outline-4&#34;&gt;
-&lt;h4 id=&#34;sec-2-3-3&#34;&gt;Javascript and Mocha&lt;/h4&gt;
-&lt;div class=&#34;outline-text-4&#34; id=&#34;text-2-3-3&#34;&gt;
-&lt;p&gt;
-You can find details about &lt;a href=&#34;http://wysocki.in/bdd-excercise-1-calc-bdd-in-javascript-with-mocha&#34;&gt;my Javascript solution in separate post&lt;/a&gt;
-&lt;/p&gt;
-
-&lt;ul class=&#34;org-ul&#34;&gt;
-&lt;li&gt;Sources on github
-&lt;ul class=&#34;org-ul&#34;&gt;
-&lt;li&gt;spec: &lt;a href=&#34;https://github.com/exu/jsbdds/blob/master/test/calc.js&#34;&gt;https://github.com/exu/jsbdds/blob/master/test/calc.js&lt;/a&gt;
-&lt;/li&gt;
-&lt;li&gt;source: &lt;a href=&#34;https://github.com/exu/jsbdds/blob/master/lib/calc.js&#34;&gt;https://github.com/exu/jsbdds/blob/master/lib/calc.js&lt;/a&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-
-&lt;div id=&#34;outline-container-sec-3&#34; class=&#34;outline-2&#34;&gt;
-&lt;h2 id=&#34;sec-3&#34;&gt;Tools used for writing BDD specs&lt;/h2&gt;
-&lt;div class=&#34;outline-text-2&#34; id=&#34;text-3&#34;&gt;
-&lt;/div&gt;&lt;div id=&#34;outline-container-sec-3-1&#34; class=&#34;outline-3&#34;&gt;
-&lt;h3 id=&#34;sec-3-1&#34;&gt;PHP - PHPSpec&lt;/h3&gt;
-&lt;div class=&#34;outline-text-3&#34; id=&#34;text-3-1&#34;&gt;
-&lt;p&gt;
-It&#39;s modern technique of writing your tests/specs in PHP world from Konstantin Kudryashov
-(@everzet). It should be treaten like DSL (don&#39;t try to complain that it&#39;s not PSR
-compatible).  You can find coverage tool for it too (but probably when You need it in spec
-way you are doing something wrong). I You are PHPUnit guy (girl) then You should give PHPSpec
-a try (If You don&#39;t write tests/specs for your new code hmm &amp;#x2026; start doing it now!).
-&lt;/p&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div id=&#34;outline-container-sec-3-2&#34; class=&#34;outline-3&#34;&gt;
-&lt;h3 id=&#34;sec-3-2&#34;&gt;Golang - Ginkgo&lt;/h3&gt;
-&lt;div class=&#34;outline-text-3&#34; id=&#34;text-3-2&#34;&gt;
-&lt;p&gt;
-Syntax in Ginkgo is very familiar to many known tools (Rspec from ruby or Mocha from javascript)
-Your&#39;e defining your expectations. It has many tools which make your Golang concurency easier.
-&lt;/p&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div id=&#34;outline-container-sec-3-3&#34; class=&#34;outline-3&#34;&gt;
-&lt;h3 id=&#34;sec-3-3&#34;&gt;Javascript (Nodejs) - Mocha&lt;/h3&gt;
-&lt;div class=&#34;outline-text-3&#34; id=&#34;text-3-3&#34;&gt;
-&lt;p&gt;
-Mocha is written by TJ Holowaychuk author of very popular Express framework. It&#39;s really good
-piece of software. You can install assert library of your choice (I&#39;ve chosed should.js). Mocha
-has nice async handling and could be used to write any kind of tests from spec/unit to end-to-end.
-&lt;/p&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div id=&#34;outline-container-sec-4&#34; class=&#34;outline-2&#34;&gt;
-&lt;h2 id=&#34;sec-4&#34;&gt;Setup&lt;/h2&gt;
-&lt;div class=&#34;outline-text-2&#34; id=&#34;text-4&#34;&gt;
-&lt;/div&gt;&lt;div id=&#34;outline-container-sec-4-1&#34; class=&#34;outline-3&#34;&gt;
-&lt;h3 id=&#34;sec-4-1&#34;&gt;PHPSpec&lt;/h3&gt;
-&lt;div class=&#34;outline-text-3&#34; id=&#34;text-4-1&#34;&gt;
-&lt;p&gt;
-Look at:
-&lt;a href=&#34;https://github.com/exu/php-12bdds/blob/master/composer.json&#34;&gt;https://github.com/exu/php-12bdds/blob/master/composer.json&lt;/a&gt;
-&lt;/p&gt;
-
-&lt;p&gt;
-If You&#39;re bad PHP boy without knowledge about &lt;a href=&#34;http://getcomposer.org&#34;&gt;composer&lt;/a&gt; you should
-take a pen and piece of paper and write:
-&#34;I will use proper tools for my PHP development workflow!&#34;
-&lt;b&gt;two hundred times!&lt;/b&gt;
-&lt;/p&gt;
-
-&lt;p&gt;
-Remember to call
-&lt;/p&gt;
-&lt;div class=&#34;org-src-container&#34;&gt;
-
-&lt;pre class=&#34;src src-sh&#34;&gt;composer install
-&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;
-in your shell
-&lt;/p&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div id=&#34;outline-container-sec-4-2&#34; class=&#34;outline-3&#34;&gt;
-&lt;h3 id=&#34;sec-4-2&#34;&gt;Ginkgo&lt;/h3&gt;
-&lt;div class=&#34;outline-text-3&#34; id=&#34;text-4-2&#34;&gt;
-&lt;p&gt;
-So You want to write some Golang code. Setup is really simple (&lt;a href=&#34;https://github.com/onsi/ginkgo&#34;&gt;https://github.com/onsi/ginkgo&lt;/a&gt;)
-Look at my repository for details &lt;a href=&#34;https://github.com/exu/bddgo&#34;&gt;https://github.com/exu/bddgo&lt;/a&gt;
-&lt;/p&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div id=&#34;outline-container-sec-4-3&#34; class=&#34;outline-3&#34;&gt;
-&lt;h3 id=&#34;sec-4-3&#34;&gt;Mocha&lt;/h3&gt;
-&lt;div class=&#34;outline-text-3&#34; id=&#34;text-4-3&#34;&gt;
-&lt;p&gt;
-run:
-&lt;/p&gt;
-
-&lt;div class=&#34;org-src-container&#34;&gt;
-
-&lt;pre class=&#34;src src-sh&#34;&gt;npm install mocha --save-dev
-&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;
-and start writing your specs in tests directory.
-&lt;/p&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-
-&lt;div id=&#34;outline-container-sec-5&#34; class=&#34;outline-2&#34;&gt;
-&lt;h2 id=&#34;sec-5&#34;&gt;Conclusions&lt;/h2&gt;
-&lt;div class=&#34;outline-text-2&#34; id=&#34;text-5&#34;&gt;
-&lt;p&gt;
-I think that the slighty faster development time You can achieve in PHPSpec.  Main reason
-for it are Its generators. Slighty more readable output in case of errors are in Mocha
-IMHO in PHPSpec diffs are sometimes annoying (you need to go into verbose mode) and when
-difference is in long string at the end you&#39;ll not receive valid diff.
-&lt;/p&gt;
 &lt;/div&gt;
 &lt;/div&gt;
 </description>

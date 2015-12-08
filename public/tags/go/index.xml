@@ -6,8 +6,109 @@
     <description>Recent content in Go on Jacek Wysocki DevLog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 07 Dec 2015 16:38:41 +0100</lastBuildDate>
+    <lastBuildDate>Tue, 08 Dec 2015 06:42:47 +0100</lastBuildDate>
     <atom:link href="http://wysocki.in/tags/go/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Golang Channels Patterns - pipes</title>
+      <link>http://wysocki.in/golang-channels-pipes</link>
+      <pubDate>Tue, 08 Dec 2015 06:42:47 +0100</pubDate>
+      
+      <guid>http://wysocki.in/golang-channels-pipes</guid>
+      <description>
+
+&lt;p&gt;Sometimes we want to push our data through several functions (filters), when
+these functions are Processor itensive it&amp;rsquo;ll be good idea to run
+them as go routines.&lt;/p&gt;
+
+&lt;p&gt;We&amp;rsquo;ll define our functions as ones which receive and returns channel of the
+same type. (&lt;code&gt;square&lt;/code&gt;, &lt;code&gt;double&lt;/code&gt;), &lt;code&gt;gen&lt;/code&gt; function will push values to first channel.&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #f92672&#34;&gt;package&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;main&lt;/span&gt;
+
+&lt;span style=&#34;color: #f92672&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;
+	&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;fmt&amp;quot;&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
+
+&lt;span style=&#34;color: #66d9ef&#34;&gt;func&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;gen&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;nums&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;...&lt;/span&gt;&lt;span style=&#34;color: #66d9ef&#34;&gt;int&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;-&lt;/span&gt;&lt;span style=&#34;color: #66d9ef&#34;&gt;chan&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+	&lt;span style=&#34;color: #a6e22e&#34;&gt;out&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;make(&lt;/span&gt;&lt;span style=&#34;color: #66d9ef&#34;&gt;chan&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;int&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
+	&lt;span style=&#34;color: #66d9ef&#34;&gt;go&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;func&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+		&lt;span style=&#34;color: #66d9ef&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;_&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;n&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;range&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;nums&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+			&lt;span style=&#34;color: #a6e22e&#34;&gt;out&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;n&lt;/span&gt;
+		&lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+		&lt;span style=&#34;color: #f8f8f2&#34;&gt;close(&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;out&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;}()&lt;/span&gt;
+	&lt;span style=&#34;color: #66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;out&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+
+&lt;span style=&#34;color: #66d9ef&#34;&gt;func&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;square&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;-&lt;/span&gt;&lt;span style=&#34;color: #66d9ef&#34;&gt;chan&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;int&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;-&lt;/span&gt;&lt;span style=&#34;color: #66d9ef&#34;&gt;chan&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+	&lt;span style=&#34;color: #a6e22e&#34;&gt;out&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;make(&lt;/span&gt;&lt;span style=&#34;color: #66d9ef&#34;&gt;chan&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;int&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
+	&lt;span style=&#34;color: #66d9ef&#34;&gt;go&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;func&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+		&lt;span style=&#34;color: #66d9ef&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;n&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;range&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+			&lt;span style=&#34;color: #a6e22e&#34;&gt;out&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;n&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;n&lt;/span&gt;
+		&lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+		&lt;span style=&#34;color: #f8f8f2&#34;&gt;close(&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;out&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;}()&lt;/span&gt;
+	&lt;span style=&#34;color: #66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;out&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+
+&lt;span style=&#34;color: #66d9ef&#34;&gt;func&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;double&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;-&lt;/span&gt;&lt;span style=&#34;color: #66d9ef&#34;&gt;chan&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;int&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;-&lt;/span&gt;&lt;span style=&#34;color: #66d9ef&#34;&gt;chan&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+	&lt;span style=&#34;color: #a6e22e&#34;&gt;out&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;make(&lt;/span&gt;&lt;span style=&#34;color: #66d9ef&#34;&gt;chan&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;int&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
+	&lt;span style=&#34;color: #66d9ef&#34;&gt;go&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;func&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+		&lt;span style=&#34;color: #66d9ef&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;n&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;range&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+			&lt;span style=&#34;color: #a6e22e&#34;&gt;out&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;n&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;n&lt;/span&gt;
+		&lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+		&lt;span style=&#34;color: #f8f8f2&#34;&gt;close(&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;out&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;}()&lt;/span&gt;
+	&lt;span style=&#34;color: #66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;out&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+
+&lt;span style=&#34;color: #66d9ef&#34;&gt;func&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;main&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+	&lt;span style=&#34;color: #a6e22e&#34;&gt;c&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;gen&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #ae81ff&#34;&gt;10&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;20&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
+	&lt;span style=&#34;color: #a6e22e&#34;&gt;out&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;double&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;double&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;c&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;))&lt;/span&gt;
+
+	&lt;span style=&#34;color: #a6e22e&#34;&gt;fmt&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;Println&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;-&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;out&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
+	&lt;span style=&#34;color: #a6e22e&#34;&gt;fmt&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;Println&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;-&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;out&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
+
+	&lt;span style=&#34;color: #a6e22e&#34;&gt;fmt&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;Println&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;Second generator&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
+	&lt;span style=&#34;color: #66d9ef&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;n&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;range&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;double&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;square&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;square&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;gen&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #ae81ff&#34;&gt;2&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;3&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;4&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;5&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;))))&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+		&lt;span style=&#34;color: #a6e22e&#34;&gt;fmt&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;Println&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #a6e22e&#34;&gt;n&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
+	&lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p class=&#34;play-go&#34;&gt;
+    &lt;a class=&#34;btn&#34; href=&#34;http://play.golang.org/p/XSxs_5nckC&#34; target=&#34;_new&#34;&gt;
+        &lt;i class=&#34;fa fa-play-circle-o&#34;&gt;&lt;/i&gt; Run it on play.golang.org
+    &lt;/a&gt;
+&lt;/p&gt;
+
+
+&lt;p&gt;When we run this program we&amp;rsquo;ll receive output:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;❯ go run 90-patterns-pipeline.go
+40
+80
+Second generator
+32
+162
+512
+1250
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h3 id=&#34;code-summary:cbd7b7dd410cfee31e8fe216c849f6c5&#34;&gt;Code Summary&lt;/h3&gt;
+
+&lt;p&gt;As we can observe, it&amp;rsquo;s really simple to push data through several
+functions with use of channels. With go routines it&amp;rsquo;ll be very easy
+to split your work in concurrent environment.&lt;/p&gt;
+
+&lt;h3 id=&#34;want-more:cbd7b7dd410cfee31e8fe216c849f6c5&#34;&gt;Want More?&lt;/h3&gt;
+
+&lt;p&gt;If you like My Go basics series feel free to read more at &lt;a href=&#34;http://wysocki.in/series/go-basics/&#34;&gt;Go Basics Series&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>Zen of go - Go pro-verbs</title>
