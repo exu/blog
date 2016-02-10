@@ -6,8 +6,61 @@
     <description>Recent content on Jacek Wysocki DevLog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 08 Dec 2015 06:42:47 +0100</lastBuildDate>
+    <lastBuildDate>Wed, 10 Feb 2016 16:33:10 +0100</lastBuildDate>
     <atom:link href="http://wysocki.in/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>php array chunk function</title>
+      <link>http://wysocki.in/php-array-chunk-function</link>
+      <pubDate>Wed, 10 Feb 2016 16:33:10 +0100</pubDate>
+      
+      <guid>http://wysocki.in/php-array-chunk-function</guid>
+      <description>
+
+&lt;h2 id=&#34;usage:425340eeb0130f5a16f8edc692d4b92c&#34;&gt;Usage&lt;/h2&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #75715e&#34;&gt;&amp;lt;?php&lt;/span&gt;
+
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;$array&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color: #ae81ff&#34;&gt;1&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt;&lt;span style=&#34;color: #ae81ff&#34;&gt;2&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt;&lt;span style=&#34;color: #ae81ff&#34;&gt;3&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt;&lt;span style=&#34;color: #ae81ff&#34;&gt;4&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt;&lt;span style=&#34;color: #ae81ff&#34;&gt;5&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt;&lt;span style=&#34;color: #ae81ff&#34;&gt;6&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt;&lt;span style=&#34;color: #ae81ff&#34;&gt;7&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt;&lt;span style=&#34;color: #ae81ff&#34;&gt;8&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt;&lt;span style=&#34;color: #ae81ff&#34;&gt;9&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;];&lt;/span&gt;
+
+&lt;span style=&#34;color: #66d9ef&#34;&gt;foreach&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(array_chunk($array)&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;as&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;$part)&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
+    &lt;span style=&#34;color: #f8f8f2&#34;&gt;print_r($part);&lt;/span&gt;
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;and you&amp;rsquo;ll get output chunked by given chunk size:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;Array
+&lt;span style=&#34;color: #f92672&#34;&gt;(&lt;/span&gt;
+    &lt;span style=&#34;color: #f92672&#34;&gt;[&lt;/span&gt;0&lt;span style=&#34;color: #f92672&#34;&gt;]&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt;&amp;gt; 1
+    &lt;span style=&#34;color: #f92672&#34;&gt;[&lt;/span&gt;1&lt;span style=&#34;color: #f92672&#34;&gt;]&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt;&amp;gt; 2
+&lt;span style=&#34;color: #f92672&#34;&gt;)&lt;/span&gt;
+Array
+&lt;span style=&#34;color: #f92672&#34;&gt;(&lt;/span&gt;
+    &lt;span style=&#34;color: #f92672&#34;&gt;[&lt;/span&gt;0&lt;span style=&#34;color: #f92672&#34;&gt;]&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt;&amp;gt; 3
+    &lt;span style=&#34;color: #f92672&#34;&gt;[&lt;/span&gt;1&lt;span style=&#34;color: #f92672&#34;&gt;]&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt;&amp;gt; 4
+&lt;span style=&#34;color: #f92672&#34;&gt;)&lt;/span&gt;
+Array
+&lt;span style=&#34;color: #f92672&#34;&gt;(&lt;/span&gt;
+    &lt;span style=&#34;color: #f92672&#34;&gt;[&lt;/span&gt;0&lt;span style=&#34;color: #f92672&#34;&gt;]&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt;&amp;gt; 5
+    &lt;span style=&#34;color: #f92672&#34;&gt;[&lt;/span&gt;1&lt;span style=&#34;color: #f92672&#34;&gt;]&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt;&amp;gt; 6
+&lt;span style=&#34;color: #f92672&#34;&gt;)&lt;/span&gt;
+Array
+&lt;span style=&#34;color: #f92672&#34;&gt;(&lt;/span&gt;
+    &lt;span style=&#34;color: #f92672&#34;&gt;[&lt;/span&gt;0&lt;span style=&#34;color: #f92672&#34;&gt;]&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt;&amp;gt; 7
+    &lt;span style=&#34;color: #f92672&#34;&gt;[&lt;/span&gt;1&lt;span style=&#34;color: #f92672&#34;&gt;]&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt;&amp;gt; 8
+&lt;span style=&#34;color: #f92672&#34;&gt;)&lt;/span&gt;
+Array
+&lt;span style=&#34;color: #f92672&#34;&gt;(&lt;/span&gt;
+    &lt;span style=&#34;color: #f92672&#34;&gt;[&lt;/span&gt;0&lt;span style=&#34;color: #f92672&#34;&gt;]&lt;/span&gt; &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt;&amp;gt; 9
+&lt;span style=&#34;color: #f92672&#34;&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;thanks &lt;a href=&#34;https://twitter.com/200PercentDev&#34;&gt;@200PercentDev&lt;/a&gt; for pointing this out.&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>Golang Channels Patterns - pipes</title>
@@ -1871,26 +1924,6 @@ Arith: 7 + &lt;span style=&#34;color: #e2b1f4;&#34;&gt;10&lt;/span&gt; = 17
 &lt;/pre&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Real Programmers Explanation - What&#39;s http://xkcd.com/378/ about?</title>
-      <link>http://wysocki.in/editor/2014/04/03-real-programmers-xkcd-explanation/</link>
-      <pubDate>Thu, 03 Apr 2014 00:00:00 +0000</pubDate>
-      
-      <guid>http://wysocki.in/editor/2014/04/03-real-programmers-xkcd-explanation/</guid>
-      <description>&lt;div id=&#34;outline-container-sec-1&#34; class=&#34;outline-2&#34;&gt;
-&lt;h2 id=&#34;sec-1&#34;&gt;Emacs &lt;a href=&#34;http://xkcd.com/378/&#34;&gt;http://xkcd.com/378/&lt;/a&gt;&lt;/h2&gt;
-&lt;div class=&#34;outline-text-2&#34; id=&#34;text-1&#34;&gt;
-&lt;p&gt;
-If you aren&#39;t emacs user it&#39;ll be incomprehensible for you. So here is explanation
-I want to add that it&#39;s included in emacs core (no plugins required)
-&lt;/p&gt;
-
-&lt;img src=&#34;http://wysocki.in/img/m-x-butterfly-emacs.gif&#34; class=&#34;img-responsive&#34; alt=&#34;M-x butterfly Emacs command animation&#34;&gt;
 &lt;/div&gt;
 &lt;/div&gt;
 </description>
