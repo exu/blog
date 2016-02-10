@@ -69,8 +69,14 @@ pygmentsuseclasses = false
     url = "/tags/"
     pre = "<i class='fa fa-star-o'></i>"
 [[menu.main]]
-    name = "Contact"
+    name = "TIL"
     weight = -20
     identifier = "contact"
+    url = "/series/til"
+    pre = "<i class='fa fa-thumbs-o-up'></i>"
+[[menu.main]]
+    name = "TIL"
+    weight = -20
+    identifier = "til"
     url = "/contact/"
     pre = "<i class='fa fa-envelope-o'></i>"
