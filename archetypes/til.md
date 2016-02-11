@@ -5,3 +5,8 @@ tags = ["til"]
 series = ["til"]
 slug = "til-"
 +++
+
+# Title
+
+{{< highlight go >}}
+{{< /highlight >}}
