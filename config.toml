@@ -11,6 +11,7 @@ pygmentsuseclasses = false
 
 [permalinks]
   post = "/:slug"
+  til = "/:section/:slug"
 
 
 [taxonomies]
@@ -70,13 +71,13 @@ pygmentsuseclasses = false
     pre = "<i class='fa fa-star-o'></i>"
 [[menu.main]]
     name = "TIL"
-    weight = -20
-    identifier = "contact"
-    url = "/series/til"
+    weight = -40
+    identifier = "til"
+    url = "/til/"
     pre = "<i class='fa fa-thumbs-o-up'></i>"
 [[menu.main]]
-    name = "TIL"
+    name = "Contact"
     weight = -20
-    identifier = "til"
+    identifier = "contact"
     url = "/contact/"
     pre = "<i class='fa fa-envelope-o'></i>"
