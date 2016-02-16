@@ -6,57 +6,36 @@
     <description>Recent content in Tils on Jacek Wysocki DevLog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 10 Feb 2016 16:33:10 +0100</lastBuildDate>
+    <lastBuildDate>Thu, 11 Feb 2016 08:30:38 +0100</lastBuildDate>
     <atom:link href="http://wysocki.in/til/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
-      <title>php array chunk function</title>
-      <link>http://wysocki.in/til/php-array-chunk-function/</link>
-      <pubDate>Wed, 10 Feb 2016 16:33:10 +0100</pubDate>
+      <title>TIL: PHP - Twig needs_environment need env as first parameter</title>
+      <link>http://wysocki.in/til/til-php-twig-needs_environment-option</link>
+      <pubDate>Thu, 11 Feb 2016 08:30:38 +0100</pubDate>
       
-      <guid>http://wysocki.in/til/php-array-chunk-function/</guid>
+      <guid>http://wysocki.in/til/til-php-twig-needs_environment-option</guid>
       <description>
 
-&lt;h2 id=&#34;usage:425340eeb0130f5a16f8edc692d4b92c&#34;&gt;Usage&lt;/h2&gt;
+&lt;h1 id=&#34;php-twig-function-configuration:7de3802ebdaaf53d0004797c024334ae&#34;&gt;PHP Twig function configuration&lt;/h1&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-php&#34;&gt;&amp;lt;?php
+&lt;p&gt;If there is &amp;lsquo;needs_environment&amp;rsquo; option in twig function definition you&amp;rsquo;ll need to pass
+Twig_Environment as first parameter to your mapped twig function&lt;/p&gt;
 
-$array = [1,2,3,4,5,6,7,8,9];
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;new \Twig_Function_Method(
+    $this,
+    &amp;#39;some&amp;#39;,
+    [
+        &amp;#39;needs_environment&amp;#39; =&amp;gt; true,
+    ]
+)
 
-foreach(array_chunk($array) as $part) {
-    print_r($part);
+
+function some(Twig_Environment $env, $otherParams) {
+    return &amp;quot;&amp;quot;;
 }
+&lt;/pre&gt;&lt;/div&gt;
 
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;and you&amp;rsquo;ll get output:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;Array
-(
-    [0] =&amp;gt; 1
-    [1] =&amp;gt; 2
-)
-Array
-(
-    [0] =&amp;gt; 3
-    [1] =&amp;gt; 4
-)
-Array
-(
-    [0] =&amp;gt; 5
-    [1] =&amp;gt; 6
-)
-Array
-(
-    [0] =&amp;gt; 7
-    [1] =&amp;gt; 8
-)
-Array
-(
-    [0] =&amp;gt; 9
-)
-
-&lt;/code&gt;&lt;/pre&gt;
 </description>
     </item>
     
