@@ -22,7 +22,7 @@
 &lt;p&gt;If there is &amp;lsquo;needs_environment&amp;rsquo; option in twig function definition you&amp;rsquo;ll need to pass
 Twig_Environment as first parameter to your mapped twig function&lt;/p&gt;
 
-&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;new \Twig_Function_Method(
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;new \Twig_Function_Method(
     $this,
     &amp;#39;some&amp;#39;,
     [

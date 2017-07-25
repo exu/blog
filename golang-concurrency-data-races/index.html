@@ -129,7 +129,7 @@ simple integer.</p>
 <p>We&rsquo;ll run <code>100</code> goroutines, each of them will increment our counter <code>10 000</code> times
 which gives us <code>1 000 000</code>, simple enough.</p>
 
-<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span style="color: #f92672">package</span> <span style="color: #a6e22e">main</span>
+<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span><span style="color: #f92672">package</span> <span style="color: #a6e22e">main</span>
 
 <span style="color: #f92672">import</span> <span style="color: #f8f8f2">(</span>
 	<span style="color: #e6db74">&quot;fmt&quot;</span>
@@ -173,8 +173,8 @@ which gives us <code>1 000 000</code>, simple enough.</p>
 
 <p>Let&rsquo;s run our example (run it on your <em>local machine</em>, play.golang.org returns good value because it has set <code>GOMAXPROCS</code> to <code>1</code>):</p>
 
-<div class="highlight" style="background: #272822"><pre style="line-height: 125%">❯ go run counter.go
-248863
+<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span>❯ go run counter.go
+<span style="color: #ae81ff">248863</span>
 </pre></div>
 
 
@@ -183,20 +183,20 @@ Whoaaaa! You have your first <strong>data race</strong>!</p>
 
 <p>To detect it before running your program simply run it with <code>-race</code> flag:</p>
 
-<div class="highlight" style="background: #272822"><pre style="line-height: 125%">go run -race app.go
+<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span>go run -race app.go
 </pre></div>
 
 
 <p>which gives you result:</p>
 
-<div class="highlight" style="background: #272822"><pre style="line-height: 125%">❯ go run -race app.go &gt;&gt; out.txt
+<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span>❯ go run -race app.go &gt;&gt; out.txt
 <span style="color: #f92672">==================</span>
 WARNING: DATA RACE
-Read by goroutine 7:
+Read by goroutine <span style="color: #ae81ff">7</span>:
   main.main.func1<span style="color: #f92672">()</span>
       /home/exu/src/github.com/exu/go-workshops/101-concurrency-other/app.go:24 +0x42
 
-Previous write by goroutine 6:
+Previous write by goroutine <span style="color: #ae81ff">6</span>:
   main.main.func1<span style="color: #f92672">()</span>
       /home/exu/src/github.com/exu/go-workshops/101-concurrency-other/app.go:24 +0x58
 
@@ -209,7 +209,7 @@ Goroutine <span style="color: #ae81ff">6</span> <span style="color: #f92672">(</
       /home/exu/src/github.com/exu/go-workshops/101-concurrency-other/app.go:26 +0x92
 <span style="color: #f92672">==================</span>
 Found <span style="color: #ae81ff">1</span> data race<span style="color: #f92672">(</span>s<span style="color: #f92672">)</span>
-<span style="color: #f8f8f2">exit </span>status 66
+<span style="color: #f8f8f2">exit</span> status <span style="color: #ae81ff">66</span>
 </pre></div>
 
 
@@ -222,7 +222,7 @@ to do it, rule is very simple - synchronize your data!</p>
 
 <p>First We&rsquo;ll try to correct Our counter with atomic counters, it&rsquo;s included in go core <code>sync/atomic</code> standard library.</p>
 
-<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span style="color: #f92672">package</span> <span style="color: #a6e22e">main</span>
+<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span><span style="color: #f92672">package</span> <span style="color: #a6e22e">main</span>
 
 <span style="color: #f92672">import</span> <span style="color: #f8f8f2">(</span>
 	<span style="color: #e6db74">&quot;fmt&quot;</span>
@@ -275,8 +275,8 @@ for blocking calls like <code>time.Sleep</code>, but in this case we need to do 
 manually.</p>
 
 <p>Now our counter is thread-safe. You can check if data races still exists:
-<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span style="color: #f8f8f2">$ </span>go run -race atomic.go
-1000000
+<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span>$ go run -race atomic.go
+<span style="color: #ae81ff">1000000</span>
 </pre></div>
 </p>
 
@@ -289,7 +289,7 @@ Me <code>mutex</code> looks and feels a lot better.</p>
 
 <p>Take a look at code written below:</p>
 
-<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span style="color: #f92672">package</span> <span style="color: #a6e22e">main</span>
+<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span><span style="color: #f92672">package</span> <span style="color: #a6e22e">main</span>
 
 <span style="color: #f92672">import</span> <span style="color: #f8f8f2">(</span>
 	<span style="color: #e6db74">&quot;fmt&quot;</span>
@@ -341,8 +341,8 @@ Me <code>mutex</code> looks and feels a lot better.</p>
 
 
 <p>Again try to check if data race exists:
-<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span style="color: #f8f8f2">$ </span>go run -race mutex.go
-1000000
+<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span>$ go run -race mutex.go
+<span style="color: #ae81ff">1000000</span>
 </pre></div>
 </p>
 
@@ -401,7 +401,7 @@ Me <code>mutex</code> looks and feels a lot better.</p>
 		    <a href="" target="_blank" title="RSS"><i class="fa fa-2x fa-fw fa-rss"></i> <span class="hidden">RSS</span></a>
 		</section>
 
-		<section class="copyright">&copy; 2016 <a href="http://wysocki.in/">Jacek Wysocki</a>. Released under the MIT license.</section>
+		<section class="copyright">&copy; 2017 <a href="http://wysocki.in/">Jacek Wysocki</a>. Released under the MIT license.</section>
 	</div>
 </footer>
     <script src="http://wysocki.in/js/jquery.min.js"></script>

@@ -24,7 +24,7 @@ them as go routines.&lt;/p&gt;
 &lt;p&gt;We&amp;rsquo;ll define our functions as ones which receive and returns channel of the
 same type. (&lt;code&gt;square&lt;/code&gt;, &lt;code&gt;double&lt;/code&gt;), &lt;code&gt;gen&lt;/code&gt; function will push values to first channel.&lt;/p&gt;
 
-&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #f92672&#34;&gt;package&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;main&lt;/span&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;package&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;main&lt;/span&gt;
 
 &lt;span style=&#34;color: #f92672&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;
 	&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;fmt&amp;quot;&lt;/span&gt;
@@ -87,14 +87,14 @@ same type. (&lt;code&gt;square&lt;/code&gt;, &lt;code&gt;double&lt;/code&gt;), &
 
 &lt;p&gt;When we run this program we&amp;rsquo;ll receive output:&lt;/p&gt;
 
-&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;❯ go run 90-patterns-pipeline.go
-40
-80
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;❯ go run &lt;span style=&#34;color: #ae81ff&#34;&gt;90&lt;/span&gt;-patterns-pipeline.go
+&lt;span style=&#34;color: #ae81ff&#34;&gt;40&lt;/span&gt;
+&lt;span style=&#34;color: #ae81ff&#34;&gt;80&lt;/span&gt;
 Second generator
-32
-162
-512
-1250
+&lt;span style=&#34;color: #ae81ff&#34;&gt;32&lt;/span&gt;
+&lt;span style=&#34;color: #ae81ff&#34;&gt;162&lt;/span&gt;
+&lt;span style=&#34;color: #ae81ff&#34;&gt;512&lt;/span&gt;
+&lt;span style=&#34;color: #ae81ff&#34;&gt;1250&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 
 
@@ -187,7 +187,7 @@ simple integer.&lt;/p&gt;
 &lt;p&gt;We&amp;rsquo;ll run &lt;code&gt;100&lt;/code&gt; goroutines, each of them will increment our counter &lt;code&gt;10 000&lt;/code&gt; times
 which gives us &lt;code&gt;1 000 000&lt;/code&gt;, simple enough.&lt;/p&gt;
 
-&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #f92672&#34;&gt;package&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;main&lt;/span&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;package&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;main&lt;/span&gt;
 
 &lt;span style=&#34;color: #f92672&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;
 	&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;fmt&amp;quot;&lt;/span&gt;
@@ -231,8 +231,8 @@ which gives us &lt;code&gt;1 000 000&lt;/code&gt;, simple enough.&lt;/p&gt;
 
 &lt;p&gt;Let&amp;rsquo;s run our example (run it on your &lt;em&gt;local machine&lt;/em&gt;, play.golang.org returns good value because it has set &lt;code&gt;GOMAXPROCS&lt;/code&gt; to &lt;code&gt;1&lt;/code&gt;):&lt;/p&gt;
 
-&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;❯ go run counter.go
-248863
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;❯ go run counter.go
+&lt;span style=&#34;color: #ae81ff&#34;&gt;248863&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 
 
@@ -241,20 +241,20 @@ Whoaaaa! You have your first &lt;strong&gt;data race&lt;/strong&gt;!&lt;/p&gt;
 
 &lt;p&gt;To detect it before running your program simply run it with &lt;code&gt;-race&lt;/code&gt; flag:&lt;/p&gt;
 
-&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;go run -race app.go
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;go run -race app.go
 &lt;/pre&gt;&lt;/div&gt;
 
 
 &lt;p&gt;which gives you result:&lt;/p&gt;
 
-&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;❯ go run -race app.go &amp;gt;&amp;gt; out.txt
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;❯ go run -race app.go &amp;gt;&amp;gt; out.txt
 &lt;span style=&#34;color: #f92672&#34;&gt;==================&lt;/span&gt;
 WARNING: DATA RACE
-Read by goroutine 7:
+Read by goroutine &lt;span style=&#34;color: #ae81ff&#34;&gt;7&lt;/span&gt;:
   main.main.func1&lt;span style=&#34;color: #f92672&#34;&gt;()&lt;/span&gt;
       /home/exu/src/github.com/exu/go-workshops/101-concurrency-other/app.go:24 +0x42
 
-Previous write by goroutine 6:
+Previous write by goroutine &lt;span style=&#34;color: #ae81ff&#34;&gt;6&lt;/span&gt;:
   main.main.func1&lt;span style=&#34;color: #f92672&#34;&gt;()&lt;/span&gt;
       /home/exu/src/github.com/exu/go-workshops/101-concurrency-other/app.go:24 +0x58
 
@@ -267,7 +267,7 @@ Goroutine &lt;span style=&#34;color: #ae81ff&#34;&gt;6&lt;/span&gt; &lt;span sty
       /home/exu/src/github.com/exu/go-workshops/101-concurrency-other/app.go:26 +0x92
 &lt;span style=&#34;color: #f92672&#34;&gt;==================&lt;/span&gt;
 Found &lt;span style=&#34;color: #ae81ff&#34;&gt;1&lt;/span&gt; data race&lt;span style=&#34;color: #f92672&#34;&gt;(&lt;/span&gt;s&lt;span style=&#34;color: #f92672&#34;&gt;)&lt;/span&gt;
-&lt;span style=&#34;color: #f8f8f2&#34;&gt;exit &lt;/span&gt;status 66
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;exit&lt;/span&gt; status &lt;span style=&#34;color: #ae81ff&#34;&gt;66&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 
 
@@ -280,7 +280,7 @@ to do it, rule is very simple - synchronize your data!&lt;/p&gt;
 
 &lt;p&gt;First We&amp;rsquo;ll try to correct Our counter with atomic counters, it&amp;rsquo;s included in go core &lt;code&gt;sync/atomic&lt;/code&gt; standard library.&lt;/p&gt;
 
-&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #f92672&#34;&gt;package&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;main&lt;/span&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;package&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;main&lt;/span&gt;
 
 &lt;span style=&#34;color: #f92672&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;
 	&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;fmt&amp;quot;&lt;/span&gt;
@@ -333,8 +333,8 @@ for blocking calls like &lt;code&gt;time.Sleep&lt;/code&gt;, but in this case we
 manually.&lt;/p&gt;
 
 &lt;p&gt;Now our counter is thread-safe. You can check if data races still exists:
-&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;$ &lt;/span&gt;go run -race atomic.go
-1000000
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;$ go run -race atomic.go
+&lt;span style=&#34;color: #ae81ff&#34;&gt;1000000&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 &lt;/p&gt;
 
@@ -347,7 +347,7 @@ Me &lt;code&gt;mutex&lt;/code&gt; looks and feels a lot better.&lt;/p&gt;
 
 &lt;p&gt;Take a look at code written below:&lt;/p&gt;
 
-&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #f92672&#34;&gt;package&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;main&lt;/span&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;package&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;main&lt;/span&gt;
 
 &lt;span style=&#34;color: #f92672&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;
 	&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;fmt&amp;quot;&lt;/span&gt;
@@ -399,8 +399,8 @@ Me &lt;code&gt;mutex&lt;/code&gt; looks and feels a lot better.&lt;/p&gt;
 
 
 &lt;p&gt;Again try to check if data race exists:
-&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;$ &lt;/span&gt;go run -race mutex.go
-1000000
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;$ go run -race mutex.go
+&lt;span style=&#34;color: #ae81ff&#34;&gt;1000000&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 &lt;/p&gt;
 
@@ -436,7 +436,7 @@ Me &lt;code&gt;mutex&lt;/code&gt; looks and feels a lot better.&lt;/p&gt;
 &lt;p&gt;Reading from ticker by multiple goroutines is quite simple. We need iterate
 through it values using &lt;code&gt;range&lt;/code&gt;.&lt;/p&gt;
 
-&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #f92672&#34;&gt;package&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;main&lt;/span&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;package&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;main&lt;/span&gt;
 
 &lt;span style=&#34;color: #f92672&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;time&amp;quot;&lt;/span&gt;
 &lt;span style=&#34;color: #f92672&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;fmt&amp;quot;&lt;/span&gt;
@@ -507,7 +507,7 @@ more room in our channel buffer (we currently have &lt;code&gt;5&lt;/code&gt;) w
 buffer will be full and next &lt;code&gt;15&lt;/code&gt; will wait on write. After first goroutine complete and
 read from channel next hunged goroutine write data to goroutine.&lt;/p&gt;
 
-&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #f92672&#34;&gt;package&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;main&lt;/span&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;package&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;main&lt;/span&gt;
 
 &lt;span style=&#34;color: #f92672&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;
 	&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;fmt&amp;quot;&lt;/span&gt;
@@ -572,7 +572,7 @@ until that all goroutines can write to this channel.&lt;/li&gt;
 other goroutine or simply from main function. Below You can see My simple
 implementation of go quit channel.&lt;/p&gt;
 
-&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #f92672&#34;&gt;package&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;main&lt;/span&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;package&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;main&lt;/span&gt;
 
 &lt;span style=&#34;color: #f92672&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;
 	&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;time&amp;quot;&lt;/span&gt;
@@ -640,7 +640,7 @@ a &lt;code&gt;time.Time&lt;/code&gt; channel and sends to it value with configur
 new data, so we can close channel. Next we define ticker and iterate through
 our &lt;code&gt;requests&lt;/code&gt; channel.&lt;/p&gt;
 
-&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #f92672&#34;&gt;package&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;main&lt;/span&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;package&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;main&lt;/span&gt;
 
 &lt;span style=&#34;color: #f92672&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;
 	&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;fmt&amp;quot;&lt;/span&gt;
