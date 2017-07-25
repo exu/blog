@@ -24,7 +24,7 @@ them as go routines.&lt;/p&gt;
 &lt;p&gt;We&amp;rsquo;ll define our functions as ones which receive and returns channel of the
 same type. (&lt;code&gt;square&lt;/code&gt;, &lt;code&gt;double&lt;/code&gt;), &lt;code&gt;gen&lt;/code&gt; function will push values to first channel.&lt;/p&gt;
 
-&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #f92672&#34;&gt;package&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;main&lt;/span&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;package&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;main&lt;/span&gt;
 
 &lt;span style=&#34;color: #f92672&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;
 	&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;fmt&amp;quot;&lt;/span&gt;
@@ -87,14 +87,14 @@ same type. (&lt;code&gt;square&lt;/code&gt;, &lt;code&gt;double&lt;/code&gt;), &
 
 &lt;p&gt;When we run this program we&amp;rsquo;ll receive output:&lt;/p&gt;
 
-&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;❯ go run 90-patterns-pipeline.go
-40
-80
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;❯ go run &lt;span style=&#34;color: #ae81ff&#34;&gt;90&lt;/span&gt;-patterns-pipeline.go
+&lt;span style=&#34;color: #ae81ff&#34;&gt;40&lt;/span&gt;
+&lt;span style=&#34;color: #ae81ff&#34;&gt;80&lt;/span&gt;
 Second generator
-32
-162
-512
-1250
+&lt;span style=&#34;color: #ae81ff&#34;&gt;32&lt;/span&gt;
+&lt;span style=&#34;color: #ae81ff&#34;&gt;162&lt;/span&gt;
+&lt;span style=&#34;color: #ae81ff&#34;&gt;512&lt;/span&gt;
+&lt;span style=&#34;color: #ae81ff&#34;&gt;1250&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 
 
@@ -121,7 +121,7 @@ to split your work in concurrent environment.&lt;/p&gt;
 &lt;p&gt;Reading from ticker by multiple goroutines is quite simple. We need iterate
 through it values using &lt;code&gt;range&lt;/code&gt;.&lt;/p&gt;
 
-&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #f92672&#34;&gt;package&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;main&lt;/span&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;package&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;main&lt;/span&gt;
 
 &lt;span style=&#34;color: #f92672&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;time&amp;quot;&lt;/span&gt;
 &lt;span style=&#34;color: #f92672&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;fmt&amp;quot;&lt;/span&gt;
@@ -192,7 +192,7 @@ more room in our channel buffer (we currently have &lt;code&gt;5&lt;/code&gt;) w
 buffer will be full and next &lt;code&gt;15&lt;/code&gt; will wait on write. After first goroutine complete and
 read from channel next hunged goroutine write data to goroutine.&lt;/p&gt;
 
-&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #f92672&#34;&gt;package&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;main&lt;/span&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;package&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;main&lt;/span&gt;
 
 &lt;span style=&#34;color: #f92672&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;
 	&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;fmt&amp;quot;&lt;/span&gt;
@@ -257,7 +257,7 @@ until that all goroutines can write to this channel.&lt;/li&gt;
 other goroutine or simply from main function. Below You can see My simple
 implementation of go quit channel.&lt;/p&gt;
 
-&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #f92672&#34;&gt;package&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;main&lt;/span&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;package&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;main&lt;/span&gt;
 
 &lt;span style=&#34;color: #f92672&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;
 	&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;time&amp;quot;&lt;/span&gt;
@@ -325,7 +325,7 @@ a &lt;code&gt;time.Time&lt;/code&gt; channel and sends to it value with configur
 new data, so we can close channel. Next we define ticker and iterate through
 our &lt;code&gt;requests&lt;/code&gt; channel.&lt;/p&gt;
 
-&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #f92672&#34;&gt;package&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;main&lt;/span&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;package&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;main&lt;/span&gt;
 
 &lt;span style=&#34;color: #f92672&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;
 	&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;fmt&amp;quot;&lt;/span&gt;
@@ -382,7 +382,7 @@ light threads). By default operations on channel (reading and writing) are block
 
 &lt;p&gt;Let&amp;rsquo;s look for simple example below:&lt;/p&gt;
 
-&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;    &lt;span style=&#34;color: #f92672&#34;&gt;package&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;main&lt;/span&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;    &lt;span style=&#34;color: #f92672&#34;&gt;package&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;main&lt;/span&gt;
 
     &lt;span style=&#34;color: #f92672&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;fmt&amp;quot;&lt;/span&gt;
     &lt;span style=&#34;color: #f92672&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;time&amp;quot;&lt;/span&gt;
@@ -446,7 +446,7 @@ used on both sides - goroutine which write to channel, and goroutine which reads
 multiple goroutines) we should use &lt;code&gt;select&lt;/code&gt; statement. It simply choose
 channel which receive value as first (It&amp;rsquo;s in context of time)&lt;/p&gt;
 
-&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span style=&#34;color: #f92672&#34;&gt;package&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;main&lt;/span&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;package&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;main&lt;/span&gt;
 
 &lt;span style=&#34;color: #f92672&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;time&amp;quot;&lt;/span&gt;
 &lt;span style=&#34;color: #f92672&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;fmt&amp;quot;&lt;/span&gt;
