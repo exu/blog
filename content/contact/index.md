@@ -21,5 +21,6 @@ document.write('<li>mailto: <a href="mailto:' + a + '">' + a + '</a></li>')
 
 ## Social media
 
-- [ex00@twitter](http://twitter.com/ex00)
-- [exu@github](http://github.com/exu)
+- [LinkedIN](http://www.linkedin.com/in/jacekwysocki)
+- [Twitter](http://twitter.com/ex00)
+- [Github](http://github.com/exu)
